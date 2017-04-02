@@ -1,4 +1,4 @@
-# Yalla Notlob
+# Yalla Netlob
 ## Description
 A simple food order application using NodeJS and MySQL. NodeJS Course, ITI
 

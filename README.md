@@ -2,6 +2,8 @@
 ## Description
 A simple food order application using NodeJS and MySQL. NodeJS Course, ITI
 
+Working application can be found on [Heroku](https://yalla-netlob.herokuapp.com/)
+
 ## Instructions
 
 1. Navigate to the applications directory and run the following command to install dependencies

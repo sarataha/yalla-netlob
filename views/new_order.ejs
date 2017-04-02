@@ -1,0 +1,25 @@
+<%include layout/header %>
+	<div class="order-form">
+		<h2>Add Order</h2>
+		<form action="" method="post">
+			<label for="meal">Order For</label>
+			<select name="meal" id="meal">
+				<option value="breakfast">Breakfast</option>
+				<option value="lunch">Lunch</option>
+				<option value="dinner">Dinner</option>
+			</select> <br> <br>
+			<label for="restaurant">From</label>
+			<input name="restaurant" type="text"> <br> <br>
+			<label for="friends">Friends</label>
+			<input name="friends" type="text"> <br> <br>
+			<label for="menu-image">Menu Image</label>
+			<input name="menu-image" type="file"> <br> <br>
+			<input type="submit" value="Publish">
+		</form>
+	</div>
+	<div class="invited-friends-list">
+		<ul>
+			<li>Ahmed Ali <br><a href="#">remove</a></li>
+		</ul>
+	</div>
+<%include layout/footer %>

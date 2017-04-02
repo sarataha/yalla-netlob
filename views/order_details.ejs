@@ -1,0 +1,104 @@
+<%include layout/header %>
+	<div class="data-container">
+		<h2>Order Details</h2>
+		<table id="order-data">
+			<tr>
+				<th>Person</th>
+				<th>Item</th>
+				<th>Amount</th>
+				<th>Price</th>
+				<th>Comment</th>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table> <br> <br>
+		<form action="" method="post">
+			<table>
+				<tr>
+					<th>Item</th>
+					<th>Amount</th>
+					<th>Price</th>
+					<th>Comment</th>
+				</tr>
+				<tr>
+					<td><input type="text" name="order-item"></td>
+					<td><input type="number" name="item-amount" style="width: 50px"></td>
+					<td><input type="number" name="item-price" style="width: 50px"></td>
+					<td><input type="text" name="comment"></td>
+					<td><input type="submit" value="Add"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="notification-container">
+		<div id="friends-details" class="friends-details">
+			<a href="#" id="invited-friends">10 friends invited, click to view</a> <br> <br>
+			<a href="#" id="joined-friends">5 friends joined, click to view</a>
+		</div>
+		<div id="invited-modal" class="modal">
+
+		  <div class="modal-content">
+		    <div class="modal-header">
+		      <span class="close">&times;</span>
+		    </div>
+		    <div class="modal-body">
+		      <ul>
+		      	<li>Ahmed Ali</li>
+		      	<li>Ahmed Ali</li>
+		      </ul>
+		    </div>
+		  </div>
+
+		</div>
+		<div id="joined-modal" class="modal">
+
+		  <div class="modal-content">
+		    <div class="modal-header">
+		      <span class="close">&times;</span>
+		    </div>
+		    <div class="modal-body">
+		      <ul>
+		      	<li>Ahmed Ali</li>
+		      	<li>Ahmed Ali</li>
+		      </ul>
+		    </div>
+		  </div>
+
+		</div>
+	</div>
+
+	<script>
+		var invited_modal = document.getElementById('invited-modal');
+		var joined_modal = document.getElementById('joined-modal');
+		var invited_friends = document.getElementById("invited-friends");
+		var joined_friends = document.getElementById('joined-friends');
+		var span = document.getElementsByClassName("close")[0];
+
+		invited_friends.onclick = function() {
+		    invited_modal.style.display = "block";
+		}
+
+		joined_friends.onclick = function() {
+		    joined_modal.style.display = "block";
+		}
+
+		span.onclick = function() {
+		    invited_modal.style.display = "none";
+		    joined_modal.style.display = "none";
+		}
+
+		window.onclick = function(event) {
+		    if (event.target == invited_modal) {
+		        invited_modal.style.display = "none";
+		    }
+		    else if (event.target == joined_modal) {
+		    	joined_modal.style.display = "none";
+		    }
+		}
+	</script>
+<%include layout/footer %>

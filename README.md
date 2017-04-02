@@ -14,7 +14,7 @@ DEBUG=yalla-notlob:* ./bin/www
 ```
 3. Open your web browser and type the following url
 
-```
+
 [http://localhost:3000/](http://localhost:3000/)
-```
+
 4. Bon appétit!

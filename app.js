@@ -43,3 +43,8 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+app.listen(8090,function () {
+  console.log("Server started....");
+
+});

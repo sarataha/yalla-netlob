@@ -3,7 +3,22 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Yalla Notlob' });
+  res.render('index', { title: 'Yalla Netlob | Login' });
+});
+
+/* GET friends page. */
+router.get('/friends', function(req, res, next) {
+  res.render('friends', { title: 'Yalla Netlob | Friends' });
+});
+
+/* GET groups page. */
+router.get('/groups', function(req, res, next) {
+  res.render('groups', { title: 'Yalla Netlob | Groups' });
+});
+
+/* GET orders page. */
+router.get('/orders', function(req, res, next) {
+  res.render('index', { title: 'Yalla Netlob | Orders' });
 });
 
 /* GET new order page. */

@@ -69,7 +69,27 @@ a {
     animation-name: slideIn;
     animation-duration: 0.4s
 }
+/* start edit for the notification tab in header */
+.notification {
+    float: left;
 
+}
+.notification-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+
+}
+
+.notification-content a:hover {
+    background-color: #ddd;
+}
+
+.show {
+    display: block;
+}
+/* end of edit for the notification tab in header */
 .data-container {
 	float: left;
 	margin-left: 5%;

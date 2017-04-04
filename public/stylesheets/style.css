@@ -27,7 +27,7 @@ a {
 /* order details style */
 #order-data,
 #order-data td,
-#order-data th {    
+#order-data th {
 		    border: 1px solid #ddd;
 		    text-align: left;
 		}
@@ -74,7 +74,7 @@ a {
 	float: left;
 	margin-left: 5%;
 }
-		
+
 .notification-container {
 	float: right;
 	margin-top: 10%;
@@ -104,7 +104,7 @@ a {
 
 /* Add Animation */
 @-webkit-keyframes slideIn {
-	from {bottom: -300px; opacity: 0} 
+	from {bottom: -300px; opacity: 0}
 	to {bottom: 0; opacity: 1}
 }
 
@@ -114,12 +114,12 @@ a {
 }
 
 @-webkit-keyframes fadeIn {
-	from {opacity: 0} 
+	from {opacity: 0}
 	to {opacity: 1}
 }
 
 @keyframes fadeIn {
-	from {opacity: 0} 
+	from {opacity: 0}
 	to {opacity: 1}
 }
 
@@ -140,4 +140,32 @@ footer.page-footer {
 	padding-bottom: 0;
 	padding-top: 3px !important;
 	text-align: center;
+}
+
+#last_order{
+  border-radius: 25px;
+  background: #9b1601;
+  padding: 20px;
+  width: 45%;
+  height: 400px;
+  float:left;
+}
+
+#friend_activies{
+  border-radius: 25px;
+  background: #9b1601;
+  padding: 20px;
+  width: 45%;
+  height: 400px;
+  float:right;
+}
+.header_h{
+    color:#000000;
+}
+
+.friends_activity_P{
+  color:#FFFFFF;
+}
+.last-order{
+  font-size: 17px;
 }

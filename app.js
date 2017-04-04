@@ -1,6 +1,6 @@
 var express = require('express');
-// var passport = require('passport');
-// var session = require('express-session');
+var passport = require('passport');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');

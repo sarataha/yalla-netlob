@@ -1,8 +1,7 @@
 var express = require('express');
- HEAD
-var passport = require('passport');
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session)
+//var passport = require('passport');
+//var session = require('express-session');
+//var RedisStore = require('connect-redis')(session)
 
 // var passport = require('passport');
 // var session = require('express-session');
@@ -20,16 +19,16 @@ var orders = require('./routes/orders');
 
 var app = express();
 
-app.use(session({  
-  store: new RedisStore({
-    url: config.redisStore.url
-  }),
-  secret: config.redisStore.secret,
-  resave: false,
-  saveUninitialized: false
-}))
-app.use(passport.initialize())  
-app.use(passport.session())  
+// app.use(session({  
+//   store: new RedisStore({
+//     url: config.redisStore.url
+//   }),
+//   secret: config.redisStore.secret,
+//   resave: false,
+//   saveUninitialized: false
+// }))
+// app.use(passport.initialize())  
+// app.use(passport.session())  
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

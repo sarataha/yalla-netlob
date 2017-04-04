@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session)
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -14,6 +15,17 @@ var groups = require('./routes/groups');
 var orders = require('./routes/orders');
 
 var app = express();
+
+app.use(session({  
+  store: new RedisStore({
+    url: config.redisStore.url
+  }),
+  secret: config.redisStore.secret,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())  
+app.use(passport.session())  
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

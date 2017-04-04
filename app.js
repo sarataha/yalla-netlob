@@ -2,7 +2,7 @@ var express = require('express');
 
 var passport = require('passport');
 var session = require('express-session');
-var RedisStore = require('connect-redis')(session)
+var usersModel = require('./models/users')
 
 //var passport = require('passport');
 //var session = require('express-session');

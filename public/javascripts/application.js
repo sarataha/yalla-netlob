@@ -28,11 +28,9 @@ window.onclick = function(event) {
 
 
 /*edit for the notfication bar */
-
   function myFunction() {
       document.getElementById("mynotification").classList.toggle("show");
   }
-
   // Close the notification if the user clicks outside of it
   window.onclick = function(e) {
     if (!e.target.matches('.dropbtn')) {
@@ -42,6 +40,4 @@ window.onclick = function(event) {
         }
     }
   }
-  
-  
   /*end of notification bar */

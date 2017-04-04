@@ -25,3 +25,23 @@ window.onclick = function(event) {
 		joined_modal.style.display = "none";
 	}
 }
+
+
+/*edit for the notfication bar */
+
+  function myFunction() {
+      document.getElementById("mynotification").classList.toggle("show");
+  }
+
+  // Close the notification if the user clicks outside of it
+  window.onclick = function(e) {
+    if (!e.target.matches('.dropbtn')) {
+      var mynotification = document.getElementById("mynotification");
+        if (mynotification.classList.contains('show')) {
+          mynotification.classList.remove('show');
+        }
+    }
+  }
+  
+  
+  /*end of notification bar */

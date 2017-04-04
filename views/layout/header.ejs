@@ -9,11 +9,28 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
-      <ul class="nav navbar-nav">
-    	  <li class="active"><a href="/">Home<span class="sr-only">(current)</span></a></li>
-    	  <li><a href="/friends">Friends</a></li>
-    	  <li><a href="/groups">Groups</a></li>
-    	  <li><a href="/orders">Orders</a></li>
-      </ul>
-	 </nav> 
+   <nav class="navbar navbar-inverse">
+   <div class="container-fluid">
+     <div class="navbar-header">
+       <a class="navbar-brand" href="/">Yalla Netlob</a>
+     </div>
+     <ul class="nav navbar-nav">
+       <li class="active"><a href="/">Home</a></li>
+       <li><a href="/friends">Friends</a></li>
+       <li><a href="/groups">Groups</a></li>
+       <li><a href="/orders">Orders</a></li>
+     </ul>
+     <ul class="nav navbar-nav navbar-right">
+     	<li> <div class="notification">
+        <button class="dropbtn" onclick="myFunction()">notification</button>
+        <div class="notification-content" id="mynotification">
+          ahmed joined you breakfast&emsp;&emsp;<a href="#">order</a></br>
+          islam invited you to his order&emsp;&emsp;<a href="#">join</a></br>
+          <a href="#">view all notifications</a>
+        </div>
+      </div></li>
+       <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sara</a></li>
+       <li><a href="#">Logout <span class="glyphicon glyphicon-log-out"></span></a></li>
+     </ul>
+   </div>
+ </nav>

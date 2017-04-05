@@ -1,8 +1,10 @@
 var express = require('express');
 
 var passport = require('passport');
-var session = require('express-session');
+// var session = require('express-session');
 var usersModel = require('./models/users')
+
+
 
 //var passport = require('passport');
 //var session = require('express-session');

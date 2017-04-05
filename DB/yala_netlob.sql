@@ -16,14 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `yala_netlob_development`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `yala_netlob_development` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `yala_netlob_development`;
-
---
 -- Table structure for table `group_members`
 --
 
@@ -163,6 +155,33 @@ LOCK TABLES `orders_users` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_friends`
+--
+
+DROP TABLE IF EXISTS `user_friends`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_friends` (
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`friend_id`),
+  KEY `user_id` (`user_id`),
+  KEY `user_friends_ibfk_2` (`friend_id`),
+  CONSTRAINT `user_friends_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `user_friends_ibfk_2` FOREIGN KEY (`friend_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_friends`
+--
+
+LOCK TABLES `user_friends` WRITE;
+/*!40000 ALTER TABLE `user_friends` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_friends` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -177,7 +196,7 @@ CREATE TABLE `users` (
   `avatar_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,6 +205,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Danny99','Deion_Rau@example.com','whatever',NULL),(2,'Jarred_Pagac18','Mohammad_Cremin@example.net','whatever',NULL),(3,'Oma.Doyle','Eldora62@example.net','whatever',NULL),(4,'Bailey.Denesik26','Elton.Schinner@example.com','whatever',NULL),(5,'Phyllis76','Scarlett.Herzog97@example.org','whatever',NULL),(6,'Johnpaul29','Karen_Keebler4@example.com','whatever',NULL),(7,'Evalyn27','Damien_Goodwin@example.org','whatever',NULL),(8,'Clement.Bailey25','Jarrell.Brekke48@example.net','whatever',NULL),(9,'Gerhard26','Jonas8@example.org','whatever',NULL),(10,'Sara','123456789','$2a$10$bNAWS37JAKvdPTzanw8dWOGv5ndsKdL9moQAd9VMIb5',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -198,4 +218,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-04  2:06:46
+-- Dump completed on 2017-04-05 19:12:36

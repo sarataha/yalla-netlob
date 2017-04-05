@@ -1,7 +1,7 @@
 // ./models/users.js
 
 var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
+// var bcrypt = require('bcrypt-nodejs');
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -49,8 +49,8 @@ var insert_user = function(username, email, password, avatar_url) {
 }
 
 // find user's friends
-var find_friends = function() {
-
+var find_friends = function(user_id) {
+  var query = "SELECT * FROM users,"
 }
 
 // test connection

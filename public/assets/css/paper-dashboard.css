@@ -86,56 +86,6 @@ blockquote {
 blockquote small {
   font-style: normal; }
 
-.text-muted {
-  color: #DDDDDD; }
-
-.text-primary, .text-primary:hover {
-  color: #427C89; }
-
-.text-info, .text-info:hover {
-  color: #3091B2; }
-
-.text-success, .text-success:hover {
-  color: #42A084; }
-
-.text-warning, .text-warning:hover {
-  color: #BB992F; }
-
-.text-danger, .text-danger:hover {
-  color: #B33C12; }
-
-.glyphicon {
-  line-height: 1; }
-
-strong {
-  color: #403D39; }
-
-.icon-primary {
-  color: #7A9E9F; }
-
-.icon-info {
-  color: #68B3C8; }
-
-.icon-success {
-  color: #7AC29A; }
-
-.icon-warning {
-  color: #F3BB45; }
-
-.icon-danger {
-  color: #EB5E28; }
-
-.chart-legend .text-primary, .chart-legend .text-primary:hover {
-  color: #7A9E9F; }
-.chart-legend .text-info, .chart-legend .text-info:hover {
-  color: #68B3C8; }
-.chart-legend .text-success, .chart-legend .text-success:hover {
-  color: #7AC29A; }
-.chart-legend .text-warning, .chart-legend .text-warning:hover {
-  color: #F3BB45; }
-.chart-legend .text-danger, .chart-legend .text-danger:hover {
-  color: #EB5E28; }
-
 /*     General overwrite     */
 body {
   color: #66615b;

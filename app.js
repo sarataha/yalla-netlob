@@ -42,6 +42,7 @@ var users = require('./routes/users');
 var friends = require('./routes/friends');
 var groups = require('./routes/groups');
 var orders = require('./routes/orders');
+var auth = require('./routes/auth');
 
 var app = express();
 
@@ -73,6 +74,7 @@ app.use('/groups', groups);
 app.use('/friends', friends);
 app.use('/orders', orders);
 app.use('/new_order', orders);
+app.use('/auth', auth);
 
 // catch 404 error and forward error status handler
 app.use(function(req, res, next) {

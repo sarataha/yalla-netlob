@@ -3,15 +3,18 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Yalla Netlob | Login' });
+  res.render('index', {
+  	title: 'Home',
+  	username: 'Sara'
+  });
 });
 router.get('/register', function(req, res, next) {
-  res.render('Registration', { title: 'Yalla Netlob | Registration' });
+  res.render('Registration', { title: 'Registration' });
 });
 
 /* GET login page. */
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Yalla Netlob | Login' });
+  res.render('login', { title: 'Login' });
 });
 
 module.exports = router;

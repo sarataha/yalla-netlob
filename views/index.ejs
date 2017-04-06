@@ -1,13 +1,62 @@
-<%include layout/header %>
-<div id="last_order" class="home_div">
-  <h4 class="header_h">last order</h4>
-  <a class="last-order" href="ay7aga.html">Lunch from pastawesy</a><br>
-  <a class="last-order" href="ay7aga.html">breakfast from 3abdo talaws</a>
-</div>
+<% include layout/sidebar %>
+<% include layout/header %>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Latest Orders</h4>
+                                <p class="category">Bla bla bla blaaaa</p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart ct-perfect-fourth">
+                                    <p><a href="#">Lunch on 13/13/2013</a></p>
+                                    <p><a href="#">Breakfast on 13/13/2013</a></p>
+                                </div>
 
-<div id="friend_activies" class="home_div">
-  <h4 class="header_h">Friends Activitiy</h4>
-  <p class="friends_activity_P">Sara Has created an order from Mac</p>
-  <p class="friends_activity_P">Dina Has created an order from papajonse</p>
-</div>
-<%include layout/footer %>
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Friends Activities</h4>
+                                <p class="category">More of bla bla bla</p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart">
+                                    <p><a href="#">Islam</a> has created <a href="#">an order</a> for lunch from <a href="#">Mac</a> </p>
+                                    <p><a href="#">Ahmed</a> has created <a href="#">an order</a> for lunch from <a href="#">Mac</a> </p>
+                                    <p>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-check"></i> Data information certified
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<% include layout/footer %>

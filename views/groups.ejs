@@ -1,23 +1,77 @@
-<%include layout/header %>
+<% include layout/sidebar %>
+<% include layout/header %>
+        <div class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                  <div class="form-group">
+                    <label>Group</label>
+                    <input type="text" value="" placeholder="Input" class="form-control" />
+                  </div>
+                  <div class="form-group col-md-offset-8">
+                    <button type="submit" class="btn btn-info btn-fill btn-wd">Add</button>
+                  </div>
+                </div>
+              </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Groups</h4>
+                                <p class="category">Bla bla bla blaaaa</p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart ct-perfect-fourth">
+                                </div>
 
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Campaign sent 2 days ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">OS</h4>
+                                <p class="category">More of bla bla bla</p>
+                            </div>
+                            <div class="content">
+                              <div class="col-md-6 col-md-offset-3">
+                  <div class="form-group">
+                    <label>Your Friend Name</label>
+                    <input type="text" value="" placeholder="Input" class="form-control" />
+                  </div>
+                  <div class="form-group col-md-offset-8">
+                    <button class="btn btn-primary btn-fill">Add</button>
+                  </div>
+                </div>
+                                <div class="ct-chart">
+                                </div>
 
-  <body >
-<div class="pageContent" style="margin-top:7%;margin-left:2%;margin-right:2%;">
- <br>  <h4>Group &emsp;<input type="text" name="groupName"> &emsp;<button type="button"> Add </button><br>
-</h4>
-   <div class="myGroup" style=" min-width: 150px; min-height: 400px; float: left;margin-top: 7.5%;  margin-left: 10%;  border: 1px solid black;padding-right: 5%;padding-bottom: 5%;">
-     <ul class="groups">
-       <li>OS &emsp;&emsp;<a href="#">remove</a>&emsp;<a href="#">add</a></li>
-     </ul>
-   </div>
-   <div class="currentGroup" style=" min-width: 150px; min-height: 400px;float: right; margin-top: 7.5%;  margin-right: 10%;  border: 1px solid black;padding-right: 5%;padding-bottom: 5%;">
-     <h3>Group Name</h3>
-     Your friend name: <input type="text" name="fname"> <button type="button"> Add </button><br>
-     <ul class="groupFriends">
-       <li>Ahmed Ali &emsp;&emsp;<a href="#">remove</a></li>
-     </ul>
-   </div>
- </div>
-</body>
-
-<%include layout/footer %>
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-check"></i> Data information certified
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<% include layout/footer %>

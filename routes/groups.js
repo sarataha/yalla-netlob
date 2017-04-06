@@ -3,7 +3,10 @@ var router = express.Router()
 
 /* GET groups page. */
 router.get('/', function(req, res, next) {
-  res.render('groups', { title: 'Yalla Netlob | Groups' });
+  res.render('groups', {
+  	title: 'Groups',
+  	username: 'Sara'
+  });
 });
 
 module.exports = router;

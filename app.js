@@ -1,6 +1,6 @@
 var express = require('express');
 
-var passport = require('passport');
+// var passport = require('passport');
 // var session = require('express-session');
 var usersModel = require('./models/users')
 
@@ -13,6 +13,23 @@ var usersModel = require('./models/users')
 // var passport = require('passport');
 // var session = require('express-session');
 
+// set up ======================================================================
+// get all the tools we need
+var session  = require('express-session');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var morgan = require('morgan');
+var app      = express();
+var port     = process.env.PORT || 8080;
+
+var passport = require('passport');
+var flash    = require('connect-flash');
+
+// configuration ===============================================================
+// connect to our database
+
+require('./config/passport')(passport); // pass passport for configuration
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -20,6 +37,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
+// var routes = require('./routes/index')(passport);
 var users = require('./routes/users');
 var friends = require('./routes/friends');
 var groups = require('./routes/groups');
@@ -49,7 +67,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.use('/home', index);
 app.use('/users', users);
 app.use('/groups', groups);
 app.use('/friends', friends);

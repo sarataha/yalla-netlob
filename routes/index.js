@@ -3,7 +3,16 @@ module.exports = function(app, passport) {
 
 	/* GET Home page with login form. */
 	app.get('/', function(req, res) {
+		// Redirect user to the dashboard if he trys to open the login page while already logged in
+		if (req.isAuthenticated()) {
+			res.render('index.ejs', {
+				title: 'Home',
+				username: req.user.user_name
+			});
+		}
+		else {
 		res.render('login.ejs', { message: req.flash('loginMessage') });
+		}
 	});
 
 	// process the login form
@@ -25,7 +34,16 @@ module.exports = function(app, passport) {
 
 	/* GET signup page. */
 	app.get('/signup', function(req, res) {
+		// Redirect user to the dashboard if he trys to open the signup page while already logged in
+		if (req.isAuthenticated()) {
+			res.render('index.ejs', {
+				title: 'Home',
+				username: req.user.user_name
+			});
+		}
+		else {
 		res.render('signup.ejs', { message: req.flash('signupMessage') });
+		}
 	});
 
 	// process the signup form

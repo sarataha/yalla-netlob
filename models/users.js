@@ -1,4 +1,5 @@
 // ./models/users.js
+
 module.exports = {
     'connection': {
         'host': 'localhost',

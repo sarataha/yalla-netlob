@@ -1,23 +1,23 @@
 // config/passport.js
 
-// load all the things we need
+// Load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 
-// load up the user model
+// Load the user model
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('../models/users');
 var connection = mysql.createConnection(dbconfig.connection);
 
 connection.query('USE ' + dbconfig.database);
-// expose this function to our app using module.exports
+// Share the authentication function with the rest of our app
 module.exports = function(passport) {
 
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
+    /**
+     * Passport session setup.
+     */
 
-    // used to serialize the user for the session
+    // Used to serialize the user for the session, passport stuff
     passport.serializeUser(function(user, done) {
         console.log('serializeUser: ' + user.user_id)
         if (user.id == undefined)
@@ -26,40 +26,38 @@ module.exports = function(passport) {
             done(null, user.id);
     });
 
-    // used to deserialize the user
+    // Used to deserialize the user, passport stuff
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE user_id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
     });
 
-    // =========================================================================
-    // LOCAL SIGNUP ============================================================
-    // =========================================================================
+    /**
+     * Local Signup.
+     */
 
     passport.use(
         'local-signup',
         new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
             usernameField : 'email',
             passwordField : 'password',
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, done) {
-            // find a user whose email is the same as the email in the form
-            // we are checking to see if the user trying to login already exists
+            // Find a user with an email similar to the email in the form
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
                     return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                 } else {
-                    // if there is no user with that email
-                    // create the user
+                    // If no email found in the database;
+                    // Create that user
                     var newUserMysql = {
                         email: email,
                         username: req.body.username,
-                        password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
+                        password: bcrypt.hashSync(password, null, null)  // Sekurity :D
                     };
 
                     var insertQuery = "INSERT INTO users ( user_name, email, password ) values (?,?,?)";
@@ -74,31 +72,31 @@ module.exports = function(passport) {
         })
     );
 
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
+    /**
+     * Local Login.
+     */
 
     passport.use(
         'local-login',
         new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
             usernameField : 'email',
             passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
+            passReqToCallback : true
         },
-        function(req, email, password, done) { // callback with email and password from our form
+        function(req, email, password, done) {
+        // Callback with email and password from the login form
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
-                    return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                    return done(null, false, req.flash('loginMessage', 'No user found.'));
                 }
 
-                // if the user is found but the password is wrong
+                // If the entered password is incorrect
                 if (!bcrypt.compareSync(password, rows[0].password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, req.flash('loginMessage', 'Wrong password. Please try again'));
 
-                // all is well, return successful user
+                // Everything is fine? Return successful and log the user in
                 return done(null, rows[0]);
             });
         })

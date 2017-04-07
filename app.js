@@ -1,6 +1,6 @@
 var express = require('express');
 
-// set up ======================================================================
+// set up
 // get all the tools we need
 var session  = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -14,9 +14,9 @@ var port     = process.env.PORT || 8080;
 var passport = require('passport');
 var flash    = require('connect-flash');
 
-// configuration ===============================================================
+// configuration
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,11 +36,11 @@ app.use(session({
   saveUninitialized: true
  } )); // session secret
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+app.use(passport.session());
+app.use(flash());
 
-// routes ======================================================================
-require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+// routes
+require('./routes/index.js')(app, passport);
 
 var index = require('./routes/index');
 var users = require('./routes/users');

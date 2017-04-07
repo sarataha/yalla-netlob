@@ -1,17 +1,6 @@
 var express = require('express');
 
-// var passport = require('passport');
-// var session = require('express-session');
 var usersModel = require('./models/users')
-
-
-
-//var passport = require('passport');
-//var session = require('express-session');
-//var RedisStore = require('connect-redis')(session)
-
-// var passport = require('passport');
-// var session = require('express-session');
 
 // set up ======================================================================
 // get all the tools we need
@@ -37,7 +26,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-// var routes = require('./routes/index')(passport);
 var users = require('./routes/users');
 var friends = require('./routes/friends');
 var groups = require('./routes/groups');
@@ -46,17 +34,6 @@ var auth = require('./routes/auth');
 
 var app = express();
 
-// app.use(session({  
-//   store: new RedisStore({
-//     url: config.redisStore.url
-//   }),
-//   secret: config.redisStore.secret,
-//   resave: false,
-//   saveUninitialized: false
-// }))
-// app.use(passport.initialize())  
-// app.use(passport.session())  
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -64,16 +41,28 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// required for passport
+app.use(session({
+  secret: 'vidyapathaisalwaysrunning',
+  resave: true,
+  saveUninitialized: true
+ } )); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+// routes ======================================================================
+require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 app.use('/home', index);
 app.use('/users', users);
 app.use('/groups', groups);
 app.use('/friends', friends);
 app.use('/orders', orders);
-app.use('/new_order', orders);
 app.use('/auth', auth);
 
 // catch 404 error and forward error status handler

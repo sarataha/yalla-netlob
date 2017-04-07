@@ -10,6 +10,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+<<<<<<< HEAD
 /* GET orders page. */
 router.get('/', function(req, res, next) {
   var query="select meal_type,order_status,resturant from orders";
@@ -42,4 +43,7 @@ router.get('/order_details', function(req, res, next) {
   });
 });
 
+=======
+>>>>>>> e6c4db2df0a4286484b4005ba817ecd3e74cd743
 module.exports = router;
+ 

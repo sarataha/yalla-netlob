@@ -1,60 +1,22 @@
 var express = require('express');
 
-// var passport = require('passport');
-// var session = require('express-session');
-var usersModel = require('./models/users')
-
-
-
-//var passport = require('passport');
-//var session = require('express-session');
-//var RedisStore = require('connect-redis')(session)
-
-// var passport = require('passport');
-// var session = require('express-session');
-
-// set up ======================================================================
+// set up
 // get all the tools we need
 var session  = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var morgan = require('morgan');
+var logger = require('morgan');
+var favicon = require('serve-favicon');
+var path = require('path');
 var app      = express();
 var port     = process.env.PORT || 8080;
 
 var passport = require('passport');
 var flash    = require('connect-flash');
 
-// configuration ===============================================================
-// connect to our database
+// configuration
 
-require('./config/passport')(passport); // pass passport for configuration
-
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-var index = require('./routes/index');
-// var routes = require('./routes/index')(passport);
-var users = require('./routes/users');
-var friends = require('./routes/friends');
-var groups = require('./routes/groups');
-var orders = require('./routes/orders');
-
-var app = express();
-
-// app.use(session({  
-//   store: new RedisStore({
-//     url: config.redisStore.url
-//   }),
-//   secret: config.redisStore.secret,
-//   resave: false,
-//   saveUninitialized: false
-// }))
-// app.use(passport.initialize())  
-// app.use(passport.session())  
+require('./config/passport')(passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,16 +25,38 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// required for passport
+app.use(session({
+  secret: 'twinkletwinklelittlestarhowiwonderwhatyouare',
+  resave: true,
+  saveUninitialized: true
+ } )); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+// routes
+require('./routes/index.js')(app, passport);
+
+var index = require('./routes/index');
+var users = require('./routes/users');
+var friends = require('./routes/friends');
+var groups = require('./routes/groups');
+var orders = require('./routes/orders');
+var new_order = require('./routes/new_order');
+var order_details = require('./routes/order_details');
 
 app.use('/home', index);
 app.use('/users', users);
 app.use('/groups', groups);
 app.use('/friends', friends);
 app.use('/orders', orders);
-app.use('/new_order', orders);
+app.use('/new_order', new_order);
+app.use('/order_details', order_details);
 
 // catch 404 error and forward error status handler
 app.use(function(req, res, next) {

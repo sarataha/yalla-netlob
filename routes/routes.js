@@ -58,29 +58,29 @@ module.exports = function(app, passport) {
 	// we will use route middleware to verify this (the isLoggedIn function)
 	app.get('/home', isLoggedIn, function(req, res) {
 		res.render('index.ejs', {
-			username : req.user, // get the user out of session and pass to template
 			title: 'Home',
+			username: req.user.user_name
 		});
 	});
 
 	app.get('/groups', isLoggedIn, function(req, res) {
 		res.render('groups.ejs', {
-			username : req, // get the user out of session and pass to template
 			title: 'Groups',
+			username: req.user.user_name
 		});
 	});
 
 	app.get('/friends', isLoggedIn, function(req, res) {
 		res.render('friends.ejs', {
-			username : req.user, // get the user out of session and pass to template
 			title: 'Friends',
+			username: req.user.user_name
 		});
 	});
 
 	app.get('/orders', isLoggedIn, function(req, res) {
 		res.render('orders.ejs', {
-			username : req.user, // get the user out of session and pass to template
 			title: 'Orders',
+			username: req.user.user_name
 		});
 	});
 
@@ -88,7 +88,7 @@ module.exports = function(app, passport) {
 	app.get('/orders/new_order', isLoggedIn, function(req, res, next) {
 	  res.render('new_order', {
 	  	title: 'New Order',
-	  	username: 'Sara',
+		username: req.user.user_name
 	  });
 	});
 
@@ -96,7 +96,15 @@ module.exports = function(app, passport) {
 	app.get('/orders/order_details', isLoggedIn, function(req, res, next) {
 	  res.render('order_details', {
 	  	title: 'Order Details',
-	  	username: 'Sara'
+		username: req.user.user_name
+	  });
+	});
+
+	/* GET users listing. */
+	app.get('/user', function(req, res, next) {
+	  res.render('profile', {
+	  	title: 'Profile',
+	  	username: req.user.user_name
 	  });
 	});
 

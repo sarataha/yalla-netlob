@@ -25,23 +25,45 @@
 	<form action="/signup" method="post">
 		<div class="form-group">
 			<label>Username</label>
-			<input type="text" class="form-control" name="username">
+			<input type="text" class="form-control" name="username" required>
+		</div>
+		<div class="form-group">
+			<label>Email</label>
+			<input type="email" class="form-control" name="email" required>
 		</div>
 		<div class="form-group">
 			<label>Password</label>
-			<input type="password" class="form-control" name="password">
+			<input type="password" id="password" class="form-control" name="password" required>
+		</div>
+		<div class="form-group">
+			<label>Password Confirmation</label>
+			<input type="password" id="confirm_password" class="form-control" name="password_confirmation" required>
 		</div>
 
-		<button type="submit" class="btn btn-warning btn-lg">Signup</button>
+		<button type="submit" class="btn btn-danger btn-lg">Signup</button>
 	</form>
 
 	<hr>
 
 	<p>Already have an account? <a href="/login">Login</a></p>
-	<p>Or go <a href="/">home</a>.</p>
+	<p>Back to <a href="/">home</a>.</p>
 
 </div>
+	<script>
+		var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirm_password");
 
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+	</script>
 </div>
 </body>
 </html>

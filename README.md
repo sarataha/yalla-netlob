@@ -12,11 +12,17 @@ npm install
 ```
 2. To start the server run
 ```
-DEBUG=yalla-notlob:* ./bin/www
+npm start
 ```
-3. Open your web browser and type the following url
+
+3. To start the server with auto-restart option on file change run
+```
+supervisor app.js
+```
+
+4. Open your web browser and type the following url
 
 
-&nbsp;&nbsp;&nbsp;[http://localhost:3000/](http://localhost:3000/)
+[http://localhost:8090/](http://localhost:8090/)
 
-4. Bon appétit!
+5. Bon appétit!

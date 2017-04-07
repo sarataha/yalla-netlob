@@ -6,7 +6,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 // load up the user model
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
-var dbconfig = require('./database');
+var dbconfig = require('../models/users');
 var connection = mysql.createConnection(dbconfig.connection);
 
 connection.query('USE ' + dbconfig.database);
@@ -16,8 +16,6 @@ module.exports = function(passport) {
     // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -38,8 +36,6 @@ module.exports = function(passport) {
     // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
 
     passport.use(
         'local-signup',
@@ -50,7 +46,7 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, done) {
-            // find a user whose email is the same as the forms email
+            // find a user whose email is the same as the email in the form
             // we are checking to see if the user trying to login already exists
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
                 if (err)
@@ -58,7 +54,7 @@ module.exports = function(passport) {
                 if (rows.length) {
                     return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                 } else {
-                    // if there is no user with that username
+                    // if there is no user with that email
                     // create the user
                     var newUserMysql = {
                         email: email,
@@ -81,8 +77,6 @@ module.exports = function(passport) {
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
 
     passport.use(
         'local-login',

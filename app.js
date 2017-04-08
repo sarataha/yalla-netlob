@@ -47,12 +47,16 @@ var users = require('./routes/users');
 var friends = require('./routes/friends');
 var groups = require('./routes/groups');
 var orders = require('./routes/orders');
+var new_order = require('./routes/new_order');
+var order_details = require('./routes/order_details');
 
 app.use('/home', index);
 app.use('/users', users);
 app.use('/groups', groups);
 app.use('/friends', friends);
 app.use('/orders', orders);
+app.use('/new_order', new_order);
+app.use('/order_details', order_details);
 
 // catch 404 error and forward error status handler
 app.use(function(req, res, next) {

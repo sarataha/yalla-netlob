@@ -104,7 +104,7 @@ module.exports = function(app, passport) {
 
 	/* GET new order page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-	app.get('/orders/new_order', isLoggedIn, function(req, res, next) {
+	app.get('/new_order', isLoggedIn, function(req, res, next) {
 	  res.render('new_order', {
 	  	title: 'New Order',
 		username: req.user.user_name,
@@ -114,7 +114,7 @@ module.exports = function(app, passport) {
 
 	/* GET order details page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-	app.get('/orders/order_details', isLoggedIn, function(req, res, next) {
+	app.get('/order_details', isLoggedIn, function(req, res, next) {
 	  res.render('order_details', {
 	  	title: 'Order Details',
 		username: req.user.user_name,
@@ -125,7 +125,7 @@ module.exports = function(app, passport) {
 	/* GET current user's page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	// TODO: add ability to view other users' profiles
-	app.get('/user', function(req, res, next) {
+	app.get('/user', isLoggedIn, function(req, res, next) {
 	  res.render('profile', {
 	  	title: 'Profile',
 	  	username: req.user.user_name,

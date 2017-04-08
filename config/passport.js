@@ -107,9 +107,9 @@ module.exports = function(passport) {
         })
     );
 
-    // =========================================================================
-    // FACEBOOK ================================================================
-    // =========================================================================
+    /***************************************
+     *********** FACEBOOK ******************
+     ***************************************/
     passport.use(new FacebookStrategy({
 
         // pull in our app id and secret from our auth.js file
@@ -160,9 +160,9 @@ module.exports = function(passport) {
 
     }));
 
-    // =========================================================================
-    // TWITTER =================================================================
-    // =========================================================================
+    /***************************************
+     *********** TWITTER *******************
+     ***************************************/
     passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
@@ -188,7 +188,6 @@ module.exports = function(passport) {
                 }
                 else {
                     // if there is no user found with that facebook id, create them
-                    // var newUser            = new User();
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,

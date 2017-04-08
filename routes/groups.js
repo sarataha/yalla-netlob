@@ -17,6 +17,7 @@ connection.query('USE ' + dbconfig.database);
 
 router.post("/add",middlewareBodyParser,function(req,respo){
   console.log("groupnameee"+req.body.name);
+  console.log("groupnameee"+req.body.name);
   var groupname=  req.body.name;
   var groupadmin=req.body.user_id;
   connection.query("SELECT * FROM groups WHERE group_name  = ?",groupname, function(err, rows) {
@@ -33,8 +34,8 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 
           var insertQuery = "INSERT INTO groups ( group_name, group_admin ) values (?,?)";
 
-          connection.query(insertQuery,[newGroupMysql.groupname, newGroupMysql.groupadmin],function(err, rows) {
-              newGroupMysql.id = rows.insertId;
+          connection.query(insertQuery,[groupname,groupadmin],function(err, rows) {
+              //newGroupMysql.id = rows.insertId;
 
               console.log("DONE");
           });

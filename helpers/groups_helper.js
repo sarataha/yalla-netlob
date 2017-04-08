@@ -7,10 +7,13 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
-// router.use(function(req,resp,next){
-//   resp.setHeader("Access-Control-Allow-Origin","*");
-//   resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
-//   next()
-// });
-
-connection.query('USE ' + dbconfig.database);
+module.exports = function() {
+	connection.query("SELECT * FROM groups", function(err, rows) {
+		if (err) {
+			return err;
+		}
+		else {
+			return rows;
+		}
+	}
+};

@@ -1,15 +1,18 @@
-var express = require('express');
 var mysql=require('mysql');
-var router = express.Router();
+var router = require('express').Router();
+var dbconfig = require('../models/groups');
+var connection = mysql.createConnection(dbconfig.connection);
+
 var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
-var connection = mysql.createConnection(dbconfig.connection);
-router.use(function(req,resp,next){
-  resp.setHeader("Access-Control-Allow-Origin","*");
-  resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
-  next()
-})
+
+// router.use(function(req,resp,next){
+//   resp.setHeader("Access-Control-Allow-Origin","*");
+//   resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
+//   next()
+// });
+
 connection.query('USE ' + dbconfig.database);
 
 router.post("/add",middlewareBodyParser,function(req,respo){
@@ -17,20 +20,23 @@ router.post("/add",middlewareBodyParser,function(req,respo){
   var groupname=  req.body.name;
   var groupadmin=req.body.user_id;
   connection.query("SELECT * FROM groups WHERE group_name  = ?",groupname, function(err, rows) {
+    console.log("HELLO==========================", groupname, groupadmin);
       if (err)
           return done(err);
       if (rows.length) {
         console.log("That group already exist");
-          //return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
       } else {
-          // If no email found in the database;
-          // Create that user
+          var newGroupMysql = {
+            groupname: req.body.name,
+            groupadmin: req.body.user_id,
+          };
 
-          var insertQuery = "INSERT INTO groups (group_name,group_admin ) values('"+groupname+"',"+user_id+")";
+          var insertQuery = "INSERT INTO groups ( group_name, group_admin ) values (?,?)";
 
-          connection.query(insertQuery,function(err, rows) {
+          connection.query(insertQuery,[newGroupMysql.groupname, newGroupMysql.groupadmin],function(err, rows) {
               newGroupMysql.id = rows.insertId;
-              return done(null, newUserMysql);
+
+              console.log("DONE");
           });
       }
   });

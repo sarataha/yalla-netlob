@@ -133,11 +133,6 @@ module.exports = function(app, passport) {
 	  });
 	});
 
-
-
-
-
-
 	/* GET logout page if user logged in. */
 	app.get('/logout', function(req, res) {
 		req.logout();

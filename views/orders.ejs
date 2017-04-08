@@ -23,26 +23,22 @@
                                       <th>Actions</th>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                          <td>Breakfast</td>
-                                          <td>ElTab3i</td>
-                                          <td>10</td>
-                                          <td>5</td>
-                                          <td>Waiting</td>
-                                          <td>
-                                            <a>view</a>
-                                            <a>finish</a>
-                                            <a>cancel</a>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td>Lunch</td>
-                                          <td>Mac</td>
-                                          <td>5</td>
-                                          <td>5</td>
-                                          <td>Finished</td>
-                                          <td><a>view</a></td>
-                                        </tr>
+
+                                        <% for(var i=0; i < orders.length; i++) { %>
+                                          <tr>
+                                            <td><%= orders[i].meal_type %></td>
+                                            <td><%= orders[i].resturant %></td>
+                                            <td>10</td>
+                                            <td>5</td>
+                                            <td><%= orders[i].order_status %></td>
+                                            <td>
+                                              <a>view</a>
+                                              <a>finish</a>
+                                              <a>cancel</a>
+                                            </td>
+                                          </tr>
+                                            <% } %>
+
                                         <tr>
                                           <td></td>
                                           <td></td>

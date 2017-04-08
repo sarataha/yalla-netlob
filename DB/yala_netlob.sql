@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `groups` (
-  `group_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
   `group_name` varchar(30) NOT NULL,
   `group_admin` int(11) NOT NULL,
   PRIMARY KEY (`group_id`),

@@ -13,7 +13,7 @@ var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
 var app      = express();
-var port     = process.env.PORT || 8080;
+var port     = process.env.PORT || 8090;
 
 var passport = require('passport');
 var config = require('./config/auth.js');
@@ -87,6 +87,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-app.listen(8090,function () {
-  console.log("Server started....");
+app.listen(port,function () {
+  console.log("App is running on port " + port);
 });

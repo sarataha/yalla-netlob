@@ -85,5 +85,18 @@
                 </div>
             </div>
         </div>
-
+        <script>
+          $function(){
+            $ajax({
+              url:"http://localhost:8090/orders",
+              method:"GET",
+              success:function(response) {
+                console.log(response);
+              },
+              error:function() {
+                console.log(err);
+              }
+            })
+          }
+        </script>
 <%include layout/footer %>

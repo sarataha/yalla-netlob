@@ -3,6 +3,11 @@
 var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
+
+var nodemailer = require('nodemailer');
+var async = require('async');
+var crypto = require('crypto');
+
 module.exports = function(app, passport) {
 
 	/* GET Home page with login form. */
@@ -174,6 +179,59 @@ module.exports = function(app, passport) {
                     successRedirect : '/home',
                     failureRedirect : '/'
             }));
+
+    /***
+     * RESET PASSWORD
+     */
+     
+    // Render reset password page
+	app.get('/reset', function (req, res, next) {
+	    // Redirect user to the dashboard if he trys to open the login page while already logged in
+		if (req.isAuthenticated()) {
+			res.render('index.ejs', {
+				title: 'Home',
+				username: req.user.user_name,
+				userID:req.user.user_id
+			});
+		}
+		else {
+		res.render('reset.ejs', {
+			title: 'Password Reset'
+			});
+		}
+	});
+
+	// Process password reset
+	// TODO: get email address from user
+	// TODO: check if email address exists in db
+	// TODO: if email exists send a reset password mail
+	// TODO: if it doesn't exist return an error to user
+	app.post('/reset', function (req, res, next) {
+	    var transporter = nodemailer.createTransport({
+	        service: 'gmail',
+	        auth: {
+	            user: 'yallanetlob@gmail.com',
+	            pass: 'yallanetlobositi'
+	        }
+	    });
+	    var mailOption = {
+	        from: '"Yalla Netlob" <yallanetlob@gmail.com>', // sender address
+    		to: 'yallanetlob@gmail.com', // receiver address
+    		subject: 'Your New Password', // Subject line
+    		text: 'Dear Customer,\n This is your new password', // plain text body
+    		html: '<b>Your new password ?</b>' // html body
+	    }
+	    transporter.sendMail(mailOption, function (err, info) {
+	        if (err) {
+	            console.log(err);
+	            res.redirect('/');
+	        }
+	        else {
+	            console.log('Message %s sent: %s', info.messageId, info.response);
+	            res.redirect('/');
+	        }
+	    });
+	});
 
 	/* GET logout page if user logged in. */
 	app.get('/logout', function(req, res) {

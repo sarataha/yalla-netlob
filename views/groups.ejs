@@ -1,15 +1,45 @@
 <% include layout/sidebar %>
 <% include layout/header %>
+<script>
+
+
+var groupname;
+var user_id;
+$(function(){
+  $( "#addGroup" ).click(function( event ) {
+    //event.preventDefault();
+    groupname=$("#groupName").val();
+    user_id=userID[0].innerHTML;
+    console.log(userID[0].innerHTML);
+      console.log(groupname);
+    $.ajax({
+      url:"http://localhost:8090/groups/add",
+      method:"POST",
+      data:{name:groupname,user_id:parseInt(user_id)},
+      success:function(response){
+         console.log(response)
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+
+})
+})
+</script>
+
+
+
         <div class="content">
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6 col-md-offset-3">
                   <div class="form-group">
                     <label>Group</label>
-                    <input type="text" value="" placeholder="Input" class="form-control" />
+                    <input type="text" value="" placeholder="Input"  name="groupName" id="groupName" class="form-control" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button type="submit" class="btn btn-info btn-fill btn-wd">Add</button>
+                    <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup">Add</button>
                   </div>
                 </div>
               </div>

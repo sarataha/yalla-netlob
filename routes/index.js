@@ -1,4 +1,8 @@
 // routes/index.js
+
+var bodyParser=require('body-parser');
+var middlewareBodyParser=bodyParser.urlencoded({extended:false})
+var dbconfig = require('../models/groups');
 module.exports = function(app, passport) {
 
 	/* GET Home page with login form. */
@@ -7,7 +11,8 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated()) {
 			res.render('index.ejs', {
 				title: 'Home',
-				username: req.user.user_name
+				username: req.user.user_name,
+				userID:req.user.user_id
 			});
 		}
 		else {
@@ -41,7 +46,8 @@ module.exports = function(app, passport) {
 		if (req.isAuthenticated()) {
 			res.render('index.ejs', {
 				title: 'Home',
-				username: req.user.user_name
+				username: req.user.user_name,
+				userID:req.user.user_id
 			});
 		}
 		else {
@@ -61,7 +67,8 @@ module.exports = function(app, passport) {
 	app.get('/home', isLoggedIn, function(req, res) {
 		res.render('index.ejs', {
 			title: 'Home',
-			username: req.user.user_name
+			username: req.user.user_name,
+			userID:req.user.user_id
 		});
 	});
 
@@ -70,7 +77,8 @@ module.exports = function(app, passport) {
 	app.get('/groups', isLoggedIn, function(req, res) {
 		res.render('groups.ejs', {
 			title: 'Groups',
-			username: req.user.user_name
+			username: req.user.user_name,
+			userID:req.user.user_id
 		});
 	});
 
@@ -79,7 +87,8 @@ module.exports = function(app, passport) {
 	app.get('/friends', isLoggedIn, function(req, res) {
 		res.render('friends.ejs', {
 			title: 'Friends',
-			username: req.user.user_name
+			username: req.user.user_name,
+			userID:req.user.user_id
 		});
 	});
 
@@ -88,7 +97,8 @@ module.exports = function(app, passport) {
 	app.get('/orders', isLoggedIn, function(req, res) {
 		res.render('orders.ejs', {
 			title: 'Orders',
-			username: req.user.user_name
+			username: req.user.user_name,
+			userID:req.user.user_id
 		});
 	});
 
@@ -97,7 +107,8 @@ module.exports = function(app, passport) {
 	app.get('/orders/new_order', isLoggedIn, function(req, res, next) {
 	  res.render('new_order', {
 	  	title: 'New Order',
-		username: req.user.user_name
+		username: req.user.user_name,
+		userID:req.user.user_id
 	  });
 	});
 
@@ -106,7 +117,8 @@ module.exports = function(app, passport) {
 	app.get('/orders/order_details', isLoggedIn, function(req, res, next) {
 	  res.render('order_details', {
 	  	title: 'Order Details',
-		username: req.user.user_name
+		username: req.user.user_name,
+		userID:req.user.user_id
 	  });
 	});
 
@@ -116,9 +128,15 @@ module.exports = function(app, passport) {
 	app.get('/user', function(req, res, next) {
 	  res.render('profile', {
 	  	title: 'Profile',
-	  	username: req.user.user_name
+	  	username: req.user.user_name,
+			userID:req.user.user_id
 	  });
 	});
+
+
+
+
+
 
 	/* GET logout page if user logged in. */
 	app.get('/logout', function(req, res) {

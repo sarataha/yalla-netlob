@@ -9,8 +9,8 @@ $(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
-    user_id=userID[0].innerHTML;
-    console.log(userID[0].innerHTML);
+    user_id=userID.innerHTML;
+    console.log(userID.innerHTML);
       console.log(groupname);
     $.ajax({
       url:"http://localhost:8090/groups/add",

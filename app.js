@@ -7,11 +7,20 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
+// for password reset
+var nodemailer = require('nodemailer');
+var async = require('async');
+var crypto = require('crypto');
 var path = require('path');
 var app      = express();
 var port     = process.env.PORT || 8080;
 
 var passport = require('passport');
+var config = require('./config/auth.js');
+var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
+var GoogleStrategy = require('passport-google-oauth').Strategy;
+
 var flash    = require('connect-flash');
 
 // configuration

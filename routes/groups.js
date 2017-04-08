@@ -27,10 +27,10 @@ router.post("/add",middlewareBodyParser,function(req,respo){
       if (rows.length) {
         console.log("That group already exist");
       } else {
-          // var newGroupMysql = {
-          //   groupname: req.body.name,
-          //   groupadmin: req.body.user_id,
-          // };
+          var newGroupMysql = {
+            groupname: req.body.name,
+            groupadmin: req.body.user_id,
+          };
 
           var insertQuery = "INSERT INTO groups ( group_name, group_admin ) values (?,?)";
 

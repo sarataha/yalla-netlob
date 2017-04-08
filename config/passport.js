@@ -4,6 +4,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Load the user model
 var mysql = require('mysql');
@@ -107,38 +108,37 @@ module.exports = function(passport) {
         })
     );
 
-    /***************************************
-     *********** FACEBOOK ******************
-     ***************************************/
+    /**
+     * Facebook Login/Signup.
+     */
+
     passport.use(new FacebookStrategy({
 
-        // pull in our app id and secret from our auth.js file
+        // Pull in our app id, secret and profile fields from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
         profileFields   : configAuth.facebookAuth.profileFields
     },
 
-    // facebook will send back the token and profile
+    // Facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
 
-        // asynchronous
+        // Asynchronous
         process.nextTick(function() {
 
-            // find the user in the database based on their facebook id
+            // Find the user in the database based on their facebook id
             connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows) {
 
-                // if there is an error, stop everything and return that
-                // ie an error connecting to the database
+                // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
 
-                // if the user is found, then log them in
+                // If the user is found, then log them in
                 if (rows[0]) {
                     return done(null, rows[0]); // user found, return that user
                 } else {
-                    // if there is no user found with that facebook id, create them
-                    // var newUser            = new User();
+                    // If there is no user found with that facebook id, create them
                     var newUserMysql = {
                         facebook_id: profile.id,
                         facebook_token: token,
@@ -160,9 +160,11 @@ module.exports = function(passport) {
 
     }));
 
-    /***************************************
-     *********** TWITTER *******************
-     ***************************************/
+    /**
+     * TWITTER Login/Signup.
+     */
+
+    // Pull in our app consumer key and consumer secret from our auth.js file
     passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
@@ -170,24 +172,24 @@ module.exports = function(passport) {
         callbackURL     : configAuth.twitterAuth.callbackURL
 
     },
+
+    // Facebook will send back the token and profile
     function(token, tokenSecret, profile, done) {
 
-        // make the code asynchronous
-    // User.findOne won't fire until we have all our data back from Twitter
+        // Asynchronous
         process.nextTick(function() {
             connection.query("SELECT * FROM users WHERE twitter_id = ?",[profile.id], function(err, rows) {
 
-                // if there is an error, stop everything and return that
-                // ie an error connecting to the database
+                // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
 
-                // if the user is found then log them in
+                // If the user is found then log them in
                 if (rows[0]) {
                     return done(null, rows[0]); // user found, return that user
                 }
                 else {
-                    // if there is no user found with that facebook id, create them
+                    // If there is no user found with that facebook id, create them
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,
@@ -206,6 +208,58 @@ module.exports = function(passport) {
                 }
             });
 
+        });
+
+    }));
+
+    /**
+     * GOOGLE Login/Signup.
+     */
+
+    passport.use(new GoogleStrategy({
+
+        clientID        : configAuth.googleAuth.clientID,
+        clientSecret    : configAuth.googleAuth.clientSecret,
+        callbackURL     : configAuth.googleAuth.callbackURL,
+
+    },
+    function(token, refreshToken, profile, done) {
+
+        // Asynchronous
+        process.nextTick(function() {
+
+            // try to find the user based on their google id
+            connection.query("SELECT * FROM users WHERE google_id = ?",[profile.id], function(err, rows) {
+
+                if (err)
+                    return done(err);
+
+                if (rows[0]) {
+
+                    // if a user is found, log them in
+                    return done(null, rows[0]);
+
+                }
+
+                else {
+                    // If there is no user found with that facebook id, create them
+                    var newUserMysql = {
+                        google_id: profile.id,
+                        google_token: token,
+                        username: profile.displayName,
+                        email: profile.emails[0].value // Get the first email
+                    };
+
+                    // save the user
+                    var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id ) values (?,?,?,?)";
+
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id],function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
         });
 
     }));

@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 // for password reset
-var nodemailer = require('nodemailer');
+//var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var path = require('path');

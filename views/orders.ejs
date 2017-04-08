@@ -86,8 +86,8 @@
             </div>
         </div>
         <script>
-          $function(){
-            $ajax({
+          $(function(){
+            $.ajax({
               url:"http://localhost:8090/orders",
               method:"GET",
               success:function(response) {
@@ -96,7 +96,7 @@
               error:function() {
                 console.log(err);
               }
-            })
-          }
+            });
+          });
         </script>
 <%include layout/footer %>

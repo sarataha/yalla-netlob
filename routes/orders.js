@@ -9,21 +9,22 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-
-<<<<<<< HEAD
 /* GET orders page. */
 router.get('/', function(req, res, next) {
   var query="select meal_type,order_status,resturant from orders";
   connection.query(query,function(err,row,fields){
-    if(!err)
+    if(!err){
+      console.log("****************************************************");
       console.log(row[0]);
+    }
     else {
       console.log("error");
     }
   });
   res.render('orders', {
   	title: 'Orders',
-  	username: 'Sara'
+  	username: 'Sara',
+    userID:1
   });
 });
 
@@ -42,8 +43,4 @@ router.get('/order_details', function(req, res, next) {
   	username: 'Sara'
   });
 });
-
-=======
->>>>>>> e6c4db2df0a4286484b4005ba817ecd3e74cd743
 module.exports = router;
- 

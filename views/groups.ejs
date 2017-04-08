@@ -8,7 +8,6 @@ $(function(){
     //event.preventDefault();
     groupname=$("#groupName").val();
     user_id=userID[0].innerHTML;
-    $("#groupName").val()="";
     console.log(user_id);
 
       console.log(groupname);
@@ -45,7 +44,16 @@ $(function(){
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Groups</h4>
-                                <p class="category" ><ul id="groupsNames"></ul></p>
+                                <p class="category" >
+                                  <ul id="groupsNames">
+                                    <% for(var i=0; i < groups.length; i++) { %>
+
+                                        <li><%= groups[i].group_name %></li>
+
+                                        <% } %>
+                                
+                                  </ul>
+                              </p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">

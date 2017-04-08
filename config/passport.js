@@ -3,6 +3,7 @@
 // Load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy  = require('passport-twitter').Strategy;
 
 // Load the user model
 var mysql = require('mysql');
@@ -138,7 +139,6 @@ module.exports = function(passport) {
                 } else {
                     // if there is no user found with that facebook id, create them
                     // var newUser            = new User();
-                    console.log(profile.name);
                     var newUserMysql = {
                         facebook_id: profile.id,
                         facebook_token: token,
@@ -156,6 +156,57 @@ module.exports = function(passport) {
                 }
 
             });
+        });
+
+    }));
+
+    // =========================================================================
+    // TWITTER =================================================================
+    // =========================================================================
+    passport.use(new TwitterStrategy({
+
+        consumerKey     : configAuth.twitterAuth.consumerKey,
+        consumerSecret  : configAuth.twitterAuth.consumerSecret,
+        callbackURL     : configAuth.twitterAuth.callbackURL
+
+    },
+    function(token, tokenSecret, profile, done) {
+
+        // make the code asynchronous
+    // User.findOne won't fire until we have all our data back from Twitter
+        process.nextTick(function() {
+            connection.query("SELECT * FROM users WHERE twitter_id = ?",[profile.id], function(err, rows) {
+
+                // if there is an error, stop everything and return that
+                // ie an error connecting to the database
+                if (err)
+                    return done(err);
+
+                // if the user is found then log them in
+                if (rows[0]) {
+                    return done(null, rows[0]); // user found, return that user
+                }
+                else {
+                    // if there is no user found with that facebook id, create them
+                    // var newUser            = new User();
+                    var newUserMysql = {
+                        twitter_id: profile.id,
+                        twitter_token: token,
+                        username: profile.username
+                    };
+
+                    console.log(profile.username);
+
+                    var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id ) values (?,?,?)";
+
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.twitter_token, newUserMysql.twitter_id],function(err, rows) {
+                        newUserMysql.id = rows.insertId;
+
+                        return done(null, newUserMysql);
+                    });
+                }
+            });
+
         });
 
     }));

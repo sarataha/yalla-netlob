@@ -14,21 +14,24 @@ var dbconfig = require('../models/groups');
 connection.query('USE ' + dbconfig.database);
 
 router.get("/",function(req,res){
-  res.render('groups.ejs', {
-        title: 'Groups',
-        username: req.user.user_name,
-        userID: req.user.user_id
-      });
+
   console.log("*********");
   connection.query("SELECT * FROM groups ", function(err, rows) {
 
       if (err)
           return done(err);
       if (rows.length) {
-        for(i=0;i<rows.length;i++)
-        {console.log("group name: "+rows[i].group_name);
-          $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
-            }
+
+        console.log("group name: "+rows[0].group_name);
+        res.render('groups.ejs', {
+              title: 'Groups',
+              username: req.user.user_name,
+              userID: req.user.user_id,
+              groups:rows
+            });
+
+        //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
+
       } else {
 
 

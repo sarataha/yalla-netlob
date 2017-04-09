@@ -46,11 +46,11 @@ router.get('/new_order', function(req, res, next) {
 });
 
 /* GET order details page. */
-router.get('/order_details', function(req, res, next) {
-  res.render('order_details', {
-  	title: 'Order Details',
-  	username: 'Sara'
-  });
-});
+// router.get('/order_details', function(req, res, next) {
+//   res.render('order_details', {
+//   	title: 'Order Details',
+//   	username: 'Sara'
+//   });
+// });
 
 module.exports = router;

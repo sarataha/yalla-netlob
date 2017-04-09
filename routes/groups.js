@@ -27,7 +27,7 @@ router.get("/",function(req,res){
               title: 'Groups',
               username: req.user.user_name,
               userID: req.user.user_id,
-              groups:rows
+              groups: rows
             });
 
         //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
@@ -38,12 +38,32 @@ router.get("/",function(req,res){
       }
   });
 });
+
+router.get("/group",function(req,res) {
+  console.log("HIIIIIIIIIIIIIIIII");
+  console.log(req.query.group);
+  var group_name = req.query.group;
+  var query = "select user_name from users where user_id in(select user_id from group_members where group_id=(select group_id from groups where group_name= ?))";
+  connection.query(query,group_name,function(err,rows) {
+    if (err) {
+      return done(err);
+    }
+    else if (rows.length) {
+      console.log("FOUND");
+
+      console.log(rows[0].user_name);
+      res.send({group_name:group_name,row:rows});
+
+    }
+  });
+});
+
 router.post("/add",middlewareBodyParser,function(req,respo){
   console.log("groupnameee"+req.body.name);
   console.log("groupnameee"+req.body.name);
   var groupname=  req.body.name;
   var groupadmin=req.body.user_id;
-  connection.query("SELECT * FROM groups WHERE group_name  = ?",groupname, function(err, rows) {
+  connection.query("SELECT * FROM groups WHERE group_name = ?",groupname, function(err, rows) {
     console.log("HELLO==========================", groupname, groupadmin);
       if (err)
           return done(err);
@@ -53,7 +73,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 
           var newGroupMysql = {
             groupname: req.body.name,
-            groupadmin: req.body.user_id,
+            groupadmin: req.body.user_id
           };
 
           var insertQuery = "INSERT INTO groups ( group_name, group_admin ) values (?,?)";

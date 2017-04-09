@@ -79,13 +79,13 @@ module.exports = function(app, passport) {
 
 	/* GET groups page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-	app.get('/groups', isLoggedIn, function(req, res) {
-		res.render('groups.ejs', {
-			title: 'Groups',
-			username: req.user.user_name,
-			userID:req.user.user_id
-		});
-	});
+	// app.get('/groups', isLoggedIn, function(req, res) {
+	// 	res.render('groups.ejs', {
+	// 		title: 'Groups',
+	// 		username: req.user.user_name,
+	// 		userID:req.user.user_id
+	// 	});
+	// });
 
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
@@ -216,7 +216,7 @@ module.exports = function(app, passport) {
 	    });
 	    var mailOption = {
 	        from: '"Yalla Netlob" <yallanetlob@gmail.com>', // sender address
-    		to: 'yallanetlob@gmail.com', // receiver address
+    		to: 'yallanetlob@yahoo.com', // receiver address
     		subject: 'Your New Password', // Subject line
     		text: 'Dear Customer,\n This is your new password', // plain text body
     		html: '<b>Your new password ?</b>' // html body

@@ -13,7 +13,12 @@ var dbconfig = require('../models/groups');
 // });
 connection.query('USE ' + dbconfig.database);
 
-router.get("/",function(req,respo){
+router.get("/",function(req,res){
+  res.render('groups.ejs', {
+        title: 'Groups',
+        username: req.user.user_name,
+        userID: req.user.user_id
+      });
   console.log("*********");
   connection.query("SELECT * FROM groups ", function(err, rows) {
 
@@ -42,13 +47,11 @@ router.post("/add",middlewareBodyParser,function(req,respo){
       if (rows.length) {
         console.log("That group already exist");
       } else {
-<<<<<<< HEAD
-=======
+
           var newGroupMysql = {
             groupname: req.body.name,
             groupadmin: req.body.user_id,
           };
->>>>>>> 8ce828f08f1a0dcef6c4b3d354138067567464cf
 
           var insertQuery = "INSERT INTO groups ( group_name, group_admin ) values (?,?)";
 

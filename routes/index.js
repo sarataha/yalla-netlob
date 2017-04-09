@@ -4,7 +4,7 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
-var nodemailer = require('nodemailer');
+//var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 
@@ -24,7 +24,7 @@ module.exports = function(app, passport) {
 		res.render('login.ejs', {
 			title: 'Login',
 			message: req.flash('loginMessage')
-		});
+			});
 		}
 	});
 
@@ -79,6 +79,14 @@ module.exports = function(app, passport) {
 
 	/* GET groups page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
+
+	// app.get('/groups', isLoggedIn, function(req, res) {
+	// 	res.render('groups.ejs', {
+	// 		title: 'Groups',
+	// 		username: req.user.user_name,
+	// 		userID:req.user.user_id
+	// 	});
+	// });
 	// app.get('/groups', isLoggedIn, function(req, res) {
 	// 	res.render('groups.ejs', {
 	// 		title: 'Groups',
@@ -99,14 +107,14 @@ module.exports = function(app, passport) {
 
 	/* GET home orders if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-	app.get('/orders', isLoggedIn, function(req, res) {
+	/*app.get('/orders', isLoggedIn, function(req, res) {
 		res.render('orders.ejs', {
 			title: 'Orders',
 			username: req.user.user_name,
 			userID:req.user.user_id
 		});
 	});
-
+*/
 	/* GET new order page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/new_order', isLoggedIn, function(req, res, next) {
@@ -183,7 +191,7 @@ module.exports = function(app, passport) {
     /***
      * RESET PASSWORD
      */
-     
+
     // Render reset password page
 	app.get('/reset', function (req, res, next) {
 	    // Redirect user to the dashboard if he trys to open the login page while already logged in
@@ -191,7 +199,7 @@ module.exports = function(app, passport) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
-				userID:req.user.user_id
+				userID:req.user.user_id,
 			});
 		}
 		else {
@@ -206,6 +214,34 @@ module.exports = function(app, passport) {
 	// TODO: check if email address exists in db
 	// TODO: if email exists send a reset password mail
 	// TODO: if it doesn't exist return an error to user
+
+	// app.post('/reset', function (req, res, next) {
+	//     var transporter = nodemailer.createTransport({
+	//         service: 'gmail',
+	//         auth: {
+	//             user: 'yallanetlob@gmail.com',
+	//             pass: 'yallanetlobositi'
+	//         }
+	//     });
+	//     var mailOption = {
+	//         from: '"Yalla Netlob" <yallanetlob@gmail.com>', // sender address
+  //   		to: 'yallanetlob@gmail.com', // receiver address
+  //   		subject: 'Your New Password', // Subject line
+  //   		text: 'Dear Customer,\n This is your new password', // plain text body
+  //   		html: '<b>Your new password ?</b>' // html body
+	//     }
+	//     transporter.sendMail(mailOption, function (err, info) {
+	//         if (err) {
+	//             console.log(err);
+	//             res.redirect('/');
+	//         }
+	//         else {
+	//             console.log('Message %s sent: %s', info.messageId, info.response);
+	//             res.redirect('/');
+	//         }
+	//     });
+	// });
+
 	app.post('/reset', function (req, res, next) {
 	    var transporter = nodemailer.createTransport({
 	        service: 'gmail',
@@ -219,7 +255,7 @@ module.exports = function(app, passport) {
     		to: 'yallanetlob@yahoo.com', // receiver address
     		subject: 'Your New Password', // Subject line
     		text: 'Dear Customer,\n This is your new password', // plain text body
-    		html: '<b>Your new password ?</b>' // html body
+    		html: '<p>Dear Customer, <br> You have requested to reset your password. <br> Your new passwo</p>' // html body
 	    }
 	    transporter.sendMail(mailOption, function (err, info) {
 	        if (err) {

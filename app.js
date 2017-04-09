@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 // for password reset
-var nodemailer = require('nodemailer');
+//var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
@@ -79,6 +79,7 @@ app.use(function(err, req, res, next) {
   // set locals, error only being provided in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
 
   // render the error page
   res.status(err.status || 500);

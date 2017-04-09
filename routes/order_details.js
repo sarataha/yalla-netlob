@@ -16,11 +16,6 @@ connection.connect();
 router.get('/',middlewareBodyParser,function(req, res) {
   console.log("******************************* order_id");
   console.log(req.query.order_id);
-      // return  res.render("order_details",{
-      //         title: 'order_details',
-      //         username: req.user.user_name,
-      //         userID: req.user.user_id
-      //       });
 
 order_id=req.query.order_id;
   var query="select meal_type,order_status,resturant from orders where order_id='"+order_id+"'";

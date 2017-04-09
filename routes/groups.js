@@ -43,14 +43,17 @@ router.get("/group",function(req,res) {
   console.log("HIIIIIIIIIIIIIIIII");
   console.log(req.query.group);
   var group_name = req.query.group;
-  var query = "SELECT * FROM groups WHERE group_name = ?";
+  var query = "select user_name from users where user_id in(select user_id from group_members where group_id=(select group_id from groups where group_name= ?))";
   connection.query(query,group_name,function(err,rows) {
     if (err) {
       return done(err);
     }
     else if (rows.length) {
       console.log("FOUND");
-      res.send(rows[0].group_name);
+
+      console.log(rows[0].user_name);
+      res.send({group_name:group_name,row:rows});
+
     }
   });
 });

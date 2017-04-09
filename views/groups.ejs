@@ -24,24 +24,7 @@ $(function(){
       }
     })
   });
-  // $(".user_Group").click(function () {
-  //        var groupName = $.trim($(this).text();
-  //        console.log(groupName);
-  //        $.ajax({
-  //        url:"http://localhost:8090/groups/group",
-  //             method:"get",
-  //             data:{group_name:groupName},
-  //             success:function(response){
-  //               console.log(response.admin);
-  //                console.log("Success")
-  //             },
-  //             error:function(error){
-  //               console.log(error);
-  //             }
-  //           })
-  //
-  //
-  //    });
+
 
 $(".grp").click(function (event){
   grpname = $(this).text();
@@ -51,8 +34,15 @@ $(".grp").click(function (event){
       method:"GET",
       data:{group:grpname},
       success:function(response){
-         console.log(response);
-         $("#single-group").html(response);
+        $("#group_friends").html(" ");
+         console.log(response.group_name);
+         console.log(response.row[0].user_name);
+         $("#single-group").html(response.group_name);
+         for (var i=0;i<response.row.length;i++)
+         { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>");
+          }
+         //innerHTML+=" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>" }
+
       },
       error:function(error){
         console.log(error);
@@ -93,7 +83,7 @@ $(".grp").click(function (event){
                                           </a>
 ======= -->
                                         <li class="list-group-item justify-content-between">
-                                        <a class="grp"><%= groups[i].group_name %></a>
+                                        <a  href= " http://localhost:8090/groups#group_div" class="grp"><%= groups[i].group_name %></a>
                                         <span class="badge badge-default badge-pill">14</span>
 
                                         </li>
@@ -124,12 +114,11 @@ $(".grp").click(function (event){
                     <div class="col-md-8" id="group_div">
                         <div class="card ">
                             <div class="header">
-<!-- <<<<<<< HEAD
-                                <h4 class="title"> Group Name: <%= admin %></h4>
+<!-- <<<<<<< HE                            <h4 class="title"> Group Name: /h4>
 ======= -->
                                 <h4 class="title" id="single-group"></h4>
 
-                                <p class="category">More of bla bla bla</p>
+
                             </div>
                             <div class="content">
                               <div class="col-md-6 col-md-offset-3">
@@ -141,7 +130,11 @@ $(".grp").click(function (event){
                     <button class="btn btn-primary btn-fill">Add</button>
                   </div>
                 </div>
-                                <div class="ct-chart">
+                                <div class="ct-chart" >
+                                  <h4 class="title">Friends List:</h4>
+                                  <ul id="group_friends">
+
+                                  </ul>
                                 </div>
 
                                 <div class="footer">

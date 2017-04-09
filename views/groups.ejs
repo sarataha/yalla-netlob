@@ -8,7 +8,7 @@ $(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
-    user_id=userID.innerHTML;
+    user_id=userID[0].innerHTML;
     console.log(user_id);
 
       console.log(groupname);
@@ -17,7 +17,12 @@ $(function(){
       method:"POST",
       data:{name:groupname,user_id:parseInt(user_id)},
       success:function(response){
-         console.log(response)
+        var result=$.trim(response)
+         if(result=="Exists")
+         {alert("That group already exist");}
+         else{
+           console.log(response);
+         }
       },
       error:function(error){
         console.log(error);
@@ -28,6 +33,32 @@ $(function(){
     })
   });
 
+  $( "#add_friend" ).click(function( event ) {
+      //event.preventDefault();
+      user_id=userID[0].innerHTML;
+      friendName=$("#friendName").val();
+      groupname=$("#single-group").text();
+      console.log(groupname);
+        console.log(friendName);
+          console.log(user_id);
+      $.ajax({
+        url:"http://localhost:8090/groups/addfriend",
+        method:"POST",
+        data:{name:friendName,groupname:groupname,user_id:parseInt(user_id)},
+        success:function(response){
+          var result=$.trim(response.message)
+           if(result=="not-friend")
+           {alert("You dont have this person as a friend");}
+           else{
+             console.log(response);
+           }
+        },
+        error:function(error){
+          console.log(error);
+        }
+      })
+    });
+
 
 $(".grp").click(function (event){
   grpname = $(this).text();
@@ -37,13 +68,25 @@ $(".grp").click(function (event){
       method:"GET",
       data:{group:grpname},
       success:function(response){
-        $("#group_friends").html(" ");
-         console.log(response.group_name);
-         console.log(response.row[0].user_name);
-         $("#single-group").html(response.group_name);
-         for (var i=0;i<response.row.length;i++)
-         { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>");
-          }
+        var result=$.trim(response.message)
+         if(result=="friends")
+         {
+           $("#group_friends").html(" ");
+          console.log(response.group_name);
+          console.log(response.row[0].user_name);
+          $("#single-group").html(response.group_name);
+          for (var i=0;i<response.row.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>");
+           }
+         }
+         else{
+           console.log(response.group_name);
+           $("#single-group").html(response.group_name);
+            $("#group_friends").html(" ");
+
+         }
+
+
          //innerHTML+=" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>" }
 
       },
@@ -65,7 +108,7 @@ $(".grp").click(function (event){
                     <input type="text" value="" placeholder="Input"  name="groupName" id="groupName" class="form-control" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup">Add</button>
+                    <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup" onClick="window.location.reload()">Add</button>
                   </div>
                 </div>
               </div>
@@ -127,14 +170,14 @@ $(".grp").click(function (event){
                               <div class="col-md-6 col-md-offset-3">
                   <div class="form-group">
                     <label>Your Friend Name</label>
-                    <input type="text" value="" placeholder="Input" class="form-control" />
+                    <input type="text" value="" placeholder="Input" class="form-control"id="friendName" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button class="btn btn-primary btn-fill">Add</button>
+                    <button class="btn btn-primary btn-fill" id="add_friend">Add</button>
                   </div>
                 </div>
                                 <div class="ct-chart" >
-                                  <h4 class="title">Friends List:</h4>
+                                  <h4 class="title">Friends List:</h4></br>
                                   <ul id="group_friends">
 
                                   </ul>

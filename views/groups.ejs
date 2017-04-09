@@ -22,8 +22,34 @@ $(function(){
         console.log(error);
       }
     })
-})
-})
+  });
+
+
+  $(".user_Group").click(function () {
+         var groupName = $.trim($(this).text().toString());
+         console.log(groupName);
+
+         $.ajax({
+         url:"http://localhost:8090/groups/group",
+              method:"get",
+              data:{name:groupname,user_id:parseInt(user_id),group_name:groupName},
+              success:function(response){
+                console.log(response.admin);
+                 console.log("Success")
+              },
+              error:function(error){
+                console.log(error);
+              }
+            })
+
+
+     });
+
+});
+
+
+
+
 </script>
 
         <div class="content">
@@ -48,10 +74,14 @@ $(function(){
                                   <ul id="groupsNames">
                                     <% for(var i=0; i < groups.length; i++) { %>
 
-                                        <li><%= groups[i].group_name %></li>
+                                        <li>
+                                           <a href="http://localhost:8090/groups#group_div" class="user_Group">
+                                          <%= groups[i].group_name %>
+                                          </a>
+                                        </li>
 
                                         <% } %>
-                                
+
                                   </ul>
                               </p>
                             </div>
@@ -73,10 +103,10 @@ $(function(){
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8" id="group_div">
                         <div class="card ">
                             <div class="header">
-                                <h4 class="title">OS</h4>
+                                <h4 class="title"> Group Name: <%= admin %></h4>
                                 <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">

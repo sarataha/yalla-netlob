@@ -6,6 +6,7 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
+
 // router.use(function(req,resp,next){
 //   resp.setHeader("Access-Control-Allow-Origin","*");
 //   resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
@@ -13,11 +14,12 @@ var dbconfig = require('../models/groups');
 // });
 connection.query('USE ' + dbconfig.database);
 
-router.get("/",function(req,res){
-
+router.get(["/","/group"],function(req,res){
+  var groupname=  req.query.group_name|| " ";
   console.log("*********");
-  connection.query("SELECT * FROM groups ", function(err, rows) {
 
+  connection.query("SELECT * FROM groups ", function(err, rows) {
+      console.log(groupname);
       if (err)
           return done(err);
       if (rows.length) {
@@ -27,7 +29,8 @@ router.get("/",function(req,res){
               title: 'Groups',
               username: req.user.user_name,
               userID: req.user.user_id,
-              groups:rows
+              groups:rows,
+              admin:groupname
             });
 
         //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
@@ -38,6 +41,36 @@ router.get("/",function(req,res){
       }
   });
 });
+
+
+router.get("/group",middlewareBodyParser,function(req,res){
+
+  var groupname=  req.query.group_name;
+  console.log("in div group" +groupname);
+  connection.query("SELECT * FROM groups where group_name=?",groupname, function(err, rows) {
+
+      if (err)
+          return done(err);
+      if (rows.length) {
+        console.log(groupname);
+        res.render('groups.ejs', {
+              title: 'Groups',
+              username: req.user.user_name,
+              admin:rows[0].admin_id,
+              userID: req.user.user_id,
+              groups:rows
+
+            });
+
+        //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
+
+      } else {
+
+
+      }
+  });
+});
+
 router.post("/add",middlewareBodyParser,function(req,respo){
   console.log("groupnameee"+req.body.name);
   console.log("groupnameee"+req.body.name);

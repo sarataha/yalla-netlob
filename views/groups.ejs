@@ -1,8 +1,6 @@
 <% include layout/sidebar %>
 <% include layout/header %>
 <script>
-
-
 var groupname;
 var user_id;
 $(function(){
@@ -10,7 +8,8 @@ $(function(){
     //event.preventDefault();
     groupname=$("#groupName").val();
     user_id=userID[0].innerHTML;
-    console.log(userID[0].innerHTML);
+    $("#groupName").val()="";
+    console.log(user_id);
       console.log(groupname);
     $.ajax({
       url:"http://localhost:8090/groups/add",
@@ -23,7 +22,6 @@ $(function(){
         console.log(error);
       }
     })
-
 })
 })
 </script>
@@ -46,7 +44,7 @@ $(function(){
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Groups</h4>
-                                <p class="category">Bla bla bla blaaaa</p>
+                                <p class="category" ><ul id="groupsNames"></ul></p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">

@@ -24,7 +24,7 @@ module.exports = function(app, passport) {
 		res.render('login.ejs', {
 			title: 'Login',
 			message: req.flash('loginMessage')
-		});
+			});
 		}
 	});
 
@@ -191,7 +191,7 @@ module.exports = function(app, passport) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
-				userID:req.user.user_id
+				userID:req.user.user_id,
 			});
 		}
 		else {
@@ -219,7 +219,7 @@ module.exports = function(app, passport) {
     		to: 'yallanetlob@yahoo.com', // receiver address
     		subject: 'Your New Password', // Subject line
     		text: 'Dear Customer,\n This is your new password', // plain text body
-    		html: '<b>Your new password ?</b>' // html body
+    		html: '<p>Dear Customer, <br> You have requested to reset your password. <br> Your new passwo</p>' // html body
 	    }
 	    transporter.sendMail(mailOption, function (err, info) {
 	        if (err) {

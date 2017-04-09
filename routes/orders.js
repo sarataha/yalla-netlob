@@ -16,7 +16,7 @@ connection.connect();
 router.get('/', middlewareBodyParser,function(req, res, next) {
   var user_id=req.user.user_id;
 
-  var query="select meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
+  var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("****************************************************");

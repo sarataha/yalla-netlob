@@ -80,13 +80,13 @@ module.exports = function(app, passport) {
 	/* GET groups page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 
-	app.get('/groups', isLoggedIn, function(req, res) {
-		res.render('groups.ejs', {
-			title: 'Groups',
-			username: req.user.user_name,
-			userID:req.user.user_id
-		});
-	});
+	// app.get('/groups', isLoggedIn, function(req, res) {
+	// 	res.render('groups.ejs', {
+	// 		title: 'Groups',
+	// 		username: req.user.user_name,
+	// 		userID:req.user.user_id
+	// 	});
+	// });
 	// app.get('/groups', isLoggedIn, function(req, res) {
 	// 	res.render('groups.ejs', {
 	// 		title: 'Groups',

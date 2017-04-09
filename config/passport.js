@@ -129,7 +129,7 @@ module.exports = function(passport) {
 
             // Find the user in the database based on their facebook id
             connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows) {
-
+                console.log(profile);
                 // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
@@ -173,13 +173,13 @@ module.exports = function(passport) {
 
     },
 
-    // Facebook will send back the token and profile
+    // Twitter will send back the token and profile
     function(token, tokenSecret, profile, done) {
 
         // Asynchronous
         process.nextTick(function() {
             connection.query("SELECT * FROM users WHERE twitter_id = ?",[profile.id], function(err, rows) {
-
+                
                 // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
@@ -189,14 +189,12 @@ module.exports = function(passport) {
                     return done(null, rows[0]); // user found, return that user
                 }
                 else {
-                    // If there is no user found with that facebook id, create them
+                    // If there is no user found with that twitter id, create them
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,
                         username: profile.username
                     };
-
-                    console.log(profile.username);
 
                     var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id ) values (?,?,?)";
 

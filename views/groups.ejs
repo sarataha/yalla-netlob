@@ -3,11 +3,12 @@
 <script>
 var groupname;
 var user_id;
+var grpname;
 $(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
-    user_id=userID[0].innerHTML;
+    user_id=userID.innerHTML;
     console.log(user_id);
 
       console.log(groupname);
@@ -22,8 +23,24 @@ $(function(){
         console.log(error);
       }
     })
-})
-})
+});
+$(".grp").click(function (event){
+  grpname = $(this).text();
+  console.log(grpname);
+  $.ajax({
+      url:"http://localhost:8090/groups/group",
+      method:"GET",
+      data:{group:grpname},
+      success:function(response){
+         console.log(response);
+         $("#single-group").html(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+});
+});
 </script>
 
         <div class="content">
@@ -44,11 +61,15 @@ $(function(){
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Groups</h4>
+                                <p class="category">-</p>
                                 <p class="category" >
-                                  <ul id="groupsNames">
+                                  <ul id="groupsNames" class="list-group">
                                     <% for(var i=0; i < groups.length; i++) { %>
 
-                                        <li><%= groups[i].group_name %></li>
+                                        <li class="list-group-item justify-content-between">
+                                        <a class="grp"><%= groups[i].group_name %></a>
+                                        <span class="badge badge-default badge-pill">14</span>
+                                        </li>
 
                                         <% } %>
                                 
@@ -76,7 +97,7 @@ $(function(){
                     <div class="col-md-8">
                         <div class="card ">
                             <div class="header">
-                                <h4 class="title">OS</h4>
+                                <h4 class="title" id="single-group"></h4>
                                 <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">

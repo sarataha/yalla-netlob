@@ -34,7 +34,11 @@
                                             <td>5</td>
                                             <td><%= orders[i].order_status %></td>
                                             <td>
+<<<<<<< HEAD
                                               <a class="view">view</a>
+=======
+                                              <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
+>>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
                                               <a>finish</a>
                                               <a>cancel</a>
                                             </td>
@@ -84,6 +88,7 @@
             </div>
         </div>
         <script>
+<<<<<<< HEAD
           $(function(){
             $.ajax({
               url:"http://localhost:8090/orders",
@@ -110,5 +115,36 @@
                 });
 });
           });
+=======
+          // $(function(){
+            // $.ajax({
+            //   url:"http://localhost:8090/orders",
+            //   method:"GET",
+            //   success:function(response) {
+            //     //console.log(response);
+            //   },
+            //   error:function() {
+            //     //console.log(err);
+            //   }
+            // });
+
+          //   $(".view").click(function(event){
+          //     console.log("HEYYYYYY");
+          //     order_id=$(this).attr('id');
+          //     console.log(order_id);
+          //     $.ajax({
+          //       url:"http://localhost:8090/order_details",
+          //       method:"GET",
+          //       data:{order_id:parseInt(order_id)},
+          //       success:function(response){
+          //         (window.location.replace('order_details?order_id='+order_id))
+          //       },
+          //       error:function(error){
+          //         console.log(error);
+          //       }
+          //     });
+          //   });
+          // });
+>>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
         </script>
 <%include layout/footer %>

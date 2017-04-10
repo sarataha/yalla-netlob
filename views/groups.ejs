@@ -8,7 +8,7 @@ $(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
-    user_id=userID.innerHTML;
+    user_id=userID[0].innerHTML;
     console.log(user_id);
 
       console.log(groupname);
@@ -17,31 +17,48 @@ $(function(){
       method:"POST",
       data:{name:groupname,user_id:parseInt(user_id)},
       success:function(response){
-         console.log(response)
+        var result=$.trim(response)
+         if(result=="Exists")
+         {alert("That group already exist");}
+         else{
+           console.log(response);
+         }
       },
       error:function(error){
         console.log(error);
       }
+    });
+})
+})
     })
   });
-  // $(".user_Group").click(function () {
-  //        var groupName = $.trim($(this).text();
-  //        console.log(groupName);
-  //        $.ajax({
-  //        url:"http://localhost:8090/groups/group",
-  //             method:"get",
-  //             data:{group_name:groupName},
-  //             success:function(response){
-  //               console.log(response.admin);
-  //                console.log("Success")
-  //             },
-  //             error:function(error){
-  //               console.log(error);
-  //             }
-  //           })
-  //
-  //
-  //    });
+
+  $( "#add_friend" ).click(function( event ) {
+      //event.preventDefault();
+      user_id=userID[0].innerHTML;
+      friendName=$("#friendName").val();
+      groupname=$("#single-group").text();
+      console.log(groupname);
+        console.log(friendName);
+          console.log(user_id);
+      $.ajax({
+        url:"http://localhost:8090/groups/addfriend",
+        method:"POST",
+        data:{name:friendName,groupname:groupname,user_id:parseInt(user_id)},
+        success:function(response){
+          var result=$.trim(response.message)
+           if(result=="not-friend")
+           {alert("You dont have this person as a friend");}
+           else{
+             console.log(response);
+           }
+        },
+        error:function(error){
+          console.log(error);
+        }
+      })
+    });
+
 
 $(".grp").click(function (event){
   grpname = $(this).text();
@@ -51,8 +68,27 @@ $(".grp").click(function (event){
       method:"GET",
       data:{group:grpname},
       success:function(response){
-         console.log(response);
-         $("#single-group").html(response);
+        var result=$.trim(response.message)
+         if(result=="friends")
+         {
+           $("#group_friends").html(" ");
+          console.log(response.group_name);
+          console.log(response.row[0].user_name);
+          $("#single-group").html(response.group_name);
+          for (var i=0;i<response.row.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>");
+           }
+         }
+         else{
+           console.log(response.group_name);
+           $("#single-group").html(response.group_name);
+            $("#group_friends").html(" ");
+
+         }
+
+
+         //innerHTML+=" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>" }
+
       },
       error:function(error){
         console.log(error);
@@ -72,7 +108,7 @@ $(".grp").click(function (event){
                     <input type="text" value="" placeholder="Input"  name="groupName" id="groupName" class="form-control" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup">Add</button>
+                    <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup" onClick="window.location.reload()">Add</button>
                   </div>
                 </div>
               </div>
@@ -91,7 +127,7 @@ $(".grp").click(function (event){
                                           <%= groups[i].group_name %>
                                           </a>
                                         <li class="list-group-item justify-content-between">
-                                        <a class="grp"><%= groups[i].group_name %></a>
+                                        <a  href= " http://localhost:8090/groups#group_div" class="grp"><%= groups[i].group_name %></a>
                                         <span class="badge badge-default badge-pill">14</span>
 
                                         </li>
@@ -122,22 +158,31 @@ $(".grp").click(function (event){
                     <div class="col-md-8" id="group_div">
                         <div class="card ">
                             <div class="header">
+<<<<<<< HEAD
                                 <h4 class="title"> Group Name: <%= admin %></h4>
+=======
+<!-- <<<<<<< HE                            <h4 class="title"> Group Name: /h4>
+======= -->
+>>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
                                 <h4 class="title" id="single-group"></h4>
 
-                                <p class="category">More of bla bla bla</p>
+
                             </div>
                             <div class="content">
                               <div class="col-md-6 col-md-offset-3">
                   <div class="form-group">
                     <label>Your Friend Name</label>
-                    <input type="text" value="" placeholder="Input" class="form-control" />
+                    <input type="text" value="" placeholder="Input" class="form-control"id="friendName" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button class="btn btn-primary btn-fill">Add</button>
+                    <button class="btn btn-primary btn-fill" id="add_friend">Add</button>
                   </div>
                 </div>
-                                <div class="ct-chart">
+                                <div class="ct-chart" >
+                                  <h4 class="title">Friends List:</h4></br>
+                                  <ul id="group_friends">
+
+                                  </ul>
                                 </div>
 
                                 <div class="footer">

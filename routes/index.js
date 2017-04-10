@@ -85,10 +85,14 @@ module.exports = function(app, passport) {
 
 	// process the signup form
 	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/',
+		successRedirect : '/send',
 		failureRedirect : '/signup',
 		failureFlash : true
 	}));
+
+	app.get('/send', function(req,res){
+		res.render('send.ejs');
+	});
 
 	// app.get('/send',function(req,res){
  //        rand=Math.floor((Math.random() * 100) + 54);

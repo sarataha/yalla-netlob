@@ -103,10 +103,11 @@ module.exports = function(passport) {
                                 res.end("error");
                             } else{
                                 console.log("Message sent: " + response.message);
-                                res.end("sent");
+                                return response.render('send.ejs');
+                                // res.end("sent");
                             }
                         });
-                        return done(null, true);
+                        // return done(null, true);
                     });
                 }
             });

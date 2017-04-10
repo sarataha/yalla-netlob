@@ -19,18 +19,6 @@ connection.connect(function(err){
   }
 });
 
-var find_user = function(email,password) {
-  var query = "SELECT * FROM users WHERE email ='" + email + "' AND password='"+password+"'"
-  connection.query(query, function(err, rows, fields) {
-    if(!err)
-      if (rows.length > 0)
-        console.log('User found: ', rows);
-      else
-        console.log('invalid user data');
-    else
-      console.log("");
-  });
-}
 
 var insert_order_items = function(order_id,user_id,item,amount,comment,order_date,price) {
  

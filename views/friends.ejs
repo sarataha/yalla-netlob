@@ -4,13 +4,16 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6 col-md-offset-3">
+                <form action="/friends/add" method ="post">
                   <div class="form-group">
+
                     <label>Your Friend Email</label>
-                    <input type="email" value="" placeholder="Input" class="form-control" />
+                    <input name="friend_mail" type="email" value=""  placeholder="Input" class="form-control" />
                   </div>
                   <div class="form-group col-md-offset-8">
-                    <button type="submit" class="btn btn-info btn-fill btn-wd">Add</button>
+                    <button type="submit" class="btn btn-info btn-fill btn-wd" name="Add">Add</button>
                   </div>
+                  </form>
                 </div>
               </div>
               <div class="row">

@@ -29,10 +29,7 @@ $(function(){
         console.log(error);
       }
     });
-})
-})
-    })
-  }
+}
   else{console.log("group name is empty");}
   });
 
@@ -46,6 +43,28 @@ $(function(){
       url:"http://localhost:8090/groups/removegp",
       method:"POST",
       data:{name:groupname},
+      success:function(response){
+          console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+
+  });
+
+
+  $( ".removefriend" ).click(function( event ) {
+    //event.preventDefault();
+    console.log("remove friend is pressed");
+    groupfriend=$(this).attr("name");
+    groupname=$("#single-group").text();
+    console.log(groupfriend);
+
+    $.ajax({
+      url:"http://localhost:8090/groups/removefriend",
+      method:"POST",
+      data:{name:groupfriend,groupname:groupname},
       success:function(response){
           console.log(response);
       },
@@ -104,7 +123,7 @@ $(function(){
           console.log(response.row[0].user_name);
           $("#single-group").html(response.group_name);
           for (var i=0;i<response.row.length;i++)
-          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>");
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
         }
       }
       else{
@@ -180,7 +199,11 @@ $(function(){
       <div class="col-md-8" id="group_div">
         <div class="card ">
           <div class="header">
+<<<<<<< HEAD
             <!--<h4 class="title"> Group Name: /h4>-->
+=======
+
+>>>>>>> 05ee7395535f435317358437fee46389b976535a
             <h4 class="title" id="single-group"></h4>
 
 

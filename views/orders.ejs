@@ -33,7 +33,7 @@
                                             <td><%= orders[i].order_status %></td>
                                             <td>
                                               <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
-                                              <a>finish</a>
+                                              <a class="finish" id="<%= orders[i].order_id%>">finish</a>
                                               <a>cancel</a>
                                             </td>
                                           </tr>
@@ -82,7 +82,7 @@
             </div>
         </div>
         <script>
-          // $(function(){
+          $(function(){
             // $.ajax({
             //   url:"http://localhost:8090/orders",
             //   method:"GET",
@@ -94,22 +94,22 @@
             //   }
             // });
 
-          //   $(".view").click(function(event){
-          //     console.log("HEYYYYYY");
-          //     order_id=$(this).attr('id');
-          //     console.log(order_id);
-          //     $.ajax({
-          //       url:"http://localhost:8090/order_details",
-          //       method:"GET",
-          //       data:{order_id:parseInt(order_id)},
-          //       success:function(response){
-          //         (window.location.replace('order_details?order_id='+order_id))
-          //       },
-          //       error:function(error){
-          //         console.log(error);
-          //       }
-          //     });
-          //   });
-          // });
+            $(".finish").click(function(event){
+              console.log("HEYYYYYY");
+              order_id=$(this).attr('id');
+              console.log(order_id);
+              $.ajax({
+                url:"http://localhost:8090/orders",
+                method:"put",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });
+            });
+          });
         </script>
 <%include layout/footer %>

@@ -19,16 +19,21 @@ router.get('/', middlewareBodyParser,function(req, res, next) {
   var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
-      console.log("****************************************************");
-      console.log(row[0]);
-      console.log(row[1]);
-      console.log(req.user.user_id);
+      if(row){
       res.render('orders.ejs', {
         title: 'Orders',
         username: req.user.user_name,
         userID:req.user.user_id,
         orders:row
       });
+    }else{
+      res.render('orders.ejs', {
+        title: 'Orders',
+        username: req.user.user_name,
+        userID:req.user.user_id,
+        orders:{}
+      });
+    }
     }
     else {
       console.log("error");
@@ -45,12 +50,29 @@ router.get('/new_order', function(req, res, next) {
   });
 });
 
-/* GET order details page. */
-// router.get('/order_details', function(req, res, next) {
-//   res.render('order_details', {
-//   	title: 'Order Details',
-//   	username: 'Sara'
-//   });
-// });
+router.put('/',middlewareBodyParser,function(req, res) {
+  console.log("******************************* order_id");
+  console.log(req.body.order_id);
+  order_id=req.body.order_id;
+  var query="update orders set order_status='finished' where order_id="+order_id;
+  connection.query(query,function(err,row,fields){
+    if(!err){
+      console.log("**************************************************** update successed");
+      console.log(req.user.user_id);
+
+      // return res.render("order_details",{
+      //       title: 'order_details',
+      //       username: req.user.user_name,
+      //       userID: req.user.user_id,
+      //       order_data:row
+      //     });
+        }
+    else {
+      console.log("error");
+    }
+
+ });
+ });
+
 
 module.exports = router;

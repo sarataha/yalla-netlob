@@ -28,6 +28,7 @@
     "passport-google-oauth": "^1.0.0",
     "passport-local": "1.0.0",
     "passport-twitter": "^1.0.4",
+    "password-reset": "^0.1.4",
     "serve-favicon": "~2.4.2",
     "socket.io": "^1.7.3",
     "supervisor": "^0.12.0"

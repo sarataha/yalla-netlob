@@ -15,6 +15,24 @@ var connection = mysql.createConnection(dbconfig.connection);
 // load the auth variables
 var configAuth = require('./auth');
 
+// email verification
+var nodemailer = require("nodemailer");
+var async = require('async');
+var crypto = require('crypto');
+
+/*
+    Here we are configuring our SMTP Server details.
+    STMP is mail server which is responsible for sending and recieving email.
+*/
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "yallanetlob@gmail.com",
+        pass: "yallanetlobositi"
+    }
+});
+var rand,mailOptions,host,link;
+
 connection.query('USE ' + dbconfig.database);
 // Share the authentication function with the rest of our app
 module.exports = function(passport) {
@@ -70,8 +88,25 @@ module.exports = function(passport) {
 
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
-
-                        return done(null, newUserMysql);
+                        rand=Math.floor((Math.random() * 100) + 54);
+                        host=req.get('host');
+                        link="http://"+req.get('host')+"/verify?id="+rand+"&email="+newUserMysql.email;
+                        mailOptions={
+                            to : newUserMysql.email,
+                            subject : "Please confirm your Email account",
+                            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+                        }
+                        console.log(mailOptions);
+                        smtpTransport.sendMail(mailOptions, function(error, response){
+                            if(error){
+                                console.log(error);
+                                res.end("error");
+                            } else{
+                                console.log("Message sent: " + response.message);
+                                res.end("sent");
+                            }
+                        });
+                        return done(null, true);
                     });
                 }
             });
@@ -91,7 +126,7 @@ module.exports = function(passport) {
         },
         function(req, email, password, done) {
         // Callback with email and password from the login form
-            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
+            connection.query("SELECT * FROM users WHERE email = ? AND verified != ?",[email,0], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {

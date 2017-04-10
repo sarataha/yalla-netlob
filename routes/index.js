@@ -4,9 +4,31 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
-var nodemailer = require('nodemailer');
-var async = require('async');
+ var nodemailer = require("nodemailer");
+ var async = require('async');
 var crypto = require('crypto');
+
+// Load the user model
+var mysql = require('mysql');
+var bcrypt = require('bcrypt-nodejs');
+var dbconfig = require('../models/users');
+var connection = mysql.createConnection(dbconfig.connection);
+
+
+connection.query('USE ' + dbconfig.database);
+
+/*
+    Here we are configuring our SMTP Server details.
+    STMP is mail server which is responsible for sending and recieving email.
+*/
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "yallanetlob@gmail.com",
+        pass: "yallanetlobositi"
+    }
+});
+var rand,mailOptions,host,link;
 
 module.exports = function(app, passport) {
 
@@ -63,10 +85,54 @@ module.exports = function(app, passport) {
 
 	// process the signup form
 	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/home',
+		successRedirect : '/',
 		failureRedirect : '/signup',
 		failureFlash : true
 	}));
+
+	// app.get('/send',function(req,res){
+ //        rand=Math.floor((Math.random() * 100) + 54);
+ //    	host=req.get('host');
+ //    	link="http://"+req.get('host')+"/verify?id="+rand;
+ //    	mailOptions={
+ //        	to : "st.elzayat@gmail.com",
+ //        	subject : "Please confirm your Email account",
+ //        	html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+ //    	}
+ //    	console.log(mailOptions);
+ //    	smtpTransport.sendMail(mailOptions, function(error, response){
+ //     		if(error){
+ //            	console.log(error);
+ //        		res.end("error");
+ //     		} else{
+ //            	console.log("Message sent: " + response.message);
+ //        		res.end("sent");
+ //         	}
+	// 	});
+	// });
+
+	app.get('/verify',function(req,res){
+		console.log(req.protocol+":/"+req.get('host'));
+		console.log("REQ ", req.protocol);
+		if((req.protocol+"://"+req.get('host'))==("http://localhost:8090"))
+		{
+    		console.log("Domain is matched. Information is from Authentic email");
+    		var update_query = "UPDATE users SET verified = ? WHERE email = ?";
+    		connection.query(update_query,[1,req.query.email], function(err, result){
+    			if (err) {
+    				console.log(err);
+    			}
+    			else {
+    				console.log("done");
+    				res.redirect('/');
+    			}
+    		});
+		}
+		else
+		{
+    		res.end("<h1>Request is from unknown source");
+		}
+	});
 
 	/* GET home page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in

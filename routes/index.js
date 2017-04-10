@@ -131,7 +131,6 @@ module.exports = function(app, passport) {
 
 	/* GET order details page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-<<<<<<< HEAD
 	app.get('/order_details', isLoggedIn, function(req, res, next) {
 	  res.render('order_details', {
 	  	title: 'Order Details',
@@ -140,7 +139,6 @@ module.exports = function(app, passport) {
 		avatar: req.user.avatar_url
 	  });
 	});
-=======
 	// app.get('/order_details', isLoggedIn, function(req, res, next) {
 	//   res.render('order_details', {
 	//   	title: 'Order Details',
@@ -148,7 +146,6 @@ module.exports = function(app, passport) {
 	// 	userID:req.user.user_id
 	//   });
 	// });
->>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
 
 	/* GET current user's page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in

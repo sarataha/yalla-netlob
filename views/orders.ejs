@@ -34,11 +34,8 @@
                                             <td>5</td>
                                             <td><%= orders[i].order_status %></td>
                                             <td>
-<<<<<<< HEAD
                                               <a class="view">view</a>
-=======
                                               <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
->>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
                                               <a>finish</a>
                                               <a>cancel</a>
                                             </td>
@@ -88,7 +85,6 @@
             </div>
         </div>
         <script>
-<<<<<<< HEAD
           $(function(){
             $.ajax({
               url:"http://localhost:8090/orders",
@@ -115,7 +111,6 @@
                 });
 });
           });
-=======
           // $(function(){
             // $.ajax({
             //   url:"http://localhost:8090/orders",
@@ -145,6 +140,5 @@
           //     });
           //   });
           // });
->>>>>>> aef666ee990395c63a02d60638682de9236e0bbb
         </script>
 <%include layout/footer %>

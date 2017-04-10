@@ -78,7 +78,18 @@ router.post("/removegp",middlewareBodyParser,function(req,respo){
   });
 });
 
-
+router.post("/removefriend",middlewareBodyParser,function(req,respo){
+  console.log("friendName"+req.body.name);
+  var friendName=req.body.name;
+  var groupname=req.body.groupname;
+  connection.query("delete  from group_members WHERE group_id = (select group_id from groups where group_name=?) and user_id=(select user_id from users where user_name=?)",[friendName,groupname], function(err, rows) {
+    if (err)
+    {respo.send("error")}
+     else {
+       respo.send("deleted");
+    }
+  });
+});
 
 
 router.post("/addfriend",middlewareBodyParser,function(req,respo){

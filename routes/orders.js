@@ -74,6 +74,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
      if(!err){
        console.log("****************************************************delete successed");
        console.log(req.user.user_id);
+       
          }
      else {
        console.log("error");

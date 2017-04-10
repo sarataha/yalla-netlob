@@ -38,6 +38,7 @@ router.get("/",function(req,res){
 });
 
 router.get("/group",function(req,res) {
+  console.log("HIIIIIIIIIIIIIIIII");
   console.log(req.query.group);
   var group_name = req.query.group;
   var query = "select user_name from users where user_id in(select user_id from group_members where group_id=(select group_id from groups where group_name= ?))";
@@ -73,13 +74,36 @@ router.post("/addfriend",middlewareBodyParser,function(req,respo){
       console.log("no group with such name");
     }
     else if (rows.length){
-
+      console.log(" group_id: "+rows[0].group_id);
        group_id=rows[0].group_id;
     }
     else
     {console.log("NO group with such name **");}
   });
-  console.log("************ ");
+
+  connection.query("select * from user_friends where user_id=? and friend_id=(select user_id from users where user_name= ?)",[user_ID,friendname],function(err, rows) {
+    if (err)
+    console.log("Error in selecting user_friends");
+    if (rows.length) {
+      console.log("found some users");
+      for(var i=0;i<rows.length;i++)
+      {
+        console.log("friend id : "+rows[i].friend_id);
+        connection.query("INSERT INTO group_members ( group_id, user_id ) values (?,?)",[group_id,rows[i].friend_id],function(err, rows) {
+          if (err)
+          console.log("Error in insert  friend query in groups");
+          else{
+            console.log("friend inserted in group");
+          }
+          //newGroupMysql.id = rows.insertId;
+        });
+      }
+      respo.send({message:"added"})
+    } else {
+      respo.send({message:"not-friend"})
+    }
+
+  });
 
   });
 

@@ -32,8 +32,8 @@
                                             <td>5</td>
                                             <td><%= orders[i].order_status %></td>
                                             <td>
-                                              <a>view</a>
-                                              <a>finish</a>
+                                              <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
+                                              <a class="finish" id="<%= orders[i].order_id%>">finish</a>
                                               <a>cancel</a>
                                             </td>
                                           </tr>
@@ -83,15 +83,32 @@
         </div>
         <script>
           $(function(){
-            $.ajax({
-              url:"http://localhost:8090/orders",
-              method:"GET",
-              success:function(response) {
-                console.log(response);
-              },
-              error:function() {
-                console.log(err);
-              }
+            // $.ajax({
+            //   url:"http://localhost:8090/orders",
+            //   method:"GET",
+            //   success:function(response) {
+            //     //console.log(response);
+            //   },
+            //   error:function() {
+            //     //console.log(err);
+            //   }
+            // });
+
+            $(".finish").click(function(event){
+              console.log("HEYYYYYY");
+              order_id=$(this).attr('id');
+              console.log(order_id);
+              $.ajax({
+                url:"http://localhost:8090/orders",
+                method:"put",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });
             });
           });
         </script>

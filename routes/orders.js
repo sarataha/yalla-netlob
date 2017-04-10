@@ -59,20 +59,27 @@ router.put('/',middlewareBodyParser,function(req, res) {
     if(!err){
       console.log("**************************************************** update successed");
       console.log(req.user.user_id);
-
-      // return res.render("order_details",{
-      //       title: 'order_details',
-      //       username: req.user.user_name,
-      //       userID: req.user.user_id,
-      //       order_data:row
-      //     });
         }
     else {
       console.log("error");
     }
+ });
+ });
 
- });
- });
+
+ router.delete("/",middlewareBodyParser,function(req, res) {
+   order_id=req.body.order_id;
+   var query="delete from orders where order_id="+order_id;
+   connection.query(query,function(err,row,fields){
+     if(!err){
+       console.log("****************************************************delete successed");
+       console.log(req.user.user_id);
+         }
+     else {
+       console.log("error");
+     }
+  });
+});
 
 
 module.exports = router;

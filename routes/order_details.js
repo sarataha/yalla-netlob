@@ -1,5 +1,11 @@
-var express = require('express');
-var router = express.Router();
+var mysql=require('mysql');
+var router = require('express').Router();
+var dbconfig = require('../models/orders');
+var connection = mysql.createConnection(dbconfig.connection);
+var bodyParser=require('body-parser');
+var middlewareBodyParser=bodyParser.urlencoded({extended:false})
+
+connection.query('USE ' + dbconfig.database);
 
 router.get('/', function(req,res) {
 	// body...

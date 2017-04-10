@@ -130,6 +130,7 @@ module.exports = function(passport) {
             // Find the user in the database based on their facebook id
             connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows) {
                 console.log(profile);
+                console.log("======================",profile.photos[0].value);
                 // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
@@ -143,12 +144,13 @@ module.exports = function(passport) {
                         facebook_id: profile.id,
                         facebook_token: token,
                         username: profile.name.givenName + ' ' + profile.name.familyName,
-                        email: profile.emails[0].value
+                        email: profile.emails[0].value,
+                        picture: profile.photos ? profile.photos[0].value : 'assets/img/faces/face-1.jpg'
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id ) values (?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id, avatar_url ) values (?,?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);

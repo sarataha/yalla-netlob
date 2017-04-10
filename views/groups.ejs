@@ -86,12 +86,10 @@ $(".grp").click(function (event){
                                   <ul id="groupsNames" class="list-group">
                                     <% for(var i=0; i < groups.length; i++) { %>
 
-<!-- <<<<<<< HEAD
                                         <li>
                                            <a href="http://localhost:8090/groups#group_div" class="user_Group">
                                           <%= groups[i].group_name %>
                                           </a>
-======= -->
                                         <li class="list-group-item justify-content-between">
                                         <a class="grp"><%= groups[i].group_name %></a>
                                         <span class="badge badge-default badge-pill">14</span>
@@ -124,9 +122,7 @@ $(".grp").click(function (event){
                     <div class="col-md-8" id="group_div">
                         <div class="card ">
                             <div class="header">
-<!-- <<<<<<< HEAD
                                 <h4 class="title"> Group Name: <%= admin %></h4>
-======= -->
                                 <h4 class="title" id="single-group"></h4>
 
                                 <p class="category">More of bla bla bla</p>

@@ -4,7 +4,7 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
-//var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 
@@ -17,7 +17,8 @@ module.exports = function(app, passport) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
-				userID:req.user.user_id
+				userID:req.user.user_id,
+				avatar: req.user.avatar_url
 			});
 		}
 		else {
@@ -73,7 +74,8 @@ module.exports = function(app, passport) {
 		res.render('index.ejs', {
 			title: 'Home',
 			username: req.user.user_name,
-			userID:req.user.user_id
+			userID:req.user.user_id,
+			avatar: req.user.avatar_url
 		});
 	});
 
@@ -101,7 +103,8 @@ module.exports = function(app, passport) {
 		res.render('friends.ejs', {
 			title: 'Friends',
 			username: req.user.user_name,
-			userID:req.user.user_id
+			userID:req.user.user_id,
+			avatar: req.user.avatar_url
 		});
 	});
 
@@ -121,7 +124,8 @@ module.exports = function(app, passport) {
 	  res.render('new_order', {
 	  	title: 'New Order',
 		username: req.user.user_name,
-		userID:req.user.user_id
+		userID:req.user.user_id,
+		avatar: req.user.avatar_url
 	  });
 	});
 
@@ -131,7 +135,8 @@ module.exports = function(app, passport) {
 	  res.render('order_details', {
 	  	title: 'Order Details',
 		username: req.user.user_name,
-		userID:req.user.user_id
+		userID:req.user.user_id,
+		avatar: req.user.avatar_url
 	  });
 	});
 
@@ -142,7 +147,8 @@ module.exports = function(app, passport) {
 	  res.render('profile', {
 	  	title: 'Profile',
 	  	username: req.user.user_name,
-			userID:req.user.user_id
+			userID:req.user.user_id,
+			avatar: req.user.avatar_url
 	  });
 	});
 
@@ -200,6 +206,7 @@ module.exports = function(app, passport) {
 				title: 'Home',
 				username: req.user.user_name,
 				userID:req.user.user_id,
+				avatar: req.user.avatar_url
 			});
 		}
 		else {
@@ -252,11 +259,12 @@ module.exports = function(app, passport) {
 	    });
 	    var mailOption = {
 	        from: '"Yalla Netlob" <yallanetlob@gmail.com>', // sender address
-    		to: 'yallanetlob@yahoo.com', // receiver address
+    		to: req.body.email, // receiver address
     		subject: 'Your New Password', // Subject line
     		text: 'Dear Customer,\n This is your new password', // plain text body
     		html: '<p>Dear Customer, <br> You have requested to reset your password. <br> Your new passwo</p>' // html body
 	    }
+	    console.log(req.body);
 	    transporter.sendMail(mailOption, function (err, info) {
 	        if (err) {
 	            console.log(err);

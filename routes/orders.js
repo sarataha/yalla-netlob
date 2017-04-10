@@ -13,16 +13,17 @@ var connection = mysql.createConnection({
 connection.connect();
 
 /* GET orders page. */
-router.get('/', middlewareBodyParser,function(req, res, next) {
+router.get('/',function(req, res, next) {
   var user_id=req.user.user_id;
 
-  var query="select meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
+  var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("****************************************************");
       console.log(row[0]);
       console.log(row[1]);
       console.log(req.user.user_id);
+      console.log(row[0]);
       res.render('orders.ejs', {
         title: 'Orders',
         username: req.user.user_name,
@@ -38,12 +39,12 @@ router.get('/', middlewareBodyParser,function(req, res, next) {
 });
 
 /* GET new order page. */
-router.get('/new_order', function(req, res, next) {
-  res.render('new_order', {
-  	title: 'New Order',
-  	username: 'Sara',
-  });
-});
+// router.get('/new_order', function(req, res, next) {
+//   res.render('new_order', {
+//   	title: 'New Order',
+//   	username: 'Sara',
+//   });
+// });
 
 /* GET order details page. */
 // router.get('/order_details', function(req, res, next) {

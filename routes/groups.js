@@ -26,7 +26,12 @@ router.get("/",function(req,res){
       //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 
     } else {
-
+      res.render('groups.ejs', {
+        title: 'Groups',
+        username: req.user.user_name,
+        userID: req.user.user_id,
+        groups: ""
+      });
 
     }
   });
@@ -54,6 +59,21 @@ router.get("/group",function(req,res) {
     }
   });
 });
+
+
+router.post("/removegp",middlewareBodyParser,function(req,respo){
+  console.log("groupnameee"+req.body.name);
+  var groupname=req.body.name;
+  connection.query("delete  from groups WHERE group_name = ?",groupname, function(err, rows) {
+    if (err)
+    {respo.send("error")}
+     else {
+       respo.send("deleted");
+    }
+  });
+});
+
+
 
 
 router.post("/addfriend",middlewareBodyParser,function(req,respo){
@@ -90,16 +110,13 @@ router.post("/addfriend",middlewareBodyParser,function(req,respo){
           else{
             console.log("friend inserted in group");
           }
-          //newGroupMysql.id = rows.insertId;
         });
       }
       respo.send({message:"added"})
     } else {
       respo.send({message:"not-friend"})
     }
-
   });
-
   });
 
 

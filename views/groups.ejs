@@ -23,6 +23,7 @@ $(document).ready(function(){
         {alert("That group already exist");}
         else{
           console.log(response);
+          getGroups();
         }
       },
       error:function(error){
@@ -33,7 +34,8 @@ $(document).ready(function(){
   else{console.log("group name is empty");}
   });
 
-  $( ".removegp" ).click(function( event ) {
+
+  $('#groupsNames').on('click', '.removegp',function( event ) {
     //event.preventDefault();
     console.log("remove group is pressed");
     groupname=$(this).attr("name");;
@@ -45,6 +47,7 @@ $(document).ready(function(){
       data:{name:groupname},
       success:function(response){
           console.log(response);
+          getGroups();
       },
       error:function(error){
         console.log(error);
@@ -52,6 +55,77 @@ $(document).ready(function(){
     })
 
   });
+
+  function getGroups(){
+    console.log("****function get groups");
+    user_id=userID[0].innerHTML;
+    $.ajax({
+      url:"http://localhost:8090/groups/getGroups",
+      method:"POST",
+      data:{user_id:parseInt(user_id)},
+      success:function(response){
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-groups")
+        { $("#groupName").val("");
+          $("#groupsNames").html(" ");
+
+        }
+        else if(result="groups"){
+          $("#groupName").val("");
+          $("#groupsNames").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].group_name);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#groupsNames").append("<li class='list-group-item justify-content-between'><a  href= ' http://localhost:8090/groups#group_div' class='grp'>"+ response.rows[i].group_name +"</a><span class='badge badge-default badge-pill'><i class='fa fa-times removegp' aria-hidden='true' name='"+ response.rows[i].group_name+"' </i> </span></li>");
+        }
+        }
+        console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
+
+
+
+
+
+
+  function getFriends(){
+    console.log("****function get friends");
+    user_id=userID[0].innerHTML;
+    groupname=$("#single-group").text();
+    $.ajax({
+      url:"http://localhost:8090/groups/getFriends",
+      method:"POST",
+      data:{groupname:groupname,user_id:parseInt(user_id)},
+      success:function(response){
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-friends")
+        { $("#friendName").val("");
+          $("#group_friends").html(" ");
+          $("#single-group").html(groupname);
+        }
+        else if(result="friends"){
+          $("#friendName").val("");
+          $("#group_friends").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].user_name);
+          $("#single-group").html(groupname);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.rows[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.rows[i].user_name+"'></i> </span></li>");
+        }
+        }
+        console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
 
   $( "#add_friend" ).click(function( event ) {
     user_id=userID[0].innerHTML;
@@ -71,6 +145,7 @@ $(document).ready(function(){
         {alert("You dont have this person as a friend");}
         else{
           console.log(response);
+          getFriends();
         }
       },
       error:function(error){
@@ -84,7 +159,7 @@ $(document).ready(function(){
   });
 
 
-  $(".grp").click(function (event){
+    $('#groupsNames').on('click', ".grp",function( event ) {
     grpname = $(this).text();
     console.log(grpname);
     $.ajax({
@@ -119,8 +194,7 @@ $(document).ready(function(){
 
 
 
-$("#removefriend").click(function( event ) {
-
+$('#group_friends').on('click', '#removefriend',function( event ) {
   console.log("remove friend is pressed");
   groupfriend=$(this).attr("name");
   groupname=$("#single-group").text();
@@ -132,6 +206,7 @@ $("#removefriend").click(function( event ) {
     data:{name:groupfriend,groupname:groupname},
     success:function(response){
         console.log(response);
+        getFriends();
     },
     error:function(error){
       console.log(error);
@@ -200,7 +275,6 @@ $("#removefriend").click(function( event ) {
       <div class="col-md-8" id="group_div">
         <div class="card ">
           <div class="header">
-            <!--<h4 class="title"> Group Name: /h4>-->
 
             <h4 class="title" id="single-group"></h4>
 
@@ -233,90 +307,6 @@ $("#removefriend").click(function( event ) {
               <div class="stats">
                 <i class="ti-timer"></i> Updated 3 minutes ago
               </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Groups</h4>
-                                <p class="category">-</p>
-                                <p class="category" >
-                                  <ul id="groupsNames" class="list-group">
-                                    <% for(var i=0; i < groups.length; i++) { %>
-
-                                        <li>
-                                           <a href="http://localhost:8090/groups#group_div" class="user_Group">
-                                          <%= groups[i].group_name %>
-                                          </a>
-                                        <li class="list-group-item justify-content-between">
-                                        <a  href= " http://localhost:8090/groups#group_div" class="grp"><%= groups[i].group_name %></a>
-                                        <span class="badge badge-default badge-pill">14</span>
-
-                                        </li>
-
-                                        <% } %>
-
-                                  </ul>
-                              </p>
-                            </div>
-                            <div class="content">
-                                <div class="ct-chart ct-perfect-fourth">
-                                </div>
-
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i>
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <i class="fa fa-circle text-warning"></i>
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-timer"></i> Updated 3 minutes ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8" id="group_div">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title"> Group Name: <%= admin %></h4>
-                                <h4 class="title"> Group Name: /h4>
-                                <h4 class="title" id="single-group"></h4>
-
-
-                            </div>
-                            <div class="content">
-                              <div class="col-md-6 col-md-offset-3">
-                  <div class="form-group">
-                    <label>Your Friend Name</label>
-                    <input type="text" value="" placeholder="Input" class="form-control"id="friendName" />
-                  </div>
-                  <div class="form-group col-md-offset-8">
-                    <button class="btn btn-primary btn-fill" id="add_friend">Add</button>
-                  </div>
-                </div>
-                                <div class="ct-chart" >
-                                  <h4 class="title">Friends List:</h4></br>
-                                  <ul id="group_friends">
-
-                                  </ul>
-                                </div>
-
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i>
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <i class="fa fa-circle text-warning"></i>
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="ti-timer"></i> Updated 3 minutes ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
           </div>
         </div>

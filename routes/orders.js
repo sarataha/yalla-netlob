@@ -67,6 +67,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
     if(!err){
       console.log("**************************************************** update successed");
       console.log(req.user.user_id);
+      res.send({message:"finish",order_id:order_id});
         }
     else {
       console.log("error");
@@ -82,7 +83,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
      if(!err){
        console.log("****************************************************delete successed");
        console.log(req.user.user_id);
-
+       res.send({message:"cancel",order_id:order_id});
          }
      else {
        console.log("error");

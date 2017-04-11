@@ -135,6 +135,15 @@
 						order_id:parseInt(order_id)
 							},
 					success:function(response){
+						var resault=$.trim(response.message);
+						if(resault=="order_details"){
+							console.log(response.items)
+							$("#order-data > tbody:last-child").append("<tr><td>"+response.user_name+
+																										"</td><td>"+response.items.item+
+																										"</td><td>"+response.items.amount+
+																										"</td><td>"+response.items.price+
+																										"</td><td>"+response.items.comment+"</td></tr>");
+						}
 						console.log("success");
 					},
 					error:function(error){

@@ -78,13 +78,16 @@ router.get('/',middlewareBodyParser,function(req, res) {
        price:req.body.item_price
       };
     console.log(items);
+    console.log(req.user.user_name);
     // var query = "INSERT INTO orders_items SET ?";
     var query=connection.query("INSERT INTO orders_items SET ?",items, function(err,row,fields){
       if(!err){
         console.log("********************** Order item added succesfully");
         console.log(req.user.user_id);
+        res.send({message:"order_details",user_name:req.user.user_name,items:items});
           }
       else {
+        res.send({message:"no_order_details"});
         console.log(err);
       }
     });

@@ -14,7 +14,7 @@
                                 <p class="category"></p>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table class="table table-striped">
+                                <table id="order_tb" class="table table-striped">
                                     <thead>
                                       <th>Order ID</th>
                                       <th>Order</th>
@@ -27,55 +27,23 @@
                                     <tbody>
 
                                         <% for(var i=0; i < orders.length; i++) { %>
-                                          <tr>
+                                          <tr id="cancel<%= orders[i].order_id %>">
                                             <td><%= orders[i].order_id %></td>
                                             <td><%= orders[i].meal_type %></td>
                                             <td><%= orders[i].resturant %></td>
                                             <td>10</td>
                                             <td>5</td>
-                                            <td><%= orders[i].order_status %></td>
+                                            <td><span class="replaceme<%= orders[i].order_id %>"><%= orders[i].order_status %></td>
                                             <td>
-                                              <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
+                                              <a class="view" value="<%= orders[i].order_id %>" id="view<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
                                               <% if (orders[i].order_status == "waiting"){ %>
-                                                <a class="finish" id="<%= orders[i].order_id%>">finish</a>
-                                                <a class="cancel" id="<%= orders[i].order_id%>">cancel</a>
+                                                <a class="finish" value="<%= orders[i].order_id %>" id="finish<%= orders[i].order_id%>">finish</a>
+                                                <a class="cancel" value="<%= orders[i].order_id %>" id="cancel<%= orders[i].order_id%>">cancel</a>
                                               <% } %>
                                           </td>
                                           </tr>
                                             <% } %>
 
-                                        <tr>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                        </tr>
-                                        <tr>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                        </tr>
-                                        <tr>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                        </tr>
-                                        <tr>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                          <td></td>
-                                        </tr>
                                     </tbody>
                                 </table>
 
@@ -92,7 +60,7 @@
 
             $(".finish").click(function(event){
               console.log("HEYYYYYY");
-              order_id=$(this).attr('id');
+              order_id=$(this).attr('value');
               console.log(order_id);
               $.ajax({
                 url:"http://localhost:8090/orders",
@@ -100,6 +68,12 @@
                 data:{order_id:parseInt(order_id)},
                 success:function(response){
                   console.log("success");
+                  if(response.message=="finish"){
+                    //$(this).remove();
+                    $(".replaceme"+response.order_id).html("finished");
+                    $("#finish"+response.order_id).remove();
+                    $("#cancel"+response.order_id).remove();
+                  }
                 },
                 error:function(error){
                   console.log(error);
@@ -109,14 +83,16 @@
 
             $(".cancel").click(function(event){
               console.log("HEYYYYYY");
-              order_id=$(this).attr('id');
+              order_id=$(this).attr('value');
               console.log(order_id);
               $.ajax({
                 url:"http://localhost:8090/orders",
                 method:"delete",
                 data:{order_id:parseInt(order_id)},
                 success:function(response){
-                  $(this).remove();
+                  if(response.message=="cancel"){
+                    $('table#order_tb tr#cancel'+response.order_id).remove();
+                  }
                 },
                 error:function(error){
                   console.log(error);

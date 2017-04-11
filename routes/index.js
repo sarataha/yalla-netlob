@@ -201,14 +201,14 @@ module.exports = function(app, passport) {
 
 	/* GET order details page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
-	app.get('/order_details', isLoggedIn, function(req, res, next) {
-	  res.render('order_details', {
-	  	title: 'Order Details',
-		username: req.user.user_name,
-		userID:req.user.user_id,
-		avatar: req.user.avatar_url
-	  });
-	});
+	// app.get('/order_details', isLoggedIn, function(req, res, next) {
+	//   res.render('order_details', {
+	//   	title: 'Order Details',
+	// 	username: req.user.user_name,
+	// 	userID:req.user.user_id,
+	// 	avatar: req.user.avatar_url
+	//   });
+	// });
 	// app.get('/order_details', isLoggedIn, function(req, res, next) {
 	//   res.render('order_details', {
 	//   	title: 'Order Details',

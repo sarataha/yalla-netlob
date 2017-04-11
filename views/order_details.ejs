@@ -2,7 +2,7 @@
 <% include layout/header %>
 	<div class="data-container">
 		<h2>Order Details</h2>
-		<table id="order-data">
+		<table id="order-data" class="table table-striped">
 			<tr>
 				<th>Person</th>
 				<th>Item</th>
@@ -10,13 +10,15 @@
 				<th>Price</th>
 				<th>Comment</th>
 			</tr>
+			<% for(var i=0; i < order_data.length; i++) { %>
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%= order_data[i].user_name %></td>
+				<td><%= order_data[i].item %></td>
+				<td><%= order_data[i].amount %></td>
+				<td><%= order_data[i].price %></td>
+				<td><%= order_data[i].comment %></td>
 			</tr>
+			<% } %>
 		</table> <br> <br>
 		<form action="" method="post">
 			<table class="table table-striped">
@@ -27,11 +29,11 @@
 					<th>Comment</th>
 				</tr>
 				<tr>
-					<td><input type="text" name="order-item"></td>
-					<td><input type="number" name="item-amount" style="width: 50px"></td>
-					<td><input type="number" name="item-price" style="width: 50px"></td>
-					<td><input type="text" name="comment"></td>
-					<td><input type="submit" value="Add"></td>
+					<td><input type="text" id="order-item"  name="order-item"></td>
+					<td><input type="number" id="item-amount" name="item-amount" style="width: 50px"></td>
+					<td><input type="number" id="item-price" name="item-price" style="width: 50px"></td>
+					<td><input type="text" id="comment" name="comment"></td>
+					<td><input type="submit" value="Add" name="<%= order_data[0].order_id %>" class="add" id="<%= order_data[0].order_id %>"></td>
 				</tr>
 			</table>
 		</form>
@@ -74,7 +76,8 @@
 	</div>
 
 	<script>
-		var invited_modal = document.getElementById('invited-modal');
+
+	  var invited_modal = document.getElementById('invited-modal');
 		var joined_modal = document.getElementById('joined-modal');
 		var invited_friends = document.getElementById("invited-friends");
 		var joined_friends = document.getElementById('joined-friends');
@@ -101,5 +104,44 @@
 		    	joined_modal.style.display = "none";
 		    }
 		}
+		//<td><input type="text" id="order-item"  name="order-item"></td>
+		// <td><input type="number" id="item-amount" name="item-amount" style="width: 50px"></td>
+		// <td><input type="number" id="item-price" name="item-price" style="width: 50px"></td>
+		// <td><input type="text" id="comment" name="comment"></td>
+		$(function(){
+			$(".add").click(function(event){
+				console.log("i'm heeeeeeeeeeeeeeeeeeeeeeeere");
+				event.preventDefault();
+				order_item=$('#order-item').val();
+				item_price=$('#item-price').val();
+				item_amount=$('#item-amount').val();
+				comment=$('#comment').val();
+				order_id=$(this).attr('name');
+				console.log("*******************add btn");
+				console.log(order_id);
+				console.log(item_amount);
+				console.log(item_price);
+				console.log(comment);
+				console.log(order_item);
+
+				$.ajax({
+					url:"http://localhost:8090/order_details",
+					method:"POST",
+					data:{
+						order_item:order_item,
+						item_price:parseInt(item_price),
+						item_amount:parseInt(item_amount),
+						comment:comment,
+						order_id:parseInt(order_id)
+							},
+					success:function(response){
+						console.log("success");
+					},
+					error:function(error){
+						console.log("error");
+					}
+				});
+			});//end of add click
+		});//end of function
 	</script>
 <%include layout/footer %>

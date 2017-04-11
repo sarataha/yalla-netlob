@@ -19,7 +19,7 @@ router.get('/',function(req, res, next) {
   var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
-      console.log("****************************************************");
+      console.log("****************************************************roooooooow");
       console.log(row[0]);
       console.log(row[1]);
       console.log(req.user.user_id);
@@ -30,6 +30,7 @@ router.get('/',function(req, res, next) {
         title: 'Orders',
         username: req.user.user_name,
         userID:req.user.user_id,
+        avatar: req.user.avatar_url,
         orders:row
       });
     }else{
@@ -37,6 +38,7 @@ router.get('/',function(req, res, next) {
         title: 'Orders',
         username: req.user.user_name,
         userID:req.user.user_id,
+        avatar: req.user.avatar_url,
         orders:{}
       });
     }
@@ -80,7 +82,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
      if(!err){
        console.log("****************************************************delete successed");
        console.log(req.user.user_id);
-       
+
          }
      else {
        console.log("error");

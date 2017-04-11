@@ -4,7 +4,7 @@ var dbconfig = require('../models/orders');
 var connection = mysql.createConnection(dbconfig.connection);
 var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
-
+var http=require('http');
 connection.query('USE ' + dbconfig.database);
 
 var mysql     = require('mysql');
@@ -22,27 +22,73 @@ connection.connect();
 router.get('/',middlewareBodyParser,function(req, res) {
   console.log("******************************* order_id");
   console.log(req.query.order_id);
-  order_id=req.query.order_id;
+  var order_id=req.query.order_id;
 
-  var query="select meal_type,order_status,resturant from orders where order_id='"+order_id+"'";
+  var query=" select users.user_name ,orders_items.* from orders_items,users where users.user_id=orders_items.user_id and order_id="+order_id;
   connection.query(query,function(err,row,fields){
     if(!err){
-      console.log("****************************************************");
-      console.log(row[0]);
+      console.log("**************************************************** Order Detailss");
+      //console.log(row[0]);
       console.log(req.user.user_id);
-
-      return res.render("order_details",{
-            title: 'order_details',
-            username: req.user.user_name,
-            userID: req.user.user_id,
-            order_data:row
-          });
+      console.log(order_id);
+      console.log("bal8888888888888888888")
+      console.log(row.length);
+      if(row.length>0){
+        return res.render("order_details",{
+              title: 'order_details',
+              username: req.user.user_name,
+              userID: req.user.user_id,
+              avatar: req.user.avatar_url,
+              order_data:row
+            });
+        }else{
+          //order_data=[{order_id:order_id}]
+          console.log(order_id);
+          return res.render("order_details",{
+                title: 'order_details',
+                username: req.user.user_name,
+                userID: req.user.user_id,
+                avatar: req.user.avatar_url,
+                order_data:[{order_id:order_id}]
+              });
+        }
         }
     else {
       console.log("error");
     }
   });
   });
+
+  router.post('/',middlewareBodyParser,function(req, res) {
+    console.log("******************************* order_id post order_details");
+    console.log(req.body.order_id);
+    console.log(req.user.user_id);
+    console.log(req.body.item_amount);
+    console.log(req.body.comment);
+    console.log(new Date());
+    console.log(req.body.item_price);
+
+    var items = {
+       order_id:req.body.order_id,
+       user_id:req.user.user_id,
+       item:req.body.order_item,
+       amount:req.body.item_amount,
+       comment:req.body.comment,
+       order_date:new Date(),
+       price:req.body.item_price
+      };
+    console.log(items);
+    // var query = "INSERT INTO orders_items SET ?";
+    var query=connection.query("INSERT INTO orders_items SET ?",items, function(err,row,fields){
+      if(!err){
+        console.log("********************** Order item added succesfully");
+        console.log(req.user.user_id);
+          }
+      else {
+        console.log(err);
+      }
+    });
+    });
 
 
 module.exports = router;

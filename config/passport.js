@@ -45,7 +45,7 @@ module.exports = function(passport) {
     passport.serializeUser(function(user, done) {
         console.log('serializeUser: ' + user.user_id)
         if (user.id == undefined)
-            done(null, user.user_id);
+            done.render('send.ejs');
         else
             done(null, user.id);
     });
@@ -103,7 +103,8 @@ module.exports = function(passport) {
                                 res.end("error");
                             } else{
                                 console.log("Message sent: " + response.message);
-                                return response.render('send.ejs');
+                                return done(null, false, req.flash('signupMessage', 'verification email has been sent.'));
+                                // return response.render('send.ejs');
                                 // res.end("sent");
                             }
                         });

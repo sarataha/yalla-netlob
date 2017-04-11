@@ -200,6 +200,7 @@ $("#removefriend").click(function( event ) {
       <div class="col-md-8" id="group_div">
         <div class="card ">
           <div class="header">
+            <!--<h4 class="title"> Group Name: /h4>-->
 
             <h4 class="title" id="single-group"></h4>
 
@@ -232,6 +233,90 @@ $("#removefriend").click(function( event ) {
               <div class="stats">
                 <i class="ti-timer"></i> Updated 3 minutes ago
               </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Groups</h4>
+                                <p class="category">-</p>
+                                <p class="category" >
+                                  <ul id="groupsNames" class="list-group">
+                                    <% for(var i=0; i < groups.length; i++) { %>
+
+                                        <li>
+                                           <a href="http://localhost:8090/groups#group_div" class="user_Group">
+                                          <%= groups[i].group_name %>
+                                          </a>
+                                        <li class="list-group-item justify-content-between">
+                                        <a  href= " http://localhost:8090/groups#group_div" class="grp"><%= groups[i].group_name %></a>
+                                        <span class="badge badge-default badge-pill">14</span>
+
+                                        </li>
+
+                                        <% } %>
+
+                                  </ul>
+                              </p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart ct-perfect-fourth">
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Updated 3 minutes ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8" id="group_div">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title"> Group Name: <%= admin %></h4>
+                                <h4 class="title"> Group Name: /h4>
+                                <h4 class="title" id="single-group"></h4>
+
+
+                            </div>
+                            <div class="content">
+                              <div class="col-md-6 col-md-offset-3">
+                  <div class="form-group">
+                    <label>Your Friend Name</label>
+                    <input type="text" value="" placeholder="Input" class="form-control"id="friendName" />
+                  </div>
+                  <div class="form-group col-md-offset-8">
+                    <button class="btn btn-primary btn-fill" id="add_friend">Add</button>
+                  </div>
+                </div>
+                                <div class="ct-chart" >
+                                  <h4 class="title">Friends List:</h4></br>
+                                  <ul id="group_friends">
+
+                                  </ul>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                        <i class="ti-timer"></i> Updated 3 minutes ago
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
           </div>
         </div>

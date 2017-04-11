@@ -27,7 +27,7 @@ module.exports = function(passport) {
     passport.serializeUser(function(user, done) {
         console.log('serializeUser: ' + user.user_id)
         if (user.id == undefined)
-            done.render('send.ejs');
+            done(null, user.user_id);
         else
             done(null, user.id);
     });
@@ -70,10 +70,9 @@ module.exports = function(passport) {
 
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
-<<<<<<< HEAD
+
 
                         return done(null, newUserMysql);
-=======
                         rand=Math.floor((Math.random() * 100) + 54);
                         host=req.get('host');
                         link="http://"+req.get('host')+"/verify?id="+rand+"&email="+newUserMysql.email;
@@ -94,6 +93,30 @@ module.exports = function(passport) {
                                 // res.end("sent");
                             }
                         });
+=======
+                        return done(null, false, req.flash('signupMessage', 'verification email has been sent.'));
+
+                        // rand=Math.floor((Math.random() * 100) + 54);
+                        // host=req.get('host');
+                        // link="http://"+req.get('host')+"/verify?id="+rand+"&email="+newUserMysql.email;
+                        // mailOptions={
+                        //     to : newUserMysql.email,
+                        //     subject : "Please confirm your Email account",
+                        //     html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+                        // }
+                        // console.log(mailOptions);
+                        // smtpTransport.sendMail(mailOptions, function(error, response){
+                        //     if(error){
+                        //         console.log(error);
+                        //         res.end("error");
+                        //     } else{
+                        //         console.log("Message sent: " + response.message);
+                        //         return done(null, false, req.flash('signupMessage', 'verification email has been sent.'));
+                        //         // return response.render('send.ejs');
+                        //         // res.end("sent");
+                        //     }
+                        // });
+>>>>>>> eeb1ac64c19f567cfa50c6aaba9a7bc2f8f8ac5a
                         // return done(null, true);
 >>>>>>> 3fe5e228cbc15657e131d8ddea9a6c7dba9098ed
                     });

@@ -38,13 +38,14 @@ $(document).ready(function(){
   $('#groupsNames').on('click', '.removegp',function( event ) {
     //event.preventDefault();
     console.log("remove group is pressed");
-    groupname=$(this).attr("name");;
+    groupname=$(this).attr("name");
+    user_id=userID[0].innerHTML;
     console.log(groupname);
 
     $.ajax({
       url:"http://localhost:8090/groups/removegp",
       method:"POST",
-      data:{name:groupname},
+      data:{name:groupname,user_id:user_id},
       success:function(response){
           console.log(response);
           getGroups();
@@ -161,11 +162,12 @@ $(document).ready(function(){
 
     $('#groupsNames').on('click', ".grp",function( event ) {
     grpname = $(this).text();
+    user_id=userID[0].innerHTML;
     console.log(grpname);
     $.ajax({
       url:"http://localhost:8090/groups/group",
       method:"GET",
-      data:{group:grpname},
+      data:{group:grpname,adminid:user_id},
       success:function(response){
         var result=$.trim(response.message)
         if(result=="friends")
@@ -197,13 +199,14 @@ $(document).ready(function(){
 $('#group_friends').on('click', '#removefriend',function( event ) {
   console.log("remove friend is pressed");
   groupfriend=$(this).attr("name");
+  user_id=userID[0].innerHTML;
   groupname=$("#single-group").text();
   console.log(groupfriend);
 
   $.ajax({
     url:"http://localhost:8090/groups/removefriend",
     method:"POST",
-    data:{name:groupfriend,groupname:groupname},
+    data:{name:groupfriend,groupname:groupname,adminid:user_id},
     success:function(response){
         console.log(response);
         getFriends();

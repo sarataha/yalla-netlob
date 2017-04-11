@@ -14,8 +14,9 @@ var dbconfig = require('../models/groups');
 connection.query('USE ' + dbconfig.database);
 
 router.get("/",function(req,res){
+  var user_id=req.user.user_id;
   console.log("*********");
-  connection.query("SELECT * FROM groups ", function(err, rows) {
+  connection.query("SELECT * FROM groups where group_admin=?",user_id, function(err, rows) {
 
     if (err)
     return done(err);
@@ -46,8 +47,9 @@ router.get("/group",function(req,res) {
   console.log("HIIIIIIIIIIIIIIIII");
   console.log(req.query.group);
   var group_name = req.query.group;
-  var query = "select user_name from users where user_id in(select user_id from group_members where group_id=(select group_id from groups where group_name= ?))";
-  connection.query(query,group_name,function(err,rows) {
+  var admin_id=req.query.adminid;
+  var query = "select user_name from users where user_id in(select user_id from group_members where group_id=(select group_id from groups where group_name= ? and group_admin=?))";
+  connection.query(query,[group_name,admin_id],function(err,rows) {
     if (err) {
       return done(err);
     }
@@ -69,7 +71,8 @@ router.get("/group",function(req,res) {
 router.post("/removegp",middlewareBodyParser,function(req,respo){
   console.log("groupnameee"+req.body.name);
   var groupname=req.body.name;
-  connection.query("delete  from groups WHERE group_name = ?",groupname, function(err, rows) {
+  var group_admin=req.body.user_id;
+  connection.query("delete  from groups WHERE group_name = ? and group_admin=?",[groupname,group_admin], function(err, rows) {
     if (err)
     {respo.send("error")}
      else {
@@ -82,7 +85,8 @@ router.post("/removefriend",middlewareBodyParser,function(req,respo){
   console.log("friendName from remove friend"+req.body.name);
   var friendName=req.body.name;
   var groupname=req.body.groupname;
-  connection.query("delete  from group_members WHERE group_id = (select group_id from groups where group_name=?) and user_id=(select user_id from users where user_name=?)",[groupname,friendName], function(err, rows) {
+  var group_admin=req.body.adminid;
+  connection.query("delete  from group_members WHERE group_id = (select group_id from groups where group_name=? and group_admin=?) and user_id=(select user_id from users where user_name=?)",[groupname,group_admin,friendName], function(err, rows) {
     if (err)
     {respo.send("error")}
      else {
@@ -97,7 +101,7 @@ router.post("/getFriends",middlewareBodyParser,function(req,respo){
   console.log("group name"+req.body.groupname);
   var user_id=req.body.user_id;
   var groupname=req.body.groupname;
-  connection.query("select user_name from users WHERE user_id in( select user_id from group_members where group_id=(select group_id from groups where group_name= ?))  ",groupname, function(err, rows) {
+  connection.query("select user_name from users WHERE user_id in( select user_id from group_members where group_id=(select group_id from groups where group_name= ? and group_admin= ?))  ",[groupname,user_id], function(err, rows) {
     if (err)
     {respo.send("error")}
     if (rows.length){
@@ -134,7 +138,7 @@ router.post("/addfriend",middlewareBodyParser,function(req,respo){
   var friendname=req.body.name;
   var groupname=req.body.groupname;
   var group_id;
-  connection.query("SELECT group_id FROM groups WHERE group_name = ?",groupname, function(err, rows){
+  connection.query("SELECT group_id FROM groups WHERE group_name = ? and group_admin=?",[groupname,user_ID], function(err, rows){
     if(err){
       console.log("no group with such name");
     }
@@ -175,7 +179,7 @@ router.post("/addfriend",middlewareBodyParser,function(req,respo){
     console.log("groupnameee"+req.body.name);
     var groupname=  req.body.name;
     var groupadmin=req.body.user_id;
-    connection.query("SELECT * FROM groups WHERE group_name = ?",groupname, function(err, rows) {
+    connection.query("SELECT * FROM groups WHERE group_name = ? and  group_admin= ?",[groupname,groupadmin], function(err, rows) {
       console.log("HELLO==========================", groupname, groupadmin);
       if (err)
       return done(err);

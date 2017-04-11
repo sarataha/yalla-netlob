@@ -4,7 +4,7 @@
 var groupname;
 var user_id;
 var grpname;
-$(function(){
+$(document).ready(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
@@ -53,29 +53,6 @@ $(function(){
 
   });
 
-
-  $( ".removefriend" ).click(function( event ) {
-    //event.preventDefault();
-    console.log("remove friend is pressed");
-    groupfriend=$(this).attr("name");
-    groupname=$("#single-group").text();
-    console.log(groupfriend);
-
-    $.ajax({
-      url:"http://localhost:8090/groups/removefriend",
-      method:"POST",
-      data:{name:groupfriend,groupname:groupname},
-      success:function(response){
-          console.log(response);
-      },
-      error:function(error){
-        console.log(error);
-      }
-    })
-
-  });
-
-
   $( "#add_friend" ).click(function( event ) {
     user_id=userID[0].innerHTML;
     friendName=$("#friendName").val();
@@ -123,7 +100,7 @@ $(function(){
           console.log(response.row[0].user_name);
           $("#single-group").html(response.group_name);
           for (var i=0;i<response.row.length;i++)
-          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
         }
       }
       else{
@@ -139,6 +116,30 @@ $(function(){
     }
   })
 });
+
+
+
+$("#removefriend").click(function( event ) {
+
+  console.log("remove friend is pressed");
+  groupfriend=$(this).attr("name");
+  groupname=$("#single-group").text();
+  console.log(groupfriend);
+
+  $.ajax({
+    url:"http://localhost:8090/groups/removefriend",
+    method:"POST",
+    data:{name:groupfriend,groupname:groupname},
+    success:function(response){
+        console.log(response);
+    },
+    error:function(error){
+      console.log(error);
+    }
+  })
+
+});
+
 });
 
 </script>

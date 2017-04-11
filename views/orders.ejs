@@ -15,7 +15,6 @@
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-striped">
                                     <thead>
-                                      <th>Order ID</th>
                                       <th>Order</th>
                                       <th>Restaurant</th>
                                       <th>Invited</th>
@@ -27,14 +26,12 @@
 
                                         <% for(var i=0; i < orders.length; i++) { %>
                                           <tr>
-                                            <td><%= orders[i].order_id %></td>
                                             <td><%= orders[i].meal_type %></td>
                                             <td><%= orders[i].resturant %></td>
                                             <td>10</td>
                                             <td>5</td>
                                             <td><%= orders[i].order_status %></td>
                                             <td>
-                                              <a class="view">view</a>
                                               <a class="view" id="<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
                                               <% if (orders[i].order_status == "waiting"){ %>
                                                 <a class="finish" id="<%= orders[i].order_id%>">finish</a>
@@ -88,48 +85,11 @@
         </div>
         <script>
           $(function(){
-<<<<<<< HEAD
-=======
             var longPolling=function(){
->>>>>>> 05ee7395535f435317358437fee46389b976535a
             $.ajax({
               url:"http://localhost:8090/orders",
               method:"GET",
               success:function(response) {
-<<<<<<< HEAD
-                console.log("Render");
-              },
-              error:function() {
-                console.log(err);
-              }
-            });
-            $(".view").click(function (event){
-              console.log($(this).parent().first().text());
-              $.ajax({
-                  url:"http://localhost:8090/order_details",
-                  method:"GET",
-                  data:{order_id:order_id},
-                  success:function(response){
-                     console.log("LOL");
-                  },
-                  error:function(error){
-                    console.log(error);
-                  }
-                });
-});
-          });
-          // $(function(){
-            // $.ajax({
-            //   url:"http://localhost:8090/orders",
-            //   method:"GET",
-            //   success:function(response) {
-            //     //console.log(response);
-            //   },
-            //   error:function() {
-            //     //console.log(err);
-            //   }
-            // });
-=======
                 //console.log(response);
               },
               complete: function(){
@@ -141,7 +101,6 @@
               }
             });
           }
->>>>>>> 05ee7395535f435317358437fee46389b976535a
 
             $(".finish").click(function(event){
               console.log("HEYYYYYY");

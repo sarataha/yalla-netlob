@@ -15,24 +15,6 @@ var connection = mysql.createConnection(dbconfig.connection);
 // load the auth variables
 var configAuth = require('./auth');
 
-// email verification
-var nodemailer = require("nodemailer");
-var async = require('async');
-var crypto = require('crypto');
-
-/*
-    Here we are configuring our SMTP Server details.
-    STMP is mail server which is responsible for sending and recieving email.
-*/
-var smtpTransport = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-        user: "yallanetlob@gmail.com",
-        pass: "yallanetlobositi"
-    }
-});
-var rand,mailOptions,host,link;
-
 connection.query('USE ' + dbconfig.database);
 // Share the authentication function with the rest of our app
 module.exports = function(passport) {
@@ -88,26 +70,8 @@ module.exports = function(passport) {
 
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
-                        rand=Math.floor((Math.random() * 100) + 54);
-                        host=req.get('host');
-                        link="http://"+req.get('host')+"/verify?id="+rand+"&email="+newUserMysql.email;
-                        mailOptions={
-                            to : newUserMysql.email,
-                            subject : "Please confirm your Email account",
-                            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
-                        }
-                        console.log(mailOptions);
-                        smtpTransport.sendMail(mailOptions, function(error, response){
-                            if(error){
-                                console.log(error);
-                                res.end("error");
-                            } else{
-                                console.log("Message sent: " + response.message);
-                                return response.render('send.ejs');
-                                // res.end("sent");
-                            }
-                        });
-                        // return done(null, true);
+
+                        return done(null, newUserMysql);
                     });
                 }
             });
@@ -127,7 +91,7 @@ module.exports = function(passport) {
         },
         function(req, email, password, done) {
         // Callback with email and password from the login form
-            connection.query("SELECT * FROM users WHERE email = ? AND verified != ?",[email,0], function(err, rows){
+            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
@@ -166,7 +130,6 @@ module.exports = function(passport) {
             // Find the user in the database based on their facebook id
             connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows) {
                 console.log(profile);
-                console.log("======================",profile.photos[0].value);
                 // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
@@ -180,13 +143,12 @@ module.exports = function(passport) {
                         facebook_id: profile.id,
                         facebook_token: token,
                         username: profile.name.givenName + ' ' + profile.name.familyName,
-                        email: profile.emails[0].value,
-                        picture: profile.photos ? profile.photos[0].value : 'assets/img/faces/face-1.jpg'
+                        email: profile.emails[0].value
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id, avatar_url ) values (?,?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id ) values (?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id, newUserMysql.picture],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -217,7 +179,7 @@ module.exports = function(passport) {
         // Asynchronous
         process.nextTick(function() {
             connection.query("SELECT * FROM users WHERE twitter_id = ?",[profile.id], function(err, rows) {
-                
+
                 // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
@@ -231,14 +193,12 @@ module.exports = function(passport) {
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,
-                        username: profile.username,
-                        picture: profile.photos ? profile.photos[0].value : 'assets/img/faces/face-1.jpg'
-
+                        username: profile.username
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id, avatar_url ) values (?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id ) values (?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.twitter_token, newUserMysql.twitter_id, newUserMysql.picture],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.twitter_token, newUserMysql.twitter_id],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -285,15 +245,13 @@ module.exports = function(passport) {
                         google_id: profile.id,
                         google_token: token,
                         username: profile.displayName,
-                        email: profile.emails[0].value, // Get the first email
-                        picture: profile.photos ? profile.photos[0].value : 'assets/img/faces/face-1.jpg'
-
+                        email: profile.emails[0].value // Get the first email
                     };
 
                     // save the user
-                    var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id, avatar_url ) values (?,?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id ) values (?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id, newUserMysql.picture],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);

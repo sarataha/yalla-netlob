@@ -32,6 +32,8 @@ CREATE TABLE `group_members` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
 --
 -- Dumping data for table `group_members`
 --
@@ -53,7 +55,6 @@ CREATE TABLE `groups` (
   `group_name` varchar(30) NOT NULL,
   `group_admin` int(11) NOT NULL,
   PRIMARY KEY (`group_id`),
-  UNIQUE KEY `group_name` (`group_name`),
   KEY `group_admin` (`group_admin`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_admin`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

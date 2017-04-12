@@ -21,8 +21,10 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Friends</h4>
-                                <p class="category"></p>
+                                <h4 class="title">Friends</h4><br><br>
+                                  <% for(var i=0; i < friends.length; i++) { %>
+                                	<p class="category"><%= friends[i].user_name%> &nbsp; &nbsp; &nbsp; &nbsp; <%= friends[i].email%></p>
+                                   <% } %>	
                             </div>
                             <div class="content">
                                 <div class="ct-chart"></div>

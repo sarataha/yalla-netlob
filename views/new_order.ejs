@@ -20,8 +20,14 @@
 										</select> <br> <br>
 										<label for="restaurant">From</label>
 										<input name="restaurant" type="text"> <br> <br>
-										<label for="friends">Friends</label>
-										<input name="friends" type="text"> <br> <br>
+										<label for="friends">Members</label>
+										<select name="addFG" id="addFG">
+										<option value="friend">Friend</option>
+										<option value="group">Group</option>
+										</select>
+										<input name="member" id="member_txt" type="text">
+										<input type="button" id="add_member" value="Add">
+										<br> <br>
 										<label for="menu-image">Menu Image</label>
 										<input name="menu-image" type="file"> <br> <br>
 										<input type="submit" value="Publish">
@@ -69,4 +75,11 @@
                     </div>
                 </div>
             </div>
+						<script>
+							$(function(){
+								$("#add_member").click(function(event){
+									
+								})
+							});
+						</script>
 	<%include layout/footer %>

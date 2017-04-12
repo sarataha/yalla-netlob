@@ -27,7 +27,7 @@
                                     <tbody>
 
                                         <% for(var i=0; i < orders.length; i++) { %>
-                                          <tr id="cancel<%= orders[i].order_id %>">
+                                          <tr id="cancelion<%= orders[i].order_id %>">
                                             <td><%= orders[i].order_id %></td>
                                             <td><%= orders[i].meal_type %></td>
                                             <td><%= orders[i].resturant %></td>
@@ -91,7 +91,7 @@
                 data:{order_id:parseInt(order_id)},
                 success:function(response){
                   if(response.message=="cancel"){
-                    $('table#order_tb tr#cancel'+response.order_id).remove();
+                    $('table#order_tb tr#cancelion'+response.order_id).remove();
                   }
                 },
                 error:function(error){

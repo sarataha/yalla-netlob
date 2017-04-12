@@ -92,6 +92,40 @@ router.post("/removefriend",middlewareBodyParser,function(req,respo){
 });
 
 
+router.post("/getFriends",middlewareBodyParser,function(req,respo){
+  console.log("****function get friends");
+  console.log("group name"+req.body.groupname);
+  var user_id=req.body.user_id;
+  var groupname=req.body.groupname;
+  connection.query("select user_name from users WHERE user_id in( select user_id from group_members where group_id=(select group_id from groups where group_name= ?))  ",groupname, function(err, rows) {
+    if (err)
+    {respo.send("error")}
+    if (rows.length){
+       respo.send({message:"friends",rows:rows});
+    }
+    else{
+      respo.send({message:"no-friends"});
+    }
+  });
+});
+
+router.post("/getGroups",middlewareBodyParser,function(req,respo){
+  console.log("****function get groups");
+
+  var user_id=req.body.user_id;
+  connection.query("select * from groups WHERE group_admin=?  ",user_id, function(err, rows) {
+    if (err)
+    {respo.send("error")}
+    if (rows.length){
+       respo.send({message:"groups",rows:rows});
+    }
+    else{
+      respo.send({message:"no-groups"});
+    }
+  });
+});
+
+
 router.post("/addfriend",middlewareBodyParser,function(req,respo){
   console.log("user_id : "+req.body.user_id);
   console.log("friend name : "+req.body.name);

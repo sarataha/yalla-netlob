@@ -1,4 +1,5 @@
 // routes/index.js
+var mysql=require('mysql');
 
 var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
@@ -98,11 +99,49 @@ module.exports = function(app, passport) {
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/friends', isLoggedIn, function(req, res) {
-		res.render('friends.ejs', {
+		var connection = mysql.createConnection({
+  		host     : 'localhost',
+  		user     : 'dina',
+  		password : '0802',
+  		database : 'yala_netlob_development'
+	});
+  connection.connect(function(err){
+ 		 if(err){
+    		console.log("error to connect to mysql server");
+    		return;
+  		}else{
+    		console.log("connected succesfully");
+  		}
+	});
+
+	connection.query("select * from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
+		// body...
+		if (!err) {
+			if (rows.length>0) {
+				console.log(rows);
+				res.render('friends.ejs', {
+			title: 'Friends',
+			username: req.user.user_name,
+			userID:req.user.user_id,
+			friends:rows
+		});
+
+			}
+			else{
+				res.render('friends.ejs', {
 			title: 'Friends',
 			username: req.user.user_name,
 			userID:req.user.user_id
 		});
+
+			}
+
+		}else{
+			console.log("error");
+		}
+
+	});
+
 	});
 
 	/* GET home orders if user logged in. */
@@ -127,6 +166,16 @@ module.exports = function(app, passport) {
 
 	/* GET order details page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
+
+	// app.get('/order_details', isLoggedIn, function(req, res, next) {
+	//   res.render('order_details', {
+	//   	title: 'Order Details',
+	// 	username: req.user.user_name,
+	// 	userID:req.user.user_id,
+	// 	avatar: req.user.avatar_url
+	//   });
+	// });
+
 	// app.get('/order_details', isLoggedIn, function(req, res, next) {
 	//   res.render('order_details', {
 	//   	title: 'Order Details',
@@ -138,6 +187,7 @@ module.exports = function(app, passport) {
 	/* GET current user's page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	// TODO: add ability to view other users' profiles
+<<<<<<< HEAD
 	app.get('/user', isLoggedIn, function(req, res, next) {
 	  res.render('profile', {
 	  	title: 'Profile',
@@ -145,6 +195,16 @@ module.exports = function(app, passport) {
 			userID:req.user.user_id
 	  });
 	});
+=======
+// 	app.get('/user', isLoggedIn, function(req, res, next) {
+// 	  res.render('profile', {
+// 	  	title: 'Profile',
+// 	  	username: req.user.user_name,
+// 			userID:req.user.user_id,
+// 			avatar: req.user.avatar_url
+// 	  });
+// 	});
+>>>>>>> 9ee8dde71d4ffe69d54591154d8983d0e90b0fe2
 
 	/***
 	 * FACEBOOK Authentication

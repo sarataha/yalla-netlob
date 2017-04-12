@@ -5,9 +5,32 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false});
 
 /* GET friends page. */
- router.get('/', function(req, res, next) {
-  
-});
+/* router.get('/', function(req, res, next) {
+  var connection = mysql.createConnection({
+  		host     : 'localhost',
+  		user     : 'dina',
+  		password : '0802',
+  		database : 'yala_netlob_development'
+	});
+  connection.connect(function(err){
+ 		 if(err){
+    		console.log("error to connect to mysql server");
+    		return;
+  		}else{
+    		console.log("connected succesfully");
+  		}
+	});
+
+	connection.query("select * from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
+		// body...
+		if (!err) {
+			console.log(rows);
+		}else{
+			console.log("error");
+		}
+
+	});  
+}); */
 router.post("/add",middlewareBodyParser,function(req,respo){
 	
 	var connection = mysql.createConnection({

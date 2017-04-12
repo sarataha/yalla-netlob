@@ -58,7 +58,9 @@ var groups = require('./routes/groups');
 var orders = require('./routes/orders');
 var new_order = require('./routes/new_order');
 var order_details = require('./routes/order_details');
+var profile = require('./routes/profile');
 
+app.use('/user',profile);
 app.use('/home', index);
 app.use('/users', users);
 app.use('/groups', groups);

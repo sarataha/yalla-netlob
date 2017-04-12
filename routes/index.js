@@ -259,14 +259,14 @@ module.exports = function(app, passport) {
 	/* GET current user's page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	// TODO: add ability to view other users' profiles
-	app.get('/user', isLoggedIn, function(req, res, next) {
-	  res.render('profile', {
-	  	title: 'Profile',
-	  	username: req.user.user_name,
-			userID:req.user.user_id,
-			avatar: req.user.avatar_url
-	  });
-	});
+// 	app.get('/user', isLoggedIn, function(req, res, next) {
+// 	  res.render('profile', {
+// 	  	title: 'Profile',
+// 	  	username: req.user.user_name,
+// 			userID:req.user.user_id,
+// 			avatar: req.user.avatar_url
+// 	  });
+// 	});
 
 	/***
 	 * FACEBOOK Authentication

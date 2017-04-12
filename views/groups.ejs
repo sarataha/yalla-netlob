@@ -4,7 +4,7 @@
 var groupname;
 var user_id;
 var grpname;
-$(function(){
+$(document).ready(function(){
   $( "#addGroup" ).click(function( event ) {
     //event.preventDefault();
     groupname=$("#groupName").val();
@@ -23,6 +23,7 @@ $(function(){
         {alert("That group already exist");}
         else{
           console.log(response);
+          getGroups();
         }
       },
       error:function(error){
@@ -33,18 +34,21 @@ $(function(){
   else{console.log("group name is empty");}
   });
 
-  $( ".removegp" ).click(function( event ) {
+
+  $('#groupsNames').on('click', '.removegp',function( event ) {
     //event.preventDefault();
     console.log("remove group is pressed");
-    groupname=$(this).attr("name");;
+    groupname=$(this).attr("name");
+    user_id=userID[0].innerHTML;
     console.log(groupname);
 
     $.ajax({
       url:"http://localhost:8090/groups/removegp",
       method:"POST",
-      data:{name:groupname},
+      data:{name:groupname,user_id:user_id},
       success:function(response){
           console.log(response);
+          getGroups();
       },
       error:function(error){
         console.log(error);
@@ -53,28 +57,76 @@ $(function(){
 
   });
 
-
-  $( ".removefriend" ).click(function( event ) {
-    //event.preventDefault();
-    console.log("remove friend is pressed");
-    groupfriend=$(this).attr("name");
-    groupname=$("#single-group").text();
-    console.log(groupfriend);
-
+  function getGroups(){
+    console.log("****function get groups");
+    user_id=userID[0].innerHTML;
     $.ajax({
-      url:"http://localhost:8090/groups/removefriend",
+      url:"http://localhost:8090/groups/getGroups",
       method:"POST",
-      data:{name:groupfriend,groupname:groupname},
+      data:{user_id:parseInt(user_id)},
       success:function(response){
-          console.log(response);
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-groups")
+        { $("#groupName").val("");
+          $("#groupsNames").html(" ");
+
+        }
+        else if(result="groups"){
+          $("#groupName").val("");
+          $("#groupsNames").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].group_name);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#groupsNames").append("<li class='list-group-item justify-content-between'><a  href= ' http://localhost:8090/groups#group_div' class='grp'>"+ response.rows[i].group_name +"</a><span class='badge badge-default badge-pill'><i class='fa fa-times removegp' aria-hidden='true' name='"+ response.rows[i].group_name+"' </i> </span></li>");
+        }
+        }
+        console.log(response);
       },
       error:function(error){
         console.log(error);
       }
     })
+  }
 
-  });
 
+
+
+
+
+  function getFriends(){
+    console.log("****function get friends");
+    user_id=userID[0].innerHTML;
+    groupname=$("#single-group").text();
+    $.ajax({
+      url:"http://localhost:8090/groups/getFriends",
+      method:"POST",
+      data:{groupname:groupname,user_id:parseInt(user_id)},
+      success:function(response){
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-friends")
+        { $("#friendName").val("");
+          $("#group_friends").html(" ");
+          $("#single-group").html(groupname);
+        }
+        else if(result="friends"){
+          $("#friendName").val("");
+          $("#group_friends").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].user_name);
+          $("#single-group").html(groupname);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.rows[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.rows[i].user_name+"'></i> </span></li>");
+        }
+        }
+        console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
 
   $( "#add_friend" ).click(function( event ) {
     user_id=userID[0].innerHTML;
@@ -94,6 +146,7 @@ $(function(){
         {alert("You dont have this person as a friend");}
         else{
           console.log(response);
+          getFriends();
         }
       },
       error:function(error){
@@ -107,13 +160,14 @@ $(function(){
   });
 
 
-  $(".grp").click(function (event){
+    $('#groupsNames').on('click', ".grp",function( event ) {
     grpname = $(this).text();
+    user_id=userID[0].innerHTML;
     console.log(grpname);
     $.ajax({
       url:"http://localhost:8090/groups/group",
       method:"GET",
-      data:{group:grpname},
+      data:{group:grpname,adminid:user_id},
       success:function(response){
         var result=$.trim(response.message)
         if(result=="friends")
@@ -123,7 +177,7 @@ $(function(){
           console.log(response.row[0].user_name);
           $("#single-group").html(response.group_name);
           for (var i=0;i<response.row.length;i++)
-          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
         }
       }
       else{
@@ -139,6 +193,31 @@ $(function(){
     }
   })
 });
+
+
+
+$('#group_friends').on('click', '#removefriend',function( event ) {
+  console.log("remove friend is pressed");
+  groupfriend=$(this).attr("name");
+  user_id=userID[0].innerHTML;
+  groupname=$("#single-group").text();
+  console.log(groupfriend);
+
+  $.ajax({
+    url:"http://localhost:8090/groups/removefriend",
+    method:"POST",
+    data:{name:groupfriend,groupname:groupname,adminid:user_id},
+    success:function(response){
+        console.log(response);
+        getFriends();
+    },
+    error:function(error){
+      console.log(error);
+    }
+  })
+
+});
+
 });
 
 </script>

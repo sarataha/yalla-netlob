@@ -13,17 +13,24 @@ var connection = mysql.createConnection({
 connection.connect();
 
 /* GET orders page. */
-router.get('/', middlewareBodyParser,function(req, res, next) {
+router.get('/',function(req, res, next) {
   var user_id=req.user.user_id;
 
   var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
+      console.log("****************************************************roooooooow");
+      console.log(row[0]);
+      console.log(row[1]);
+      console.log(req.user.user_id);
+      console.log(row[0]);
+
       if(row){
       res.render('orders.ejs', {
         title: 'Orders',
         username: req.user.user_name,
         userID:req.user.user_id,
+        avatar: req.user.avatar_url,
         orders:row
       });
     }else{
@@ -31,6 +38,7 @@ router.get('/', middlewareBodyParser,function(req, res, next) {
         title: 'Orders',
         username: req.user.user_name,
         userID:req.user.user_id,
+        avatar: req.user.avatar_url,
         orders:{}
       });
     }
@@ -43,12 +51,12 @@ router.get('/', middlewareBodyParser,function(req, res, next) {
 });
 
 /* GET new order page. */
-router.get('/new_order', function(req, res, next) {
-  res.render('new_order', {
-  	title: 'New Order',
-  	username: 'Sara',
-  });
-});
+// router.get('/new_order', function(req, res, next) {
+//   res.render('new_order', {
+//   	title: 'New Order',
+//   	username: 'Sara',
+//   });
+// });
 
 router.put('/',middlewareBodyParser,function(req, res) {
   console.log("******************************* order_id");
@@ -59,6 +67,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
     if(!err){
       console.log("**************************************************** update successed");
       console.log(req.user.user_id);
+      res.send({message:"finish",order_id:order_id});
         }
     else {
       console.log("error");
@@ -74,7 +83,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
      if(!err){
        console.log("****************************************************delete successed");
        console.log(req.user.user_id);
-       
+       res.send({message:"cancel",order_id:order_id});
          }
      else {
        console.log("error");

@@ -1,4 +1,4 @@
-<%include ./config.ejs %>
+<% include ./config.ejs %>
 
 <div class="main-panel">
         <nav class="navbar navbar-default">
@@ -16,7 +16,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a href="/user">
-                                <img width="30" height="30" src="assets/img/faces/face-1.jpg" />
+                                <img width="30" height="30" src="<%= avatar %>" />
                                 <p><%= username %> </p>
                                   <p id="userID"><%= userID %> </p>
                             </a>

@@ -18,7 +18,7 @@ $(document).ready(function(){
 
 
     var imagetoDB= reader.readAsDataURL(files[0]);;
-    var user_id=userID[0].innerHTML;
+    var user_id=friendID[0].innerHTML;
     console.log("******"+user_name);
     console.log("******"+imagetoDB);
     console.log("******"+user_id);
@@ -78,7 +78,7 @@ $( ".changePassword" ).click(function( event ) {
   var old_password=$(".oldPassword").val();
   var new_password=$(".newPassword").val();
   var confirm_password=$(".confirmPassword").val();
-  var user_id=userID[0].innerHTML;
+  var user_id=friendID[0].innerHTML;
   if(new_password!=confirm_password){
     alert("new passwords dont match");
   }else{

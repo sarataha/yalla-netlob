@@ -35,8 +35,8 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 	
 	var connection = mysql.createConnection({
   		host     : 'localhost',
-  		user     : 'dina',
-  		password : '0802',
+  		user     : 'root',
+  		password : '',
   		database : 'yala_netlob_development'
 	});
 	connection.connect(function(err){

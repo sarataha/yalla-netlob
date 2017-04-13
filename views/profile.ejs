@@ -10,16 +10,24 @@ $(document).ready(function(){
     console.log("UPdate user is pressed");
     var user_name=$(".user_name_modify").val();
     var user_img=$(".imgbutton").val();
-    var user_id=userID[0].innerHTML;
+
+
+    var files =   user_img.files;
+    var reader = new FileReader();
+
+
+
+    var imagetoDB= reader.readAsDataURL(files[0]);;
+    var user_id=friendID[0].innerHTML;
     console.log("******"+user_name);
-    console.log("******"+user_img);
+    console.log("******"+imagetoDB);
     console.log("******"+user_id);
     if(user_name.length>1 && user_img.length>1){
       console.log("cond1**********");
       $.ajax({
         url:"http://localhost:8090/user//updateUser",
         method:"POST",
-        data:{name:user_name,user_id:parseInt(user_id),user_img:user_img},
+        data:{name:user_name,user_id:parseInt(user_id),user_img:imagetoDB},
         success:function(response){
         console.log(response);
         },
@@ -65,14 +73,16 @@ $(document).ready(function(){
 
   });
 $( ".changePassword" ).click(function( event ) {
+  event.preventDefault();
+  console.log("Change password is pressed");
   var old_password=$(".oldPassword").val();
   var new_password=$(".newPassword").val();
   var confirm_password=$(".confirmPassword").val();
-  var user_id=userID[0].innerHTML;
+  var user_id=friendID[0].innerHTML;
   if(new_password!=confirm_password){
     alert("new passwords dont match");
   }else{
-
+    console.log("password and confrim match");
     $.ajax({
       url:"http://localhost:8090/user/updatePassword",
       method:"POST",
@@ -123,7 +133,7 @@ $( ".changePassword" ).click(function( event ) {
                                     <img class="avatar border-white" src="assets/img/faces/face-1.jpg" alt="..."/>
                                     <% }
                                     else {%>
-                                      <img class="avatar border-white" src="<%user_img%>" alt="..."/>
+                                      <img class="avatar border-white" src="<%user_img%>" />
 
                                     <%}%>
 
@@ -175,7 +185,7 @@ $( ".changePassword" ).click(function( event ) {
                                             <div class="form-group">
                                                 <label>Change picture</label>
                                                 <div class="text-center">
-                                                  <input name="profile_picture" class="btn btn-info btn-fill btn-wd imgbutton" type="file">
+                                                  <input name="profile_picture" class="btn btn-info btn-fill btn-wd imgbutton" type="file" accept="image/png, image/jpeg">
                                                 <!-- <button type="button" class="btn btn-info btn-fill btn-wd">Browse</button> -->
                                                   </div>
                                             </div>

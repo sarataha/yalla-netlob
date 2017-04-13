@@ -93,7 +93,7 @@ module.exports = function(passport) {
                                 // res.end("sent");
                             }
                         });
-=======
+
                         return done(null, false, req.flash('signupMessage', 'verification email has been sent.'));
 
                         // rand=Math.floor((Math.random() * 100) + 54);
@@ -116,9 +116,9 @@ module.exports = function(passport) {
                         //         // res.end("sent");
                         //     }
                         // });
->>>>>>> eeb1ac64c19f567cfa50c6aaba9a7bc2f8f8ac5a
+
                         // return done(null, true);
->>>>>>> 3fe5e228cbc15657e131d8ddea9a6c7dba9098ed
+
                     });
                 }
             });

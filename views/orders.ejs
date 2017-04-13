@@ -16,7 +16,6 @@
                             <div class="content table-responsive table-full-width">
                                 <table id="order_tb" class="table table-striped">
                                     <thead>
-                                      <th>Order ID</th>
                                       <th>Order</th>
                                       <th>Restaurant</th>
                                       <th>Invited</th>
@@ -27,14 +26,18 @@
                                     <tbody>
 
                                         <% for(var i=0; i < orders.length; i++) { %>
+
                                           <tr id="cancel<%= orders[i].order_id %>">
                                             <td><%= orders[i].order_id %></td>
+
                                             <td><%= orders[i].meal_type %></td>
                                             <td><%= orders[i].resturant %></td>
                                             <td>10</td>
                                             <td>5</td>
                                             <td><span class="replaceme<%= orders[i].order_id %>"><%= orders[i].order_status %></td>
                                             <td>
+
+
                                               <a class="view" value="<%= orders[i].order_id %>" id="view<%= orders[i].order_id%>" href="/order_details?order_id=<%=orders[i].order_id%>">view</a>
                                               <% if (orders[i].order_status == "waiting"){ %>
                                                 <a class="finish" value="<%= orders[i].order_id %>" id="finish<%= orders[i].order_id%>">finish</a>
@@ -57,6 +60,25 @@
         <script>
 
           $(function(){
+<<<<<<< HEAD
+            var longPolling=function(){
+            $.ajax({
+              url:"http://localhost:8090/orders",
+              method:"GET",
+              success:function(response) {
+                //console.log(response);
+              },
+              complete: function(){
+                  longPolling()
+              },
+              timeout: 30000,
+              error:function() {
+                //console.log(err);
+              }
+            });
+          }
+=======
+>>>>>>> 9ee8dde71d4ffe69d54591154d8983d0e90b0fe2
 
             $(".finish").click(function(event){
               console.log("HEYYYYYY");

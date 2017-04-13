@@ -6,6 +6,7 @@ var dbconfig = require('../models/users');
 var connection = mysql.createConnection(dbconfig.connection);
 var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
+var bcrypt = require('bcrypt-nodejs');
 
 connection.query('USE ' + dbconfig.database);
 // /* GET users listing. */
@@ -82,14 +83,37 @@ console.log("Rendering users ***********");
           console.log("updatePassword"+req.body.old_password);
           var old_password=req.body.old_password;
           var new_password=req.body.new_password;
+          // var enc_oldpassword=bcrypt.hashSync(old_password, null, null)
+           var enc_newpassword=bcrypt.hashSync(new_password, null, null)
+          // console.log(enc_oldpassword);
+          // console.log(enc_newpassword);
           var user_id=req.body.user_id;
-          connection.query("update users set password=? where user_id=? and password=? ",[new_password,old_password,user_id], function(err, rows) {
+          connection.query("select * from users where user_id=?  ",[user_id], function(err, rows) {
             if (err)
             {respo.send("error")}
-             else {
-               respo.send("updated");
-            }
+             else if(rows.length){
+               console.log("************");
+               if (!bcrypt.compareSync(old_password, rows[0].password)){
+                      console.log("not match");
+                      respo.send("notmatch");
+               }
+               else {
+                 console.log("password matches old password");
+                 connection.query("update users set password=? where user_id=?  ",[enc_newpassword,user_id], function(err, rows) {
+                   if (err)
+                   {respo.send("error");}
+                   else{respo.send("updated");}
+
+                 });
+
+
+               }
+
+
+             }
           });
+
+
         });
 
 

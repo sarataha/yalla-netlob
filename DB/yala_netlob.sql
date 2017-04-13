@@ -19,6 +19,7 @@
 -- Table structure for table `group_members`
 --
 
+
 DROP TABLE IF EXISTS `group_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -27,12 +28,10 @@ CREATE TABLE `group_members` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`group_id`,`user_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`),
-  CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-
 
 --
 -- Dumping data for table `group_members`
@@ -56,8 +55,8 @@ CREATE TABLE `groups` (
   `group_admin` int(11) NOT NULL,
   PRIMARY KEY (`group_id`),
   KEY `group_admin` (`group_admin`),
-  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_admin`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_admin`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +64,7 @@ CREATE TABLE `groups` (
 --
 
 LOCK TABLES `groups` WRITE;
+
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;

@@ -10,24 +10,16 @@ $(document).ready(function(){
     console.log("UPdate user is pressed");
     var user_name=$(".user_name_modify").val();
     var user_img=$(".imgbutton").val();
-
-
-    var files =   user_img.files;
-    var reader = new FileReader();
-
-
-
-    var imagetoDB= reader.readAsDataURL(files[0]);;
-    var user_id=friendID[0].innerHTML;
+    var user_id=userID[0].innerHTML;
     console.log("******"+user_name);
-    console.log("******"+imagetoDB);
+    console.log("******"+user_img);
     console.log("******"+user_id);
     if(user_name.length>1 && user_img.length>1){
       console.log("cond1**********");
       $.ajax({
         url:"http://localhost:8090/user//updateUser",
         method:"POST",
-        data:{name:user_name,user_id:parseInt(user_id),user_img:imagetoDB},
+        data:{name:user_name,user_id:parseInt(user_id),user_img:user_img},
         success:function(response){
         console.log(response);
         },
@@ -78,7 +70,7 @@ $( ".changePassword" ).click(function( event ) {
   var old_password=$(".oldPassword").val();
   var new_password=$(".newPassword").val();
   var confirm_password=$(".confirmPassword").val();
-  var user_id=friendID[0].innerHTML;
+  var user_id=userID[0].innerHTML;
   if(new_password!=confirm_password){
     alert("new passwords dont match");
   }else{

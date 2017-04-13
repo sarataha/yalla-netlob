@@ -14,7 +14,7 @@ module.exports = function(router, passport) {
 
 // /* GET users listing. */
 router.get("/",function(req,res){
-  var user_id=req.query.user_id;
+  var user_id=req.user.user_id;
   console.log(user_id);
 console.log("Rendering users ***********");
   connection.query("SELECT * FROM users where user_id= ?",user_id, function(err, rows) {
@@ -22,7 +22,6 @@ console.log("Rendering users ***********");
     if (err)
     return done(err);
     if (rows.length) {
-      if (req.query.user_id == req.user.user_id) {
       console.log("user name: "+rows[0].avatar_url);
       res.render('profile.ejs', {
       	title: 'Profile',
@@ -34,19 +33,6 @@ console.log("Rendering users ***********");
   //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 
     }
-    else {
-      res.render('friend_profile.ejs', {
-        title: 'Profile',
-        username: req.user.user_name,
-        userID: req.user.user_id,
-        friendID: rows[0].user_id,
-        friend_name: rows[0].user_name,
-        user_img: rows[0].avatar_url,
-        user_email: rows[0].email
-      });
-    }
-  }
-
   });
 
 

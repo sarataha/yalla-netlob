@@ -9,6 +9,9 @@ var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var bcrypt = require('bcrypt-nodejs');
 
 connection.query('USE ' + dbconfig.database);
+
+module.exports = function(router, passport) {
+
 // /* GET users listing. */
 router.get("/",function(req,res){
   var user_id=req.query.user_id;
@@ -133,5 +136,15 @@ console.log("Rendering users ***********");
 
 
 });
+};
 
-module.exports = router;
+// route middleware to check:
+function isLoggedIn(req, res, next) {
+
+  // if the user is authenticated in the session, keep going
+  if (req.isAuthenticated())
+    return next();
+
+  // else if they aren't then redirect them to the login/signup home page
+  res.redirect('/');
+}

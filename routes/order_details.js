@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-router.get('/',middlewareBodyParser,function(req, res) {
+router.get('/',isLoggedIn,middlewareBodyParser,function(req, res) {
   console.log("******************************* order_id");
   console.log(req.query.order_id);
   var order_id=req.query.order_id;
@@ -93,5 +93,15 @@ router.get('/',middlewareBodyParser,function(req, res) {
     });
     });
 
+// route middleware to check:
+function isLoggedIn(req, res, next) {
+
+  // if the user is authenticated in the session, keep going
+  if (req.isAuthenticated())
+    return next();
+
+  // else if they aren't then redirect them to the login/signup home page
+  res.redirect('/');
+}
 
 module.exports = router;

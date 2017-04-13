@@ -13,7 +13,7 @@ var dbconfig = require('../models/groups');
 // });
 connection.query('USE ' + dbconfig.database);
 
-router.get("/",function(req,res){
+router.get("/",isLoggedIn,function(req,res){
   console.log("*********");
   connection.query("SELECT * FROM groups ", function(err, rows) {
 
@@ -42,7 +42,7 @@ router.get("/",function(req,res){
   });
 });
 
-router.get("/group",function(req,res) {
+router.get("/group",isLoggedIn,function(req,res) {
   console.log("HIIIIIIIIIIIIIIIII");
   console.log(req.query.group);
   var group_name = req.query.group;
@@ -199,5 +199,16 @@ router.post("/addfriend",middlewareBodyParser,function(req,respo){
       }
     });
   });
+
+// route middleware to check:
+function isLoggedIn(req, res, next) {
+
+  // if the user is authenticated in the session, keep going
+  if (req.isAuthenticated())
+    return next();
+
+  // else if they aren't then redirect them to the login/signup home page
+  res.redirect('/');
+}
 
   module.exports = router;

@@ -10,10 +10,8 @@ var bcrypt = require('bcrypt-nodejs');
 
 connection.query('USE ' + dbconfig.database);
 
-module.exports = function(router, passport) {
-
 // /* GET users listing. */
-router.get("/",function(req,res){
+router.get("/",isLoggedIn,function(req,res){
   var user_id=req.user.user_id;
   console.log(user_id);
 console.log("Rendering users ***********");
@@ -122,7 +120,6 @@ console.log("Rendering users ***********");
 
 
 });
-};
 
 // route middleware to check:
 function isLoggedIn(req, res, next) {
@@ -134,3 +131,5 @@ function isLoggedIn(req, res, next) {
   // else if they aren't then redirect them to the login/signup home page
   res.redirect('/');
 }
+
+module.exports = router;

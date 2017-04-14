@@ -11,27 +11,26 @@
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">
-                                    <form action="" method="post">
-										<label for="meal">Order For</label>
-										<select name="meal" id="meal">
-										<option value="breakfast">Breakfast</option>
-										<option value="lunch">Lunch</option>
-										<option value="dinner">Dinner</option>
-										</select> <br> <br>
-										<label for="restaurant">From</label>
-										<input name="restaurant" type="text"> <br> <br>
-										<label for="friends">Members</label>
-										<select name="addFG" id="addFG">
-										<option value="friend">Friend</option>
-										<option value="group">Group</option>
-										</select>
-										<input name="member" id="member_txt" type="text">
-										<input type="button" id="add_member" value="Add">
-										<br> <br>
-										<label for="menu-image">Menu Image</label>
-										<input name="menu-image" type="file"> <br> <br>
-										<input type="submit" value="Publish">
-								</form>
+																	<form action="" method="post">
+																		<label for="meal">Order For</label>
+																		<select name="meal" id="meal">
+																			<option value="breakfast">Breakfast</option>
+																			<option value="lunch">Lunch</option>
+																			<option value="dinner">Dinner</option>
+																		</select> <br> <br>
+																		<label for="restaurant">From</label>
+																		<input name="restaurant" type="text"> <br> <br>
+																		<label for="friends">Members</label>
+																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
+																		<input type="email" name="email" class="form-control" placeholder="Email" id="friend_txt" disabled="true"><br>
+																		<input type="radio" value="group" name="addM" id="addG" class="addM">Group
+																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
+																		<input type="button" id="add_member" value="Add">
+																		<br> <br>
+																		<label for="menu-image">Menu Image</label>
+																		<input name="menu-image" type="file"> <br> <br>
+																		<input type="submit" value="Publish">
+																	</form>
                                 </div>
 
                                 <div class="footer">
@@ -77,9 +76,65 @@
             </div>
 						<script>
 							$(function(){
+								$('#addF').click(function()
+								{
+								  $('#friend_txt').removeAttr("disabled");
+									$('#group_txt').attr("disabled",true);
+								});
+
+								$('#addG').click(function()
+								{
+								  $('#group_txt').removeAttr("disabled");
+									$('#friend_txt').attr("disabled",true);
+								});
+
 								$("#add_member").click(function(event){
-									
-								})
+									var member_type = $("input[name='addM']:checked").val();
+									if(member_type=="friend"){
+										var member_email=$("#friend_txt").val();
+										$("#friend_txt").val("");
+										$.ajax({
+											url:"http://localhost:8090/new_order",
+											method:"post",
+											data:{
+												member_type:member_type,
+												member_email:member_email
+											},
+											success:function(response){
+												var resault=$.trim(response.message);
+												console.log(resault);
+											},
+											error:function(error){
+												console.log("error checking");
+											}
+
+										});//end of ajax
+
+									}else if(member_type=="group"){
+										var member_name=$("#group_txt").val();
+										$("#group_txt").val("");
+										$.ajax({
+											url:"http://localhost:8090/new_order",
+											method:"post",
+											data:{
+												member_type:member_type,
+												member_name:member_email
+											},
+											success:function(response){
+												var resault=$.trim(response.message);
+												console.log(resault);
+											},
+											error:function(error){
+												console.log("error checking");
+											}
+
+										});//end of ajax
+									}
+
+									console.log(member_email);
+									console.log(member_type);
+
+								});
 							});
 						</script>
 	<%include layout/footer %>

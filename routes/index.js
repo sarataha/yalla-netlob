@@ -173,8 +173,8 @@ module.exports = function(app, passport) {
 	app.get('/friends', isLoggedIn, function(req, res) {
 		var connection = mysql.createConnection({
   		host     : 'localhost',
-  		user     : 'dina',
-  		password : '0802',
+  		user     : 'root',
+  		password : '',
   		database : 'yala_netlob_development'
 	});
   connection.connect(function(err){
@@ -195,6 +195,7 @@ module.exports = function(app, passport) {
 			title: 'Friends',
 			username: req.user.user_name,
 			userID:req.user.user_id,
+      avatar: req.user.avatar_url,
 			friends:rows
 		});
 
@@ -204,17 +205,18 @@ module.exports = function(app, passport) {
 			title: 'Friends',
 			username: req.user.user_name,
 			userID:req.user.user_id,
-			avatar: req.user.avatar_url
+			avatar: req.user.avatar_url,
+      friends:[]
 		});
 
 			}
-			
+
 		}else{
 			console.log("error");
 		}
 
-	});  
-		
+	});
+
 	});
 
 	/* GET home orders if user logged in. */

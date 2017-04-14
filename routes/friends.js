@@ -29,14 +29,14 @@ var middlewareBodyParser=bodyParser.urlencoded({extended:false});
 			console.log("error");
 		}
 
-	});  
+	});
 }); */
 router.post("/add",middlewareBodyParser,function(req,respo){
-	
+
 	var connection = mysql.createConnection({
   		host     : 'localhost',
-  		user     : 'dina',
-  		password : '0802',
+  		user     : 'root',
+  		password : '',
   		database : 'yala_netlob_development'
 	});
 	connection.connect(function(err){
@@ -51,7 +51,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 	var email=req.body.friend_mail;
 	//var res=null;
 	connection.query("select * from users where email='"+email+"'", function(err, rows,fields) {
-		
+
     if(!err)
      { if (rows.length > 0)
         {
@@ -69,7 +69,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 
         	})
 
-        }	
+        }
       else
         console.log('invalid user data');
 	}
@@ -77,7 +77,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
       console.log("invalid data");
   });
 	//console.log("result "+res);
-	
+
 
 });
 

@@ -23,7 +23,31 @@
                             <div class="header">
                                 <h4 class="title">Friends</h4><br><br>
                                   <% for(var i=0; i < friends.length; i++) { %>
-                                	<p class="category"><%= friends[i].user_name%> &nbsp; &nbsp; &nbsp; &nbsp; <%= friends[i].email%></p>
+                                  <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-xs-5">
+                                        <div class="icon-big icon-warning text-center">
+                                            <i class="ti-server"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <div class="numbers">
+                                            <p><a href="/user?user_id=<%=friends[i].user_id%>"><%= friends[i].user_name%></a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <hr />
+                                    <div class="stats">
+                                        <i class="ti-reload"></i> Remove
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                	
                                    <% } %>	
                             </div>
                             <div class="content">

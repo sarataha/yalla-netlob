@@ -26,8 +26,7 @@
                                     <tbody>
 
                                         <% for(var i=0; i < orders.length; i++) { %>
-
-                                          <tr id="cancel<%= orders[i].order_id %>">
+                                          <tr id="cancelion<%= orders[i].order_id %>">
                                             <td><%= orders[i].order_id %></td>
 
                                             <td><%= orders[i].meal_type %></td>
@@ -60,26 +59,6 @@
         <script>
 
           $(function(){
-<<<<<<< HEAD
-            var longPolling=function(){
-            $.ajax({
-              url:"http://localhost:8090/orders",
-              method:"GET",
-              success:function(response) {
-                //console.log(response);
-              },
-              complete: function(){
-                  longPolling()
-              },
-              timeout: 30000,
-              error:function() {
-                //console.log(err);
-              }
-            });
-          }
-=======
->>>>>>> 9ee8dde71d4ffe69d54591154d8983d0e90b0fe2
-
             $(".finish").click(function(event){
               console.log("HEYYYYYY");
               order_id=$(this).attr('value');
@@ -113,7 +92,7 @@
                 data:{order_id:parseInt(order_id)},
                 success:function(response){
                   if(response.message=="cancel"){
-                    $('table#order_tb tr#cancel'+response.order_id).remove();
+                    $('table#order_tb tr#cancelion'+response.order_id).remove();
                   }
                 },
                 error:function(error){

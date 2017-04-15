@@ -7,7 +7,6 @@
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Add Order</h4>
-                                <p class="category">Bla bla bla blaaaa</p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">
@@ -19,7 +18,7 @@
 																			<option value="dinner">Dinner</option>
 																		</select> <br> <br>
 																		<label for="restaurant">From</label>
-																		<input name="restaurant" type="text"> <br> <br>
+																		<input name="restaurant" type="text" id="from"> <br> <br>
 																		<label for="friends">Members</label>
 																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
 																		<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
@@ -30,7 +29,7 @@
 																		<br> <br>
 																		<label for="menu-image">Menu Image</label>
 																		<input name="menu-image" type="file" id="image"> <br> <br>
-																		<input type="submit" value="Publish">
+																		<input type="submit" value="Publish" id="publish">
 																	</form>
                                 </div>
 
@@ -75,6 +74,8 @@
             </div>
 						<script>
 							$(function(){
+								var invited_id=[];
+								var invited_name=[];
 								$('#addF').click(function()
 								{
 								  $('#friend_txt').removeAttr("disabled");
@@ -106,6 +107,8 @@
 												if(response.message=="not_friend")
 													alert("not in your friends");
 												else if(response.message=="is_friend"){
+													invited_id.push(response.friend_id);
+													invited_name.push(response.friend_name);
 													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
 												}
 											},
@@ -130,8 +133,11 @@
 												var resault=$.trim(response.message);
 												console.log(resault);
 												if(response.message=="is_group"){
-													for(i=0;i<response.group_members.length;i++)
+													for(i=0;i<response.group_members.length;i++){
+														invited_name.push(response.group_members[i].user_name);
+														invited_id.push(response.group_members[i].user_id);
 														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+													}
 												}
 											},
 											error:function(error){
@@ -144,6 +150,40 @@
 										console.log(member_type);
 									}
 								});
+								$("#publish").click(function(event){
+									event.preventDefault();
+									var meal_type=$("#meal").find(":selected").val();
+									console.log("mealType");
+									console.log(meal_type);
+
+									var from=$("#from").val();
+									console.log(from);
+									var img=$('input[type=file]').val();
+									console.log(img);
+									console.log(invited_id);
+									console.log(invited_name);
+
+									$.ajax({
+										url:"http://localhost:8090/new_order",
+										method:"put",
+										data:{
+											meal_type:meal_type,
+											from:from,
+											invited_id:invited_id,
+											invited_name:invited_name,
+											image:img
+										},
+										success:function(response){
+												console.log("success");
+										},
+										error:function(error){
+											console.log("error publish");
+											console.log(error);
+										}
+
+									})
+								});
+
 							});
 						</script>
 	<%include layout/footer %>

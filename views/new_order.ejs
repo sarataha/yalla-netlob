@@ -22,13 +22,14 @@
 																		<input name="restaurant" type="text"> <br> <br>
 																		<label for="friends">Members</label>
 																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
-																		<input type="email" name="email" class="form-control" placeholder="Email" id="friend_txt" disabled="true"><br>
-																		<input type="radio" value="group" name="addM" id="addG" class="addM">Group
+																		<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
+																		<br>
+																			<input type="radio" value="group" name="addM" id="addG" class="addM">Group
 																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
 																		<input type="button" id="add_member" value="Add">
 																		<br> <br>
 																		<label for="menu-image">Menu Image</label>
-																		<input name="menu-image" type="file"> <br> <br>
+																		<input name="menu-image" type="file" id="image"> <br> <br>
 																		<input type="submit" value="Publish">
 																	</form>
                                 </div>
@@ -53,10 +54,8 @@
                                 <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">
-                                <div class="ct-chart">
-                                    <p>Test Friend</p>
-                                    <a href="#">remove</a>
-                                    <p>
+                                <div class="ct-chart" id="friend_list">
+
                                 </div>
 
                                 <div class="footer">
@@ -89,6 +88,7 @@
 								});
 
 								$("#add_member").click(function(event){
+
 									var member_type = $("input[name='addM']:checked").val();
 									if(member_type=="friend"){
 										var member_email=$("#friend_txt").val();
@@ -103,9 +103,15 @@
 											success:function(response){
 												var resault=$.trim(response.message);
 												console.log(resault);
+												if(response.message=="not_friend")
+													alert("not in your friends");
+												else if(response.message=="is_friend"){
+													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+												}
 											},
 											error:function(error){
 												console.log("error checking");
+												console.log(error);
 											}
 
 										});//end of ajax
@@ -118,22 +124,25 @@
 											method:"post",
 											data:{
 												member_type:member_type,
-												member_name:member_email
+												member_name:member_name
 											},
 											success:function(response){
 												var resault=$.trim(response.message);
 												console.log(resault);
+												if(response.message=="is_group"){
+													for(i=0;i<response.group_members.length;i++)
+														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+												}
 											},
 											error:function(error){
-												console.log("error checking");
+												console.log("error checking group");
+												console.log(error);
 											}
 
 										});//end of ajax
+										console.log(member_name);
+										console.log(member_type);
 									}
-
-									console.log(member_email);
-									console.log(member_type);
-
 								});
 							});
 						</script>

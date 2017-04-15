@@ -190,12 +190,13 @@ module.exports = function(passport) {
                         facebook_id: profile.id,
                         facebook_token: token,
                         username: profile.name.givenName + ' ' + profile.name.familyName,
-                        email: profile.emails[0].value
+                        email: profile.emails[0].value,
+                        picture: profile.photos ? profile.photos[0].value : ''
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id ) values (?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, facebook_token, facebook_id, avatar_url ) values (?,?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.facebook_token, newUserMysql.facebook_id, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -240,12 +241,13 @@ module.exports = function(passport) {
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,
-                        username: profile.username
+                        username: profile.username,
+                        picture: profile.photos ? profile.photos[0].value : ''
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id ) values (?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, twitter_token, twitter_id, avatar_url ) values (?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.twitter_token, newUserMysql.twitter_id],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.twitter_token, newUserMysql.twitter_id, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
@@ -292,13 +294,14 @@ module.exports = function(passport) {
                         google_id: profile.id,
                         google_token: token,
                         username: profile.displayName,
-                        email: profile.emails[0].value // Get the first email
+                        email: profile.emails[0].value, // Get the first email
+                        picture: profile.photos ? profile.photos[0].value : ''
                     };
 
                     // save the user
-                    var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id ) values (?,?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id, avatar_url ) values (?,?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);

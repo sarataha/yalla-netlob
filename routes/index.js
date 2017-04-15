@@ -128,7 +128,6 @@ module.exports = function(app, passport) {
 			userID:req.user.user_id,
 			friends:rows,
 			avatar: req.user.avatar_url
-			friends:rows
 		});
 
 			}

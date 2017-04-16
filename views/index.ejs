@@ -1,10 +1,15 @@
 <% include layout/sidebar %>
 <% include layout/header %>
-<script>
- var socket = io();
-socket.emit('connection','Hello');
-
-</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+    <script>
+        $(function(){
+            var iosocket = io.connect();
+            iosocket.on('connect', function () {
+                console.log("connected");
+            });
+        });
+    </script>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">

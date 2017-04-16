@@ -1,6 +1,5 @@
 var express = require('express');
 
-
 // set up
 // get all the tools we need
 var session  = require('express-session');
@@ -14,10 +13,15 @@ var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
 var app      = express();
-var http=require('http').createServer(app);
+// var http=require('http').createServer(app);
 //var server=http;
-var io = require('socket.io')(http);
-http.listen(8090,"127.0.0.1");
+// var io = require('socket.io')(http);
+// http.listen(8090,"127.0.0.1");
+
+var app = express();
+var server = app.listen(8080);
+var io = require('socket.io').listen(server);
+
 var port     = process.env.PORT || 8090;
 
 var passport = require('passport');
@@ -76,8 +80,9 @@ app.use('/order_details', order_details);
 
 
 io.on('connection', function(socket){
-  socket.on('connection', function(msg){console.log("message recieved"+msg);});
-  socket.on('disconnect',function(){});
+  console.log('connection')
+//   socket.on('connection', function(msg){console.log("message recieved"+msg);});
+//   socket.on('disconnect',function(){});
 });
 
 
@@ -102,6 +107,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-app.listen(port,function () {
-  console.log("App is running on port " + port);
-});
+// app.listen(port,function () {
+//   console.log("App is running on port " + port);
+// });

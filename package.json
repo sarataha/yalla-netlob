@@ -30,6 +30,7 @@
     "passport-local": "1.0.0",
     "passport-twitter": "^1.0.4",
     "password-reset": "^0.1.4",
+    "redis": "^2.7.1",
     "serve-favicon": "~2.4.2",
     "socket.io": "^1.7.3",
     "supervisor": "^0.12.0"

@@ -119,6 +119,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-// app.listen(port,function () {
-//   console.log("App is running on port " + port);
-// });
+app.listen(port,function () {
+  console.log("App is running on port " + port);
+});

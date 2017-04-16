@@ -8,13 +8,19 @@ var dbconfig = require('../models/groups');
 //var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
-
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'yala_netlob_development'
+});
 module.exports = function(app, passport) {
 
 	/* GET Home page with login form. */
 	app.get('/', function(req, res) {
 		// Redirect user to the dashboard if he trys to open the login page while already logged in
 		if (req.isAuthenticated()) {
+			var user_id=req.user.user_id;
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
@@ -96,13 +102,27 @@ module.exports = function(app, passport) {
 	/* GET home page if user logged in. */
 	app.get('/home', isLoggedIn, function(req, res) {
 		console.log(req.user.avatar_url);
-		res.render('index.ejs', {
-			title: 'Home',
-			username: req.user.user_name,
-			userID:req.user.user_id,
-			avatar: req.user.avatar_url
+		var query="select users.user_name,orders.* from users,orders  where user_id=owner_id limit 5";
+		connection.query(query,function(err,row,fields){
+			if(!err){
+				console.log(row);
+				res.render('index.ejs', {
+					title: 'Home',
+					username: req.user.user_name,
+					userID:req.user.user_id,
+					avatar: req.user.avatar_url,
+					row:row
+				});
+			}else {
+				console.log(err);
+			}
 		});
+
 	});
+
+	// app.post('/home', isLoggedIn, function(req, res) {
+	//
+	// });
 
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
@@ -164,7 +184,7 @@ module.exports = function(app, passport) {
 		avatar: req.user.avatar_url
 	  });
 	});
-	
+
 	/***
 	 * FACEBOOK Authentication
 	 */

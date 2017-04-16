@@ -22,11 +22,11 @@
 																		<label for="friends">Members</label>
 																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
 																		<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
-																		<br>
+
 																			<input type="radio" value="group" name="addM" id="addG" class="addM">Group
 																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
 																		<input type="button" id="add_member" value="Add">
-																		<br> <br>
+
 																		<label for="menu-image">Menu Image</label>
 																		<input name="menu-image" type="file" id="image"> <br> <br>
 																		<input type="submit" value="Publish" id="publish">
@@ -152,6 +152,7 @@
 								});
 								$("#publish").click(function(event){
 									event.preventDefault();
+									user_id=userID[0].innerHTML;
 									var meal_type=$("#meal").find(":selected").val();
 									console.log("mealType");
 									console.log(meal_type);
@@ -167,6 +168,7 @@
 										url:"http://localhost:8090/new_order",
 										method:"put",
 										data:{
+											owner_id:user_id,
 											meal_type:meal_type,
 											from:from,
 											invited_id:invited_id,

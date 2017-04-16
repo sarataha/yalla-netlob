@@ -1,5 +1,6 @@
 var express = require('express');
 
+
 // set up
 // get all the tools we need
 var session  = require('express-session');
@@ -13,6 +14,10 @@ var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
 var app      = express();
+var http=require('http').createServer(app);
+//var server=http;
+var io = require('socket.io')(http);
+http.listen(8090,"127.0.0.1");
 var port     = process.env.PORT || 8090;
 
 var passport = require('passport');
@@ -68,6 +73,13 @@ app.use('/friends', friends);
 app.use('/orders', orders);
 app.use('/new_order', new_order);
 app.use('/order_details', order_details);
+
+
+io.on('connection', function(socket){
+  socket.on('connection', function(msg){console.log("message recieved"+msg);});
+  socket.on('disconnect',function(){});
+});
+
 
 // catch 404 error and forward error status handler
 app.use(function(req, res, next) {

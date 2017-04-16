@@ -106,6 +106,53 @@ router.post('/',middlewareBodyParser,function(req, res) {
 
 router.put('/',middlewareBodyParser,function(req, res) {
   console.log(req.body);
+  console.log(req.body.owner_id);
+  var owner_id=req.body.owner_id;
+  var meal_type=req.body.meal_type;
+  var resturant=req.body.from;
+  var menu_img=req.body.image;
+    var d= new Date();
+var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
+//  var order_time=new Date("yyyy-mm-dd").toLocaleString();
+  console.log(order_time);
+  connection.query("insert into orders (meal_type,order_status,owner_id,resturant,menu_img,order_time) values (?,?,?,?,?,?)",[meal_type,"waiting",owner_id,resturant,menu_img,order_time],function(error,row){
+    if(error)
+    {
+      console.log("error while inserting");
+    }
+    else{
+      console.log("inersted");
+      connection.query("select order_id from orders where owner_id=? and order_time=?",[owner_id,order_time],function(error,rows){
+        if(error){
+
+        }else{
+          console.log(rows[0].order_id);
+          for(var i=0;i<req.body.invited_id.length;i++){
+            console.log(req.body.invited_id[i]);
+            connection.query("insert into orders_users (order_id,user_id) values (?,?)",[rows[0].order_id,req.body.invited_id[i]],function(error,rows){
+              if(error){
+                console.log("error in 2 query");
+
+              }
+              else{
+              //   socket.on('send to server',function(data){
+              //     //  socketId =  getSocketIdFromUserId(user_id);
+              // io.to(req.body.invited_id[i]).emit('notification', 'test data');
+          // })
+                console.log("inserted 2");
+              }
+            });
+
+          }
+
+        }
+      });
+
+
+
+
+    }
+  });
 });
 
 

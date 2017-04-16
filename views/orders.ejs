@@ -65,7 +65,7 @@
               order_id=$(this).attr('value');
               console.log(order_id);
               $.ajax({
-                url:"http://localhost:8090/orders",
+                url:"http://localhost:8080/orders",
                 method:"put",
                 data:{order_id:parseInt(order_id)},
                 success:function(response){
@@ -88,7 +88,7 @@
               order_id=$(this).attr('value');
               console.log(order_id);
               $.ajax({
-                url:"http://localhost:8090/orders",
+                url:"http://localhost:8080/orders",
                 method:"delete",
                 data:{order_id:parseInt(order_id)},
                 success:function(response){

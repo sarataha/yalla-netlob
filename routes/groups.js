@@ -27,6 +27,7 @@ router.get("/",isLoggedIn,function(req,res){
         title: 'Groups',
         username: req.user.user_name,
         userID: req.user.user_id,
+        avatar: req.user.avatar_url,
         groups: rows
       });
 
@@ -37,6 +38,7 @@ router.get("/",isLoggedIn,function(req,res){
         title: 'Groups',
         username: req.user.user_name,
         userID: req.user.user_id,
+        avatar: req.user.avatar_url,
         groups: ""
       });
 

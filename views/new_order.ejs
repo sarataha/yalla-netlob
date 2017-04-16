@@ -1,191 +1,201 @@
 <% include layout/sidebar %>
 <% include layout/header %>
-	<div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Add Order</h4>
-                            </div>
-                            <div class="content">
-                                <div class="ct-chart ct-perfect-fourth">
-																	<form action="" method="post">
-																		<label for="meal">Order For</label>
-																		<select name="meal" id="meal">
-																			<option value="breakfast">Breakfast</option>
-																			<option value="lunch">Lunch</option>
-																			<option value="dinner">Dinner</option>
-																		</select> <br> <br>
-																		<label for="restaurant">From</label>
-																		<input name="restaurant" type="text" id="from"> <br> <br>
-																		<label for="friends">Members</label>
-																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
-																		<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card">
+					<div class="header">
+						<h4 class="title">Add Order</h4>
+					</div>
+					<div class="content">
+						<div class="ct-chart ct-perfect-fourth" style="height: 500px">
+							<form action="" method="post">
+								<div class="form-group">
+									<label for="meal">Order For</label>
+									<select class="form-control" name="meal" id="meal">
+										<option value="breakfast">Breakfast</option>
+										<option value="lunch">Lunch</option>
+										<option value="dinner">Dinner</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="restaurant">From</label>
+									<input name="restaurant" type="text" id="from" class="form-control">
+								</div>
+								<div class="form-group">
+									<label for="friends">Members</label><br>
+									<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
+									<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
+								</div>
+								<div class="form-group">
+									<input type="radio" value="group" name="addM" id="addG" class="addM">Group
+									<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true">
+								</div>
+								<div class="form-group">
+									<input type="button" class="btn btn-info btn-fill btn-wd" id="add_member" value="Add"><br>
+								</div>
+								<div class="form-group">
+									<label for="menu-image">Menu Image</label>
+									<input name="menu-image" type="file" id="image">
+								</div>
+								<input type="submit" class="btn btn-danger btn-wd btn-f" value="Publish" id="publish">
+							</form>
+						</div>
 
-																			<input type="radio" value="group" name="addM" id="addG" class="addM">Group
-																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
-																		<input type="button" id="add_member" value="Add">
+						<div class="footer">
+							<div class="chart-legend">
+								<i class="fa fa-circle text-info"></i>
+								<i class="fa fa-circle text-danger"></i>
+								<i class="fa fa-circle text-warning"></i>
+							</div>
+							<hr>
+							<div class="stats">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card ">
+					<div class="header">
+						<h4 class="title">Invited Friends</h4>
+						<p class="category">More of bla bla bla</p>
+					</div>
+					<div class="content">
+						<div class="ct-chart" id="friend_list" style="height:480px">
 
-																		<label for="menu-image">Menu Image</label>
-																		<input name="menu-image" type="file" id="image"> <br> <br>
-																		<input type="submit" value="Publish" id="publish">
-																	</form>
-                                </div>
+						</div>
 
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i>
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <i class="fa fa-circle text-warning"></i>
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">Invited Friends</h4>
-                                <p class="category">More of bla bla bla</p>
-                            </div>
-                            <div class="content">
-                                <div class="ct-chart" id="friend_list">
+						<div class="footer">
+							<div class="chart-legend">
+								<i class="fa fa-circle text-info"></i>
+								<i class="fa fa-circle text-danger"></i>
+								<i class="fa fa-circle text-warning"></i>
+							</div>
+							<hr>
+							<div class="stats">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	$(function(){
+		var invited_id=[];
+		var invited_name=[];
+		$('#addF').click(function()
+		{
+			$('#friend_txt').removeAttr("disabled");
+			$('#group_txt').attr("disabled",true);
+		});
 
-                                </div>
+		$('#addG').click(function()
+		{
+			$('#group_txt').removeAttr("disabled");
+			$('#friend_txt').attr("disabled",true);
+		});
 
-                                <div class="footer">
-                                    <div class="chart-legend">
-                                        <i class="fa fa-circle text-info"></i>
-                                        <i class="fa fa-circle text-danger"></i>
-                                        <i class="fa fa-circle text-warning"></i>
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-						<script>
-							$(function(){
-								var invited_id=[];
-								var invited_name=[];
-								$('#addF').click(function()
-								{
-								  $('#friend_txt').removeAttr("disabled");
-									$('#group_txt').attr("disabled",true);
-								});
+		$("#add_member").click(function(event){
 
-								$('#addG').click(function()
-								{
-								  $('#group_txt').removeAttr("disabled");
-									$('#friend_txt').attr("disabled",true);
-								});
+			var member_type = $("input[name='addM']:checked").val();
+			if(member_type=="friend"){
+				var member_email=$("#friend_txt").val();
+				$("#friend_txt").val("");
+				$.ajax({
+					url:"http://localhost:8090/new_order",
+					method:"post",
+					data:{
+						member_type:member_type,
+						member_email:member_email
+					},
+					success:function(response){
+						var resault=$.trim(response.message);
+						console.log(resault);
+						if(response.message=="not_friend")
+						alert("not in your friends");
+						else if(response.message=="is_friend"){
+							invited_id.push(response.friend_id);
+							invited_name.push(response.friend_name);
+							$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+						}
+					},
+					error:function(error){
+						console.log("error checking");
+						console.log(error);
+					}
 
-								$("#add_member").click(function(event){
+				});//end of ajax
 
-									var member_type = $("input[name='addM']:checked").val();
-									if(member_type=="friend"){
-										var member_email=$("#friend_txt").val();
-										$("#friend_txt").val("");
-										$.ajax({
-											url:"http://localhost:8090/new_order",
-											method:"post",
-											data:{
-												member_type:member_type,
-												member_email:member_email
-											},
-											success:function(response){
-												var resault=$.trim(response.message);
-												console.log(resault);
-												if(response.message=="not_friend")
-													alert("not in your friends");
-												else if(response.message=="is_friend"){
-													invited_id.push(response.friend_id);
-													invited_name.push(response.friend_name);
-													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
-												}
-											},
-											error:function(error){
-												console.log("error checking");
-												console.log(error);
-											}
+			}else if(member_type=="group"){
+				var member_name=$("#group_txt").val();
+				$("#group_txt").val("");
+				$.ajax({
+					url:"http://localhost:8090/new_order",
+					method:"post",
+					data:{
+						member_type:member_type,
+						member_name:member_name
+					},
+					success:function(response){
+						var resault=$.trim(response.message);
+						console.log(resault);
+						if(response.message=="is_group"){
+							for(i=0;i<response.group_members.length;i++){
+								invited_name.push(response.group_members[i].user_name);
+								invited_id.push(response.group_members[i].user_id);
+								$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+							}
+						}
+					},
+					error:function(error){
+						console.log("error checking group");
+						console.log(error);
+					}
 
-										});//end of ajax
+				});//end of ajax
+				console.log(member_name);
+				console.log(member_type);
+			}
+		});
+		$("#publish").click(function(event){
+			event.preventDefault();
+			user_id=userID[0].innerHTML;
+			var meal_type=$("#meal").find(":selected").val();
+			console.log("mealType");
+			console.log(meal_type);
 
-									}else if(member_type=="group"){
-										var member_name=$("#group_txt").val();
-										$("#group_txt").val("");
-										$.ajax({
-											url:"http://localhost:8090/new_order",
-											method:"post",
-											data:{
-												member_type:member_type,
-												member_name:member_name
-											},
-											success:function(response){
-												var resault=$.trim(response.message);
-												console.log(resault);
-												if(response.message=="is_group"){
-													for(i=0;i<response.group_members.length;i++){
-														invited_name.push(response.group_members[i].user_name);
-														invited_id.push(response.group_members[i].user_id);
-														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
-													}
-												}
-											},
-											error:function(error){
-												console.log("error checking group");
-												console.log(error);
-											}
+			var from=$("#from").val();
+			console.log(from);
+			var img=$('input[type=file]').val();
+			console.log(img);
+			console.log(invited_id);
+			console.log(invited_name);
 
-										});//end of ajax
-										console.log(member_name);
-										console.log(member_type);
-									}
-								});
-								$("#publish").click(function(event){
-									event.preventDefault();
-									user_id=userID[0].innerHTML;
-									var meal_type=$("#meal").find(":selected").val();
-									console.log("mealType");
-									console.log(meal_type);
+			$.ajax({
+				url:"http://localhost:8090/new_order",
+				method:"put",
+				data:{
+					owner_id:user_id,
+					meal_type:meal_type,
+					from:from,
+					invited_id:invited_id,
+					invited_name:invited_name,
+					image:img
+				},
+				success:function(response){
+					console.log("success");
+				},
+				error:function(error){
+					console.log("error publish");
+					console.log(error);
+				}
 
-									var from=$("#from").val();
-									console.log(from);
-									var img=$('input[type=file]').val();
-									console.log(img);
-									console.log(invited_id);
-									console.log(invited_name);
+			})
+		});
 
-									$.ajax({
-										url:"http://localhost:8090/new_order",
-										method:"put",
-										data:{
-											owner_id:user_id,
-											meal_type:meal_type,
-											from:from,
-											invited_id:invited_id,
-											invited_name:invited_name,
-											image:img
-										},
-										success:function(response){
-												console.log("success");
-										},
-										error:function(error){
-											console.log("error publish");
-											console.log(error);
-										}
-
-									})
-								});
-
-							});
-						</script>
+	});
+	</script>
 	<%include layout/footer %>

@@ -18,7 +18,8 @@ module.exports = function(app, passport) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
-				userID:req.user.user_id
+				userID:req.user.user_id,
+				avatar: req.user.avatar_url
 			});
 		}
 		else {
@@ -71,10 +72,12 @@ module.exports = function(app, passport) {
 	/* GET home page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/home', isLoggedIn, function(req, res) {
+		console.log(req.user);
 		res.render('index.ejs', {
 			title: 'Home',
 			username: req.user.user_name,
-			userID:req.user.user_id
+			userID:req.user.user_id,
+			avatar: req.user.avatar_url
 		});
 	});
 
@@ -123,8 +126,8 @@ module.exports = function(app, passport) {
 			title: 'Friends',
 			username: req.user.user_name,
 			userID:req.user.user_id,
-      avatar: req.user.avatar_url,
-			friends:rows
+			friends:rows,
+			avatar: req.user.avatar_url
 		});
 
 			}
@@ -132,9 +135,9 @@ module.exports = function(app, passport) {
 				res.render('friends.ejs', {
 			title: 'Friends',
 			username: req.user.user_name,
+			friends: [],
 			userID:req.user.user_id,
-			avatar: req.user.avatar_url,
-      friends:[]
+			avatar: req.user.avatar_url
 
 			// userID:req.user.user_id,
 			// avatar: req.user.avatar_url,
@@ -167,7 +170,8 @@ module.exports = function(app, passport) {
 	  res.render('new_order', {
 	  	title: 'New Order',
 		username: req.user.user_name,
-		userID:req.user.user_id
+		userID:req.user.user_id,
+		avatar: req.user.avatar_url
 	  });
 	});
 

@@ -25,6 +25,7 @@ console.log("Rendering users ***********");
       	title: 'Profile',
       	username: rows[0].user_name,
         userID:rows[0].user_id,
+        avatar: req.user.avatar_url,
         user_img:rows[0].avatar_url,
         user_email:rows[0].email
       });

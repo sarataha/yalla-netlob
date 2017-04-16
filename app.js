@@ -80,6 +80,18 @@ app.use('/order_details', order_details);
 
 
 io.on('connection', function(socket){
+  socket.on('join',function(data){
+      console.log("join***"+data.user_id);
+      users[data.user_id]=socket;
+      console.log(users.length);
+
+  });
+  socket.on('send notification',function(data){
+    console.log("in notification send");
+    console.log(data.user_id);
+    users[data.user_id].emit('notification',data.msg);
+    //users[data.user_id].emit('notification',data.msg);
+  });
   console.log('connection')
 //   socket.on('connection', function(msg){console.log("message recieved"+msg);});
 //   socket.on('disconnect',function(){});
@@ -107,6 +119,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-// app.listen(port,function () {
-//   console.log("App is running on port " + port);
-// });
+app.listen(port,function () {
+  console.log("App is running on port " + port);
+});

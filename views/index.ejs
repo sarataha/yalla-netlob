@@ -3,11 +3,21 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
     <script>
-        $(function(){
+
+        $(document).ready(function(){
+
+          console.log("******"+userID.innerHTML);
+
+            var user_id=userID.innerHTML;
             var iosocket = io.connect();
-            iosocket.on('connect', function () {
-                console.log("connected");
-            });
+            iosocket.emit('join', {user_id:user_id});
+            
+            iosocket.on('notification',function(data){
+              alert(data);
+            })
+            // function () {
+            //     console.log("connected");
+            // });
         });
     </script>
         <div class="content">

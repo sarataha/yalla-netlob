@@ -1,5 +1,10 @@
 <% include layout/sidebar %>
 <% include layout/header %>
+<script>
+ var socket = io();
+socket.emit('connection','Hello');
+
+</script>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">

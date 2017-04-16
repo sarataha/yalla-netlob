@@ -59,6 +59,7 @@ router.get('/',isLoggedIn,function(req, res, next) {
 // });
 
 router.put('/',middlewareBodyParser,function(req, res) {
+  //io.on("finish","hey finish");
   console.log("******************************* order_id");
   console.log(req.body.order_id);
   order_id=req.body.order_id;

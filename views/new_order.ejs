@@ -117,9 +117,11 @@
 						if(response.message=="not_friend")
 						alert("not in your friends");
 						else if(response.message=="is_friend"){
-							invited_id.push(response.friend_id);
-							invited_name.push(response.friend_name);
-							$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+							if(!invited_id.includes(response.friend_id)){
+								invited_id.push(response.friend_id);
+								invited_name.push(response.friend_name);
+								$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+							}
 						}
 					},
 					error:function(error){
@@ -144,10 +146,14 @@
 						console.log(resault);
 						if(response.message=="is_group"){
 							for(i=0;i<response.group_members.length;i++){
-								invited_name.push(response.group_members[i].user_name);
-								invited_id.push(response.group_members[i].user_id);
-								$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+								if(!invited_id.includes(response.group_members[i].user_id)){
+									invited_name.push(response.group_members[i].user_name);
+									invited_id.push(response.group_members[i].user_id);
+									$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><a>remove</a>");
+								}
 							}
+						}else if(response.message=="not_group"){
+							alert("not In Ur Groups");
 						}
 					},
 					error:function(error){

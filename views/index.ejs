@@ -5,7 +5,7 @@
     <script>
 
         $(document).ready(function(){
-
+                
           console.log("******"+userID.innerHTML);
 
             var user_id=userID.innerHTML;
@@ -13,8 +13,24 @@
             iosocket.emit('join', {user_id:user_id});
 
             iosocket.on('notification',function(data){
-              alert(data);
-            })
+             // alert(data);
+              demo.showNotification('top','right',data);
+              var not_no = $("#mylist li").length
+              $("#notifications-no").html(not_no);
+              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
+             /* var answer = confirm (data)
+            if (answer) {
+                io.emit('join order');
+                alert("hi");
+            }
+           else
+                alert ("Darn. Well, keep trying then.")*/
+            });
+
+            socket.on('connectToOrder',function(data){
+                alert(data);
+            });
+
             // function () {
             //     console.log("connected");
             // });

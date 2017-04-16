@@ -9,27 +9,35 @@
                                 <h4 class="title">Add Order</h4>
                             </div>
                             <div class="content">
-                                <div class="ct-chart ct-perfect-fourth">
+                                <div class="ct-chart ct-perfect-fourth" style="height: 500px">
 																	<form action="" method="post">
+																	<div class="form-group">
 																		<label for="meal">Order For</label>
-																		<select name="meal" id="meal">
+																		<select name="meal" class="form-control" id="meal">
 																			<option value="breakfast">Breakfast</option>
 																			<option value="lunch">Lunch</option>
 																			<option value="dinner">Dinner</option>
-																		</select> <br> <br>
+																		</select>
+																		</div>
+																		<div class="form-group">
 																		<label for="restaurant">From</label>
-																		<input name="restaurant" type="text" id="from"> <br> <br>
-																		<label for="friends">Members</label>
+																		<input class="form-control" name="restaurant" type="text" id="from">
+																		</div>
+																		<div class="form-group">
+																		<label for="friends">Members</label><br>
 																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
-																		<input type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
-
+																		<input class="form-control" type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
+																		</div>
+																		<div class="form-group">
 																			<input type="radio" value="group" name="addM" id="addG" class="addM">Group
 																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
-																		<input type="button" id="add_member" value="Add">
-
+																		<input type="button" id="add_member" value="Add" class="btn btn-warning">
+																		</div>
+																		<div class="form-group">
 																		<label for="menu-image">Menu Image</label>
-																		<input name="menu-image" type="file" id="image"> <br> <br>
-																		<input type="submit" value="Publish" id="publish">
+																		<input name="menu-image" type="file" id="image">
+																		</div>
+																		<input type="submit" value="Publish" id="publish" class="btn btn-danger btn-wd">
 																	</form>
                                 </div>
 
@@ -53,7 +61,7 @@
                                 <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">
-                                <div class="ct-chart" id="friend_list">
+                                <div class="ct-chart" id="friend_list" style="height:550px">
 
                                 </div>
                             </div>
@@ -64,8 +72,14 @@
 						<script src="/socket.io/socket.io.js"></script>
 						<script>
 					var	user_id=userID.innerHTML;
+					var user_name = $("#user-name").text();
+					console.log(user_name);
 					  var iosocket = io.connect();
+					  iosocket.on('notification',function(data){
+              			alert(data);
+            			});
 							$(function(){
+							console.log($("#user-name").text());
 								var invited_id=[];
 								var invited_name=[];
 								$('#addF').click(function()
@@ -153,6 +167,7 @@
 										data:{
 											meal_type:meal_type,
 											owner_id:user_id,
+											owner_name: user_name,
 											from:from,
 											invited_id:invited_id,
 											invited_name:invited_name,
@@ -161,11 +176,15 @@
 										success:function(response){
 											var result=$.trim(response)
 											if(result=="notify"){
+												var username = $("#user-name").text().trim();
+												var notification_msg = username + " has invited you to joined their order";
+												var room = username + from + meal_type;
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{user_id:invited_id[i],msg:"hello"});
+													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg,room:room});
 										}}
 												console.log("success");
+												window.location.href = "/orders"
 										},
 										error:function(error){
 											console.log("error publish");

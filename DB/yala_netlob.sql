@@ -1,8 +1,8 @@
--- MySQL dump 10.14  Distrib 5.5.52-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.20-MariaDB, for osx10.12 (x86_64)
 --
--- Host: localhost    Database: yala_netlob_development
+-- Host: yala_netlob_development    Database: yala_netlob_development
 -- ------------------------------------------------------
--- Server version	5.5.52-MariaDB
+-- Server version	10.1.20-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -19,7 +19,6 @@
 -- Table structure for table `group_members`
 --
 
-
 DROP TABLE IF EXISTS `group_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -29,7 +28,7 @@ CREATE TABLE `group_members` (
   PRIMARY KEY (`group_id`,`user_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`group_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -56,7 +55,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`group_id`),
   KEY `group_admin` (`group_admin`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`group_admin`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +63,6 @@ CREATE TABLE `groups` (
 --
 
 LOCK TABLES `groups` WRITE;
-
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -83,10 +81,11 @@ CREATE TABLE `orders` (
   `owner_id` int(11) NOT NULL,
   `resturant` varchar(60) NOT NULL,
   `menu_img` varchar(255) DEFAULT NULL,
+  `order_time` datetime NOT NULL,
   PRIMARY KEY (`order_id`),
   KEY `owner_id` (`owner_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,6 +94,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (11,'breakfast','waiting',38,'pppp','','0000-00-00 00:00:00'),(12,'breakfast','waiting',38,'hij','','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,6 +152,7 @@ CREATE TABLE `orders_users` (
 
 LOCK TABLES `orders_users` WRITE;
 /*!40000 ALTER TABLE `orders_users` DISABLE KEYS */;
+INSERT INTO `orders_users` VALUES (11,39),(11,39);
 /*!40000 ALTER TABLE `orders_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,6 +180,7 @@ CREATE TABLE `user_friends` (
 
 LOCK TABLES `user_friends` WRITE;
 /*!40000 ALTER TABLE `user_friends` DISABLE KEYS */;
+INSERT INTO `user_friends` VALUES (38,39),(38,40),(38,41),(39,38),(39,40),(40,38),(41,38);
 /*!40000 ALTER TABLE `user_friends` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,7 +207,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `facebook_id` (`facebook_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,6 +216,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (38,'mariam','miro_mg@hotmail.com','$2a$10$cz0kRbYISiheVx.CSsUY8uOZD0NRAxn6nNZT98wJ1QlZyYAvUnGne',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),(39,'toto','toto@lolo.com','$2a$10$IuqMvbFZS4nejkTlky3vdOduDZWtVKZHCEwgoDtnPcSo9EJ6HW4iK',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),(40,'moe','moe@g.com','$2a$10$dexYSI6DNrEluMaBeTrAk.fyvH.XUMPQ9ZqzlQnA6dbXlftbU65Dm',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),(41,'wafaa','wafaa@k.com','$2a$10$CEKtnVWQP3UhzBQdp/DezuiS.onA3Ryzk1yYPzHB8B4Vq9AfYeXuy',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -226,4 +229,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-11 10:23:35
+-- Dump completed on 2017-04-16 12:01:10

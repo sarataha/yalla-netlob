@@ -11,7 +11,7 @@
             var user_id=userID.innerHTML;
             var iosocket = io.connect();
             iosocket.emit('join', {user_id:user_id});
-            
+
             iosocket.on('notification',function(data){
               alert(data);
             })
@@ -31,8 +31,11 @@
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">
-                                    <p><a href="#">Lunch on 13/13/2013</a></p>
-                                    <p><a href="#">Breakfast on 13/13/2013</a></p>
+                                  <% for(var i=0; i < row.length; i++) { %>
+                                    <% if (row[i].order_status == "waiting"){ %>
+                                      <p><a class="latest" id="<%= row[i].order_id %>" href="/order_details?order_id=<%=row[i].order_id%>"><%= row[i].meal_type %> on <%= row[i].order_time %> </a></p>
+                                    <% } %>
+                                    <% } %>
                                 </div>
 
                                 <div class="footer">
@@ -52,13 +55,12 @@
                         <div class="card ">
                             <div class="header">
                                 <h4 class="title">Friends Activities</h4>
-                                <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart">
-                                    <p><a href="#">Islam</a> has created <a href="#">an order</a> for lunch from <a href="#">Mac</a> </p>
-                                    <p><a href="#">Ahmed</a> has created <a href="#">an order</a> for lunch from <a href="#">Mac</a> </p>
-                                    <p>
+                                  <% for(var i=0; i < row.length; i++) { %>
+                                    <p><a id='<%= row[i].owner_id %>'><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                    <% } %>
                                 </div>
 
                                 <div class="footer">
@@ -77,4 +79,24 @@
                 </div>
             </div>
         </div>
+        <!-- <script>
+          $(function(){
+            $(".latest").click(function(event){
+              order_id=$(this).attr('id');
+              console.log(order_id);
+              $.ajax({
+                url:"http://localhost:8080/order_details",
+                method:"get",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                  console.log(response);
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });
+            });
+          });
+        </script> -->
 <% include layout/footer %>

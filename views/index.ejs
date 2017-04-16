@@ -59,7 +59,11 @@
                             <div class="content">
                                 <div class="ct-chart">
                                   <% for(var i=0; i < row.length; i++) { %>
-                                    <p><a id='<%= row[i].owner_id %>'><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                    <% if (row[i].user_name == username){ %>
+                                    <p><a id='<%= row[i].owner_id %>' href="/user"><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                    <% } else{ %>
+                                      <p><a id='<%= row[i].owner_id %>' href="/users?user_id=<%=row[i].owner_id%>"><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                    <% } %>
                                     <% } %>
                                 </div>
 

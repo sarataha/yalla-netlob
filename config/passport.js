@@ -12,8 +12,17 @@ var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('../models/users');
 var connection = mysql.createConnection(dbconfig.connection);
 
-// load the auth variables
+// Load the auth variables
 var configAuth = require('./auth');
+
+// Load avatar upload configuration
+var cloudinary = require('cloudinary');
+
+cloudinary.config({ 
+    cloud_name: 'sarazilla', 
+    api_key: '621858345579474', 
+    api_secret: '1rilj-EVmYy1R0YaTpFPstOEUFo' 
+});
 
 connection.query('USE ' + dbconfig.database);
 // Share the authentication function with the rest of our app
@@ -60,15 +69,20 @@ module.exports = function(passport) {
                 } else {
                     // If no email found in the database;
                     // Create that user
+                    cloudinary.uploader.upload(req.body.avatar, function(result) { 
+                        console.log(result) 
+                    });
+                    console.log(req.files)
                     var newUserMysql = {
                         email: email,
                         username: req.body.username,
-                        password: bcrypt.hashSync(password, null, null)  // Sekurity :D
+                        password: bcrypt.hashSync(password, null, null),  // Sekurity :D
+                        picture: req.body.avatar.value
                     };
 
-                    var insertQuery = "INSERT INTO users ( user_name, email, password ) values (?,?,?)";
+                    var insertQuery = "INSERT INTO users ( user_name, email, password, avatar_url ) values (?,?,?,?)";
 
-                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password],function(err, rows) {
+                    connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
 

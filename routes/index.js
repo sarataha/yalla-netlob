@@ -72,7 +72,7 @@ module.exports = function(app, passport) {
 	/* GET home page if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/home', isLoggedIn, function(req, res) {
-		console.log(req.user);
+		console.log(req.user.avatar_url);
 		res.render('index.ejs', {
 			title: 'Home',
 			username: req.user.user_name,

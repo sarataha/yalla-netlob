@@ -103,7 +103,7 @@ module.exports = function(app, passport) {
 			avatar: req.user.avatar_url
 		});
 	});
-	
+
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/friends', isLoggedIn, function(req, res) {
@@ -143,10 +143,6 @@ module.exports = function(app, passport) {
 			friends: [],
 			userID:req.user.user_id,
 			avatar: req.user.avatar_url
-
-			// userID:req.user.user_id,
-			// avatar: req.user.avatar_url,
-			// friends: []
 		});
 
 			}
@@ -159,18 +155,7 @@ module.exports = function(app, passport) {
 
 	});
 
-	/* GET home orders if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-	/*app.get('/orders', isLoggedIn, function(req, res) {
-		res.render('orders.ejs', {
-			title: 'Orders',
-			username: req.user.user_name,
-			userID:req.user.user_id
-		});
-	});
-*/
 	/* GET new order page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
 	app.get('/new_order', isLoggedIn, function(req, res, next) {
 	  res.render('new_order', {
 	  	title: 'New Order',

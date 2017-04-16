@@ -1,21 +1,28 @@
 // config/passport.js
 
-// Load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-// Load the user model
 var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('../models/users');
 var connection = mysql.createConnection(dbconfig.connection);
 
-// Load the auth variables
 var configAuth = require('./auth');
 
-// Load avatar upload configuration
+ var nodemailer = require("nodemailer");
+
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "yallanetlob@gmail.com",
+        pass: "yallanetlobositi"
+    }
+});
+var rand,mailOptions,host,link;
+
 var cloudinary = require('cloudinary');
 
 cloudinary.config({ 
@@ -25,14 +32,13 @@ cloudinary.config({
 });
 
 connection.query('USE ' + dbconfig.database);
-// Share the authentication function with the rest of our app
+
 module.exports = function(passport) {
 
     /**
-     * Passport session setup.
+     * Passport Session
      */
 
-    // Used to serialize the user for the session, passport stuff
     passport.serializeUser(function(user, done) {
         console.log('serializeUser: ' + user.user_id)
         if (user.id == undefined)
@@ -41,7 +47,6 @@ module.exports = function(passport) {
             done(null, user.id);
     });
 
-    // Used to deserialize the user, passport stuff
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE user_id = ? ",[id], function(err, rows){
             done(err, rows[0]);
@@ -57,22 +62,19 @@ module.exports = function(passport) {
         new LocalStrategy({
             usernameField : 'email',
             passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
+            passReqToCallback : true
         },
         function(req, email, password, done) {
-            // Find a user with an email similar to the email in the form
             connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows) {
                 if (err)
                     return done(err);
                 if (rows.length) {
                     return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
                 } else {
-                    // If no email found in the database;
-                    // Create that user
                     cloudinary.uploader.upload(req.body.avatar, function(result) { 
                         console.log(result) 
                     });
-                    console.log(req.files)
+                    console.log(req.file)
                     var newUserMysql = {
                         email: email,
                         username: req.body.username,
@@ -85,8 +87,6 @@ module.exports = function(passport) {
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password, newUserMysql.picture],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
-
-                        return done(null, newUserMysql);
                         rand=Math.floor((Math.random() * 100) + 54);
                         host=req.get('host');
                         link="http://"+req.get('host')+"/verify?id="+rand+"&email="+newUserMysql.email;
@@ -151,19 +151,16 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, email, password, done) {
-        // Callback with email and password from the login form
-            connection.query("SELECT * FROM users WHERE email = ?",[email], function(err, rows){
+            connection.query("SELECT * FROM users WHERE email = ? AND verified",[email,1], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
                     return done(null, false, req.flash('loginMessage', 'No user found.'));
                 }
 
-                // If the entered password is incorrect
                 if (!bcrypt.compareSync(password, rows[0].password))
                     return done(null, false, req.flash('loginMessage', 'Wrong password. Please try again'));
 
-                // Everything is fine? Return successful and log the user in
                 return done(null, rows[0]);
             });
         })
@@ -175,31 +172,24 @@ module.exports = function(passport) {
 
     passport.use(new FacebookStrategy({
 
-        // Pull in our app id, secret and profile fields from our auth.js file
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL,
         profileFields   : configAuth.facebookAuth.profileFields
     },
 
-    // Facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
 
-        // Asynchronous
         process.nextTick(function() {
 
-            // Find the user in the database based on their facebook id
             connection.query("SELECT * FROM users WHERE facebook_id = ?",[profile.id], function(err, rows) {
                 console.log(profile);
-                // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
 
-                // If the user is found, then log them in
                 if (rows[0]) {
-                    return done(null, rows[0]); // user found, return that user
+                    return done(null, rows[0]);
                 } else {
-                    // If there is no user found with that facebook id, create them
                     var newUserMysql = {
                         facebook_id: profile.id,
                         facebook_token: token,
@@ -226,7 +216,6 @@ module.exports = function(passport) {
      * TWITTER Login/Signup.
      */
 
-    // Pull in our app consumer key and consumer secret from our auth.js file
     passport.use(new TwitterStrategy({
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
@@ -235,23 +224,18 @@ module.exports = function(passport) {
 
     },
 
-    // Twitter will send back the token and profile
     function(token, tokenSecret, profile, done) {
 
-        // Asynchronous
         process.nextTick(function() {
             connection.query("SELECT * FROM users WHERE twitter_id = ?",[profile.id], function(err, rows) {
 
-                // If there is an error, stop everything and return that error
                 if (err)
                     return done(err);
 
-                // If the user is found then log them in
                 if (rows[0]) {
-                    return done(null, rows[0]); // user found, return that user
+                    return done(null, rows[0]);
                 }
                 else {
-                    // If there is no user found with that twitter id, create them
                     var newUserMysql = {
                         twitter_id: profile.id,
                         twitter_token: token,
@@ -286,10 +270,8 @@ module.exports = function(passport) {
     },
     function(token, refreshToken, profile, done) {
 
-        // Asynchronous
         process.nextTick(function() {
 
-            // try to find the user based on their google id
             connection.query("SELECT * FROM users WHERE google_id = ?",[profile.id], function(err, rows) {
 
                 if (err)
@@ -297,22 +279,19 @@ module.exports = function(passport) {
 
                 if (rows[0]) {
 
-                    // if a user is found, log them in
                     return done(null, rows[0]);
 
                 }
 
                 else {
-                    // If there is no user found with that facebook id, create them
                     var newUserMysql = {
                         google_id: profile.id,
                         google_token: token,
                         username: profile.displayName,
-                        email: profile.emails[0].value, // Get the first email
+                        email: profile.emails[0].value,
                         picture: profile.photos ? profile.photos[0].value : ''
                     };
 
-                    // save the user
                     var insertQuery = "INSERT INTO users ( user_name, email, google_token, google_id, avatar_url ) values (?,?,?,?,?)";
 
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.google_token, newUserMysql.google_id, newUserMysql.picture],function(err, rows) {

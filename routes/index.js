@@ -69,8 +69,31 @@ module.exports = function(app, passport) {
 		failureFlash : true
 	}));
 
+	app.get('/verify',function(req,res){
+		console.log(req.protocol+":/"+req.get('host'));
+		    console.log("Domain is matched. Information is from Authentic email");
+
+		    	var connection = mysql.createConnection({
+			  		host     : 'localhost',
+			  		user     : 'root',
+			  		password : '',
+			  		database : 'yala_netlob_development'
+				});
+
+		    	connection.query("UPDATE users SET verified = ? WHERE email = ?",[1,req.query.email],function(err) {
+		    		if (err) {
+		    			console.log(err);
+		    		}
+		    		else {
+		    			console.log("done");
+		    		}
+		    	})
+
+		        console.log("email is verified");
+		        res.end("<h1>Email "+req.query.email+" is been Successfully verified</h1><p>Visit the <a href='/'>Login</a> page to start your journey</p>");
+	});
+
 	/* GET home page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
 	app.get('/home', isLoggedIn, function(req, res) {
 		console.log(req.user.avatar_url);
 		res.render('index.ejs', {
@@ -80,25 +103,7 @@ module.exports = function(app, passport) {
 			avatar: req.user.avatar_url
 		});
 	});
-
-	/* GET groups page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-
-	// app.get('/groups', isLoggedIn, function(req, res) {
-	// 	res.render('groups.ejs', {
-	// 		title: 'Groups',
-	// 		username: req.user.user_name,
-	// 		userID:req.user.user_id
-	// 	});
-	// });
-	// app.get('/groups', isLoggedIn, function(req, res) {
-	// 	res.render('groups.ejs', {
-	// 		title: 'Groups',
-	// 		username: req.user.user_name,
-	// 		userID:req.user.user_id
-	// 	});
-	// });
-
+	
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/friends', isLoggedIn, function(req, res) {
@@ -174,48 +179,13 @@ module.exports = function(app, passport) {
 		avatar: req.user.avatar_url
 	  });
 	});
-
-	/* GET order details page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-
-	// app.get('/order_details', isLoggedIn, function(req, res, next) {
-	//   res.render('order_details', {
-	//   	title: 'Order Details',
-	// 	username: req.user.user_name,
-	// 	userID:req.user.user_id,
-	// 	avatar: req.user.avatar_url
-	//   });
-	// });
-
-	// app.get('/order_details', isLoggedIn, function(req, res, next) {
-	//   res.render('order_details', {
-	//   	title: 'Order Details',
-	// 	username: req.user.user_name,
-	// 	userID:req.user.user_id
-	//   });
-	// });
-
-	/* GET current user's page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-	// TODO: add ability to view other users' profiles
-
-
-// 	app.get('/user', isLoggedIn, function(req, res, next) {
-// 	  res.render('profile', {
-// 	  	title: 'Profile',
-// 	  	username: req.user.user_name,
-// 			userID:req.user.user_id,
-// 			avatar: req.user.avatar_url
-// 	  });
-// 	});
+	
 	/***
 	 * FACEBOOK Authentication
 	 */
 
-    // route for facebook authentication and login
     app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
-    // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
             successRedirect : '/home',
@@ -225,10 +195,9 @@ module.exports = function(app, passport) {
     /***
 	 * TWITTER Authentication
 	 */
-    // route for twitter authentication and login
+
     app.get('/auth/twitter', passport.authenticate('twitter'));
 
-    // handle the callback after twitter has authenticated the user
     app.get('/auth/twitter/callback',
         passport.authenticate('twitter', {
             successRedirect : '/home',
@@ -238,12 +207,9 @@ module.exports = function(app, passport) {
     /***
 	 * GOOGLE Authentication
 	 */
-    // send to google to do the authentication
-    // profile gets us their basic information including their name
-    // email gets their emails
+
     app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
-    // the callback after google has authenticated the user
     app.get('/auth/google/callback',
             passport.authenticate('google', {
                     successRedirect : '/home',
@@ -254,9 +220,7 @@ module.exports = function(app, passport) {
      * RESET PASSWORD
      */
 
-    // Render reset password page
 	app.get('/reset', function (req, res, next) {
-	    // Redirect user to the dashboard if he trys to open the login page while already logged in
 		if (req.isAuthenticated()) {
 			res.render('index.ejs', {
 				title: 'Home',

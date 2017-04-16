@@ -105,8 +105,8 @@ router.post('/',middlewareBodyParser,function(req, res) {
 });
 
 router.put('/',middlewareBodyParser,function(req, res) {
-  console.log(req.body);
-  console.log(req.body.owner_id);
+  console.log("**************"+req.body);
+  console.log("00000000"+req.body.owner_id);
   var owner_id=req.body.owner_id;
   var meal_type=req.body.meal_type;
   var resturant=req.body.from;
@@ -135,6 +135,8 @@ var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHo
 
               }
               else{
+                  res.send("notify");
+
               //   socket.on('send to server',function(data){
               //     //  socketId =  getSocketIdFromUserId(user_id);
               // io.to(req.body.invited_id[i]).emit('notification', 'test data');

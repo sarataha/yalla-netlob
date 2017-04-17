@@ -58,7 +58,6 @@
                         <div class="card ">
                             <div class="header">
                                 <h4 class="title">Invited Friends</h4>
-                                <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart" id="friend_list" style="height:550px">
@@ -72,6 +71,7 @@
 						<script src="/socket.io/socket.io.js"></script>
 						<script>
 					var	user_id=userID.innerHTML;
+					var friend_id;
 					var user_name = $("#user-name").text();
 					console.log(user_name);
 					  var iosocket = io.connect();
@@ -110,10 +110,14 @@
 												if(response.message=="not_friend")
 													alert("not in your friends");
 												else if(response.message=="is_friend"){
-													invited_id.push(response.friend_id);
-													invited_name.push(response.friend_name);
-													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
-												}
+
+													if(!invited_id.includes(response.friend_id)){
+														friend_id=response.friend_id;
+														invited_id.push(response.friend_id);
+														invited_name.push(response.friend_name);
+														$("#friend_list").append("<p id='rm"+response.friend_id+"'>"+response.friend_name+"</p><a class='rmm' value='"+response.friend_id+"' id='remove"+response.friend_id+"'>remove</a>");
+													}
+											}
 											},
 											error:function(error){
 												console.log("error checking");
@@ -135,10 +139,12 @@
 												console.log(resault);
 												if(response.message=="is_group"){
 													for(i=0;i<response.group_members.length;i++){
-														invited_name.push(response.group_members[i].user_name);
-														invited_id.push(response.group_members[i].user_id);
-														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+														if(!invited_id.includes(response.friend_id)){
+															invited_name.push(response.group_members[i].user_name);
+															invited_id.push(response.group_members[i].user_id);
+															$("#friend_list").append("<p id='rm"+response.friend_id+"'>"+response.friend_name+"</p><a class='rmm' value='"+response.friend_id+"' id='remove"+response.friend_id+"'>remove</a>");
 													}
+												}
 												}
 											},
 											error:function(error){
@@ -150,6 +156,18 @@
 										console.log(member_type);
 									}
 								});
+
+								$('#friend_list').delegate('a','click',function() {
+									//event.preventDefault();
+									console.log("Heeeeeeeeeeeeere");
+									value=invited_id.indexOf(friend_id);
+									console.log(value);
+									invited_id.splice(value,1);
+									console.log(invited_id);
+									$("#rm"+friend_id).remove();
+									$("#remove"+friend_id).remove();
+								});
+
 								$("#publish").click(function(event){
 									event.preventDefault();
 									var meal_type=$("#meal").find(":selected").val();
@@ -192,6 +210,8 @@
 										}
 									})
 								});
+
+
 							});
 						</script>
 	<%include layout/footer %>

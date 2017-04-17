@@ -113,10 +113,13 @@ router.put('/',middlewareBodyParser,function(req, res) {
   var menu_img=req.body.image;
   var owner_name = req.body.owner_name;
   var invited_id = req.body.invited_id;
-    var d= new Date();
+  var order_time= new Date();
+
     console.log(owner_name);
-var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
+//var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
 //  var order_time=new Date("yyyy-mm-dd").toLocaleString();
+console.log("dateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+console.log(order_time);
   console.log(order_time);
   connection.query("insert into orders (meal_type,order_status,owner_id,resturant,menu_img,order_time) values (?,?,?,?,?,?)",[meal_type,"waiting",owner_id,resturant,menu_img,order_time],function(error,row){
     if(error)

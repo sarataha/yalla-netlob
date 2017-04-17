@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 -- MySQL dump 10.16  Distrib 10.1.20-MariaDB, for osx10.12 (x86_64)
 --
 -- Host: yala_netlob_development    Database: yala_netlob_development
@@ -231,7 +231,6 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-04-16 12:01:10
-=======
 -- MySQL dump 10.14  Distrib 5.5.52-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: yala_netlob_development
@@ -496,4 +495,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-04-17 10:42:46
->>>>>>> cac6ef87d2d88a10f849ad82809c69a1207832e2
+

@@ -63,7 +63,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         			connection.query("insert into  user_friends( user_id ,friend_id) values(?,?)",[rows[0].user_id,req.user.user_id],function(insert_error2,insert_row2){
         				if (!insert_error2){
         					respo.send("done you friend is added");
-        					respo.redirect("http://localhost:8090/friends");
+        					//respo.redirect("http://localhost:8090/friends");
         				}
         				else{
         					respo.send("the friend is already existed");
@@ -91,5 +91,28 @@ router.post("/add",middlewareBodyParser,function(req,respo){
 
 });
 
+router.get("/remove",function(req,resp) {
+	// body...
+	console.log("helllooooooooooooooo"+req.query.id);
+	var connection = mysql.createConnection({
+  		host     : 'localhost',
+  		user     : 'root',
+  		password : '',
+  		database : 'yala_netlob_development'
+	});
+	connection.query("delete  from user_friends WHERE user_id= ? and friend_id=?",[req.user.user_id,req.query.id], function(err, rows) {
+    if (err)
+    {resp.send("error")}
+     else {
+     	connection.query("delete  from user_friends WHERE user_id= ? and friend_id=?",[req.query.id,req.user.user_id], function(err2, rows2) {
+       		if (err2) {
+       			resp.send("error");
+       		}else{
+       			resp.send("delete");
+       		}
+   });
 
+    }
+  });
+})
 module.exports = router;

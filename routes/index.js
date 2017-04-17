@@ -151,7 +151,8 @@ module.exports = function(app, passport) {
   		host     : 'localhost',
   		user     : 'root',
   		password : '',
-  		database : 'yala_netlob_development'
+  		database : 'yala_netlob_development',
+  		multipleStatements: true
 	});
   connection.connect(function(err){
  		 if(err){
@@ -162,19 +163,20 @@ module.exports = function(app, passport) {
   		}
 	});
 
-	connection.query("select * from users,notifications where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
+	connection.query("select users.* from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+");SELECT * FROM notifications;",function(err,rows,fields){
 		// body...
 		if (!err) {
+			console.log("HI FROM ",rows)
 			if (rows.length>0) {
 				console.log(rows);
 				res.render('friends.ejs', {
-			title: 'Friends',
-			username: req.user.user_name,
-			userID:req.user.user_id,
-			friends:rows,
-			avatar: req.user.avatar_url,
-			row:rows
-		});
+				title: 'Friends',
+				username: req.user.user_name,
+				userID:req.user.user_id,
+				friends:rows[0],
+				avatar: req.user.avatar_url,
+				row:rows[1]
+				});
 
 			}
 			else{

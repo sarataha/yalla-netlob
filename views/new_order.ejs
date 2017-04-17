@@ -65,6 +65,9 @@
 						<script>
 					var	user_id=userID.innerHTML;
 					  var iosocket = io.connect();
+					  iosocket.on('notification',function(data){
+              			alert(data);
+            			});
 							$(function(){
 								var invited_id=[];
 								var invited_name=[];

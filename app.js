@@ -78,23 +78,47 @@ app.use('/orders', orders);
 app.use('/new_order', new_order);
 app.use('/order_details', order_details);
 
+// users = []
+// console.log(users.length);
+
+var currentConnections = [];
 
 io.on('connection', function(socket){
+  console.log(socket.id);
+  currentConnections.push({socket: socket.id});
+  console.log(currentConnections);
   socket.on('join',function(data){
       console.log("join***"+data.user_id);
-      users[data.user_id]=socket;
-      console.log(users.length);
-
+      currentConnections[currentConnections.length-1].user_id = data.user_id; 
+      console.log(currentConnections);
+      // console.log(currentConnections[socket.id]);
+      // users[data.user_id]=socket;
+      // console.log("USERS LENGTH => ", users.length);
+      // console.log(users[data.user_id]);
   });
   socket.on('send notification',function(data){
     console.log("in notification send");
     console.log(data.user_id);
-    users[data.user_id].emit('notification',data.msg);
+    for (var i = currentConnections.length - 1; i >= 0; i--) {
+      if(currentConnections[i].user_id == data.user_id) {
+        console.log(currentConnections[i]);
+        socket.broadcast.to(currentConnections[i].socket).emit('notification',data.msg);
+      }
+    }
+    
     //users[data.user_id].emit('notification',data.msg);
   });
   console.log('connection')
 //   socket.on('connection', function(msg){console.log("message recieved"+msg);});
 //   socket.on('disconnect',function(){});
+  socket.on('groups', function (data) {
+    // body...
+    console.log("GROUPS")
+  });
+
+  socket.on('disconnect', function() {
+    delete currentConnections[socket.id];
+  });
 });
 
 

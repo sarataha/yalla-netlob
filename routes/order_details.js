@@ -14,7 +14,8 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'yala_netlob_development'
+  database : 'yala_netlob_development',
+  multipleStatements: true
 });
 
 connection.connect();
@@ -24,7 +25,7 @@ router.get('/',isLoggedIn,function(req, res) {
   console.log(req.query.order_id);
   var order_id=req.query.order_id;
 
-  var query=" select users.user_name ,orders_items.*,notifications.* from orders_items,users,notifications where users.user_id=orders_items.user_id and orders_items.order_id="+order_id;
+  var query=" select users.user_name ,orders_items.* from orders_items,users where users.user_id=orders_items.user_id and orders_items.order_id="+order_id+"SELECT * FROM notifications;";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("**************************************************** Order Detailss");
@@ -39,8 +40,8 @@ router.get('/',isLoggedIn,function(req, res) {
               username: req.user.user_name,
               userID: req.user.user_id,
               avatar: req.user.avatar_url,
-              order_data:row,
-              row:row
+              order_data:row[0],
+              row:row[1]
             });
         }else{
           //order_data=[{order_id:order_id}]

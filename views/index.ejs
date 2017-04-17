@@ -16,7 +16,10 @@
 
             iosocket.on('notification',function(data){
              // alert(data);
-              demo.showNotification('top','right',data)
+              demo.showNotification('top','right',data);
+              var not_no = $("#mylist li").length
+              $("#notifications-no").html(not_no);
+              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
              /* var answer = confirm (data)
             if (answer) {
                 io.emit('join order');

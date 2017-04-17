@@ -21,12 +21,30 @@ module.exports = function(app, passport) {
 		// Redirect user to the dashboard if he trys to open the login page while already logged in
 		if (req.isAuthenticated()) {
 			var user_id=req.user.user_id;
+			connection.query("SELECT * from notifications",function (err,row) {
+				if(err)
+					console.log(err);
+				else {
+					if(row) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
 				userID:req.user.user_id,
-				avatar: req.user.avatar_url
+				avatar: req.user.avatar_url,
+				row:row
 			});
+		}
+		else {
+			res.render('index.ejs', {
+				title: 'Home',
+				username: req.user.user_name,
+				userID:req.user.user_id,
+				avatar: req.user.avatar_url,
+				row:[]
+			});
+		}
+		}
+		});
 		}
 		else {
 		res.render('login.ejs', {

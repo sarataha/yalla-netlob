@@ -40,14 +40,26 @@ router.get("/",isLoggedIn,function(req,res){
         console.log(err);
       }
       else{
-      res.render('groups.ejs', {
-        title: 'Groups',
-        username: req.user.user_name,
-        userID: req.user.user_id,
-        avatar: req.user.avatar_url,
-        groups: "",
-        row:rows
-      });
+        if(rows) {
+          res.render('groups.ejs', {
+            title: 'Groups',
+            username: req.user.user_name,
+            userID: req.user.user_id,
+            avatar: req.user.avatar_url,
+            groups: "",
+            row:rows
+          });
+        }
+      else {
+        res.render('groups.ejs', {
+            title: 'Groups',
+            username: req.user.user_name,
+            userID: req.user.user_id,
+            avatar: req.user.avatar_url,
+            groups: "",
+            row:[]
+          });
+      }
     }
     });
     }

@@ -165,6 +165,7 @@ module.exports = function(app, passport) {
 						console.log(err);
 					}
 					else {
+						if(row) {
 						res.render('friends.ejs', {
 							title: 'Friends',
 							username: req.user.user_name,
@@ -173,6 +174,17 @@ module.exports = function(app, passport) {
 							avatar: req.user.avatar_url,
 							row:row
 						});
+					}
+					else{
+						res.render('friends.ejs', {
+							title: 'Friends',
+							username: req.user.user_name,
+							friends: [],
+							userID:req.user.user_id,
+							avatar: req.user.avatar_url,
+							row:[]
+						});
+					}
 					}
 				});
 

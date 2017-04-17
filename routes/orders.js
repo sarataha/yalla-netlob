@@ -40,8 +40,9 @@ router.get('/',isLoggedIn,function(req, res, next) {
         console.log(err);
       }
       else{
+        if(rows) {
         console.log(rows);
-      res.render('orders.ejs', {
+        res.render('orders.ejs', {
         title: 'Orders',
         username: req.user.user_name,
         userID: req.user.user_id,
@@ -49,6 +50,17 @@ router.get('/',isLoggedIn,function(req, res, next) {
         groups: "",
         row:rows
       });
+      }
+      else {
+        res.render('orders.ejs', {
+        title: 'Orders',
+        username: req.user.user_name,
+        userID: req.user.user_id,
+        avatar: req.user.avatar_url,
+        groups: "",
+        row:[]
+      });
+      }
     }
     });
     }

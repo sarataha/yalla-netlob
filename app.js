@@ -177,7 +177,7 @@ io.on('connection', function(socket){
       if (currentConnections[i].user_id == data.user_id) {
         rooms[data.room][rooms[data.room].length] = (currentConnections[i].socket);
         console.log(rooms);
-        for (var i = rooms[data.room].length - 1; i >= 0; i--) {
+        for (var i = 0; i <= rooms[data.room].length - 1; i++) {
           console.log(rooms[data.room][i]);
           socket.broadcast.to(rooms[data.room][i]).emit('notification',{msg:data.msg,room:data.room});
           // socket.broadcast.to(rooms[data.room][i]).emit('friend joined',{msg:'your friend has joined your order'});

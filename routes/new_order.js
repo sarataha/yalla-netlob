@@ -162,7 +162,7 @@ var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHo
                       console.log(owner_name);
                       connection.query("INSERT INTO notifications (notifier_id, notified_id, order_id, notifier_name, type) values(?,?,?,?,?)",[owner_id,invited_id,rows[0].order_id,owner_name,0],function (err,rows) {
                         if (err) {
-                          console.log("EROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRR");
+                          console.log(err);
                         }
                       else {
                         res.send("notify");

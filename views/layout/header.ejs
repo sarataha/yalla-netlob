@@ -10,13 +10,14 @@
     <script>
         var iosocket = io.connect();
         var room = "";
+        var owner_id = 0;
         $(document).ready(function(){
 
           $("#joinorder").click(function(){
             console.log("ROOM ",room);
             
             console.log(room);
-            iosocket.emit('join order',{msg:'hellohellohello',room:room,user_id:user_id});
+            iosocket.emit('join order', {msg:'hellohellohello',owner_id:owner_id,room:room,user_id:user_id});
           });
           console.log("******"+userID.innerHTML);
 
@@ -27,6 +28,7 @@
             iosocket.on('notification',function(data){
              // alert(data);
             room = data.room;
+            owner_id = data.owner_id;
               demo.showNotification('top','right',data.msg);
               var not_no = $("#my-notifications li").length
               $("#notifications-no").html(not_no);

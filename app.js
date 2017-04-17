@@ -159,7 +159,7 @@ io.on('connection', function(socket){
     for (var i = currentConnections.length - 1; i >= 0; i--) {
       if(currentConnections[i].user_id == data.user_id) {
         console.log(currentConnections[i]);
-        socket.broadcast.to(currentConnections[i].socket).emit('notification',{msg:data.msg,room:data.room});
+        socket.broadcast.to(currentConnections[i].socket).emit('notification',{owner_id:data.owner_id,msg:data.msg,room:data.room});
       }
     }
 
@@ -173,16 +173,22 @@ io.on('connection', function(socket){
   socket.on('join order',function (data) {
     // body...
     console.log("JOIN ROOOOOOOOOM ", data.room);
-    for (var i = currentConnections.length - 1; i >= 0; i--) {
-      if (currentConnections[i].user_id == data.user_id) {
-        rooms[data.room][rooms[data.room].length] = (currentConnections[i].socket);
-        console.log(rooms);
-        for (var i = 0; i <= rooms[data.room].length - 1; i++) {
-          console.log(rooms[data.room][i]);
-          socket.broadcast.to(rooms[data.room][i]).emit('notification',{msg:data.msg,room:data.room});
-          // socket.broadcast.to(rooms[data.room][i]).emit('friend joined',{msg:'your friend has joined your order'});
-        }
+    // for (var i = currentConnections.length - 1; i >= 0; i--) {
+    //   if (currentConnections[i].user_id == data.user_id) {
+    //     rooms[data.room][rooms[data.room].length] = (currentConnections[i].socket);
+    //     console.log(rooms);
+    //     for (var i = 0; i <= rooms[data.room].length - 1; i++) {
+    //       console.log(rooms[data.room][i]);
+    //       socket.broadcast.to(rooms[data.room][i]).emit('notification',{msg:data.msg,room:data.room});
+    //       // socket.broadcast.to(rooms[data.room][i]).emit('friend joined',{msg:'your friend has joined your order'});
+    //     }
+    //   }
+      for (var i = currentConnections.length - 1; i >= 0; i--) {
+      if(currentConnections[i].user_id == data.owner_id) {
+        console.log(currentConnections[i]);
+        socket.broadcast.to(currentConnections[i].socket).emit('friend joined',{owner_id:data.owner_id,msg:data.msg,room:data.room});
       }
+    }
     } 
     // socket.join(data.room);
     // io.of('/').in(data.room).clients(function(error, clients){

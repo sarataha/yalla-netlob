@@ -29,7 +29,12 @@
                   <b class="caret"></b>
                               </a>
                               <ul id="my-notifications" class="dropdown-menu">
-                                
+                                <% for(var i=0; i < row.length; i++) { %>
+                                    <% if (row[i].notified_id == userID){ %>
+                                        <li><a href="#"> <%= row[i].notifier_name %> has invited you to their order </a></li>
+                                    <% } else{ %>
+                                    <% } %>
+                                    <% } %>
                               </ul>
                         </li>
             <li>

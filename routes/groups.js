@@ -17,7 +17,7 @@ router.get("/",isLoggedIn,function(req,res){
 
   var user_id=req.user.user_id;
   console.log("*********");
-  connection.query("SELECT * FROM groups where group_admin=?",user_id, function(err, rows) {
+  connection.query("SELECT * FROM groups,notifications where group_admin=?",user_id, function(err, rows) {
 
     if (err)
     return done(err);
@@ -28,7 +28,8 @@ router.get("/",isLoggedIn,function(req,res){
         username: req.user.user_name,
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
-        groups: rows
+        groups: rows,
+        row:row
       });
 
       //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";

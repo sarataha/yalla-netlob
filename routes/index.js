@@ -102,16 +102,18 @@ module.exports = function(app, passport) {
 	/* GET home page if user logged in. */
 	app.get('/home', isLoggedIn, function(req, res) {
 		console.log(req.user.avatar_url);
-		var query="select users.user_name,orders.* from users,orders  where user_id=owner_id limit 5";
-		connection.query(query,function(err,row,fields){
+		var user_id = req.user.user_id;
+		var query="select users.user_name,orders.*,notifications.* from users,orders,notifications where user_id=owner_id limit 5";
+		connection.query(query,[user_id],function(err,row,fields){
 			if(!err){
-				console.log(row);
-				res.render('index.ejs', {
+					console.log(row);
+					res.render('index.ejs', {
 					title: 'Home',
 					username: req.user.user_name,
 					userID:req.user.user_id,
 					avatar: req.user.avatar_url,
 					row:row
+					// notifications: [{row.notifier_id: row.order_id}]
 				});
 			}else {
 				console.log(err);
@@ -142,7 +144,7 @@ module.exports = function(app, passport) {
   		}
 	});
 
-	connection.query("select * from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
+	connection.query("select * from users,notifications where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
 		// body...
 		if (!err) {
 			if (rows.length>0) {
@@ -152,7 +154,8 @@ module.exports = function(app, passport) {
 			username: req.user.user_name,
 			userID:req.user.user_id,
 			friends:rows,
-			avatar: req.user.avatar_url
+			avatar: req.user.avatar_url,
+			row:rows
 		});
 
 			}
@@ -176,14 +179,14 @@ module.exports = function(app, passport) {
 	});
 
 	/* GET new order page if user logged in. */
-	app.get('/new_order', isLoggedIn, function(req, res, next) {
-	  res.render('new_order', {
-	  	title: 'New Order',
-		username: req.user.user_name,
-		userID:req.user.user_id,
-		avatar: req.user.avatar_url
-	  });
-	});
+	// app.get('/new_order', isLoggedIn, function(req, res, next) {
+	//   res.render('new_order', {
+	//   	title: 'New Order',
+	// 	username: req.user.user_name,
+	// 	userID:req.user.user_id,
+	// 	avatar: req.user.avatar_url
+	//   });
+	// });
 
 	/***
 	 * FACEBOOK Authentication

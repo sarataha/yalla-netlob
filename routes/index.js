@@ -160,13 +160,21 @@ module.exports = function(app, passport) {
 
 			}
 			else{
-				res.render('friends.ejs', {
-			title: 'Friends',
-			username: req.user.user_name,
-			friends: [],
-			userID:req.user.user_id,
-			avatar: req.user.avatar_url
-		});
+				connection.query("SELECT * FROM notifications",function (err,row) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						res.render('friends.ejs', {
+							title: 'Friends',
+							username: req.user.user_name,
+							friends: [],
+							userID:req.user.user_id,
+							avatar: req.user.avatar_url,
+							row:row
+						});
+					}
+				});
 
 			}
 

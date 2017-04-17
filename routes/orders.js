@@ -16,7 +16,7 @@ connection.connect();
 router.get('/',isLoggedIn,function(req, res, next) {
   var user_id=req.user.user_id;
 
-  var query="select order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"'";
+  var query="select orders.order_id,meal_type,order_status,resturant, notifications.* from orders,notifications where owner_id='"+user_id+"'";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("****************************************************roooooooow");
@@ -31,16 +31,26 @@ router.get('/',isLoggedIn,function(req, res, next) {
         username: req.user.user_name,
         userID:req.user.user_id,
         avatar: req.user.avatar_url,
-        orders:row
+        orders:row,
+        row:row
       });
     }else{
+      connection.query("SELECT * FROM notifications", function(err, rows) {
+      if (err) {
+        console.log(err);
+      }
+      else{
+        console.log(rows);
       res.render('orders.ejs', {
         title: 'Orders',
         username: req.user.user_name,
-        userID:req.user.user_id,
+        userID: req.user.user_id,
         avatar: req.user.avatar_url,
-        orders:{}
+        groups: "",
+        row:rows
       });
+    }
+    });
     }
     }
     else {

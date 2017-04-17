@@ -20,7 +20,7 @@ router.get("/",isLoggedIn,function(req,res){
   connection.query("SELECT * FROM groups,notifications where group_admin=?",user_id, function(err, rows) {
 
     if (err)
-    return done(err);
+      console.log(err)
     if (rows.length) {
       console.log("group name: "+rows[0].group_name);
       res.render('groups.ejs', {
@@ -29,20 +29,27 @@ router.get("/",isLoggedIn,function(req,res){
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
         groups: rows,
-        row:row
+        row:rows
       });
 
       //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 
     } else {
+      connection.query("SELECT * FROM notifications", function(err, rows) {
+      if (err) {
+        console.log(err);
+      }
+      else{
       res.render('groups.ejs', {
         title: 'Groups',
         username: req.user.user_name,
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
-        groups: ""
+        groups: "",
+        row:rows
       });
-
+    }
+    });
     }
   });
 });

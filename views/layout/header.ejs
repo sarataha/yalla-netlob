@@ -37,7 +37,7 @@
 
             iosocket.on('friend joined', function(data) {
                 console.log('Incoming message:', data.room);
-                demo.showNotification('top','right',data.room);
+                demo.showNotification('top','right',"Hi");
             });
 
             iosocket.on('connectToOrder',function(data){

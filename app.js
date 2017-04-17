@@ -189,7 +189,7 @@ io.on('connection', function(socket){
         socket.broadcast.to(currentConnections[i].socket).emit('friend joined',{owner_id:data.owner_id,msg:data.msg,room:data.room});
       }
     }
-    } 
+    
     // socket.join(data.room);
     // io.of('/').in(data.room).clients(function(error, clients){
     //   if (error) throw error;

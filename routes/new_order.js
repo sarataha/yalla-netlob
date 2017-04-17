@@ -111,7 +111,10 @@ router.put('/',middlewareBodyParser,function(req, res) {
   var meal_type=req.body.meal_type;
   var resturant=req.body.from;
   var menu_img=req.body.image;
+  var owner_name = req.body.owner_name;
+  var invited_id = req.body.invited_id;
     var d= new Date();
+    console.log(owner_name);
 var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
 //  var order_time=new Date("yyyy-mm-dd").toLocaleString();
   console.log(order_time);
@@ -135,7 +138,21 @@ var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHo
 
               }
               else{
-                  res.send("notify");
+                  connection.query("select order_id from orders where owner_id=? and order_time=?",[owner_id,order_time],function(error,rows){
+                    if(error){
+                      console.log(err);
+                    }else{
+                      console.log(owner_name);
+                      connection.query("INSERT INTO notifications (notifier_id, notified_id, order_id, notifier_name, type) values(?,?,?,?,?)",[owner_id,invited_id,rows[0].order_id,owner_name,0],function (err,rows) {
+                        if (err) {
+                          console.log("EROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRR");
+                        }
+                      else {
+                        res.send("notify");
+                      }
+                    });
+                    }
+                  });
 
               //   socket.on('send to server',function(data){
               //     //  socketId =  getSocketIdFromUserId(user_id);

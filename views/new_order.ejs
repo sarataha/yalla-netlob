@@ -72,6 +72,8 @@
 						<script src="/socket.io/socket.io.js"></script>
 						<script>
 					var	user_id=userID.innerHTML;
+					var user_name = $("#user-name").text();
+					console.log(user_name);
 					  var iosocket = io.connect();
 					  iosocket.on('notification',function(data){
               			alert(data);
@@ -165,6 +167,7 @@
 										data:{
 											meal_type:meal_type,
 											owner_id:user_id,
+											owner_name: user_name,
 											from:from,
 											invited_id:invited_id,
 											invited_name:invited_name,

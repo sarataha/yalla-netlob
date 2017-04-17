@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.20-MariaDB, for osx10.12 (x86_64)
+-- MySQL dump 10.14  Distrib 5.5.52-MariaDB, for Linux (x86_64)
 --
--- Host: yala_netlob_development    Database: yala_netlob_development
+-- Host: localhost    Database: yala_netlob_development
 -- ------------------------------------------------------
--- Server version	10.1.20-MariaDB
+-- Server version	5.5.52-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -65,6 +65,38 @@ CREATE TABLE `groups` (
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notifier_id` int(11) NOT NULL,
+  `notified_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `notifier_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifier_id` (`notifier_id`),
+  KEY `notified_id` (`notified_id`),
+  KEY `order_id` (`order_id`),
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`notifier_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`notified_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `notifications_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -229,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-16 12:01:10
+-- Dump completed on 2017-04-17 10:42:46

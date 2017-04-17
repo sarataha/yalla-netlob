@@ -66,7 +66,7 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         					respo.redirect("/friends");
         				}
         				else{
-        					respo.send("the friend is already existed");
+        					respo.send("the friend is already existed <a href='/friends'>return to the friends page </a>");
         				}
         			});
 
@@ -74,14 +74,17 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         		}
         		else{
         			console.log("the friend is already existed");
-        			respo.send("the friend is already existed");
+        			respo.send("the friend is already existed <a href='/friends'>return to the friends page </a>");
+
         		}
 
         	})
 
         }
-      else
+      else{
         console.log('invalid user data');
+    	respo.send("Invalid User Data <a href='/friends'>return to the friends page </a>");
+    }
 	}
     else
       console.log("invalid data");

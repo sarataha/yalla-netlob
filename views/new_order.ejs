@@ -69,6 +69,7 @@
               			alert(data);
             			});
 							$(function(){
+							console.log($("#user-name").text());
 								var invited_id=[];
 								var invited_name=[];
 								$('#addF').click(function()
@@ -164,9 +165,11 @@
 										success:function(response){
 											var result=$.trim(response)
 											if(result=="notify"){
+												var username = $("#user-name").text();
+												var notification_msg = username + " has invited you to joined their order";
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{user_id:invited_id[i],msg:"hello"});
+													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg});
 										}}
 												console.log("success");
 										},

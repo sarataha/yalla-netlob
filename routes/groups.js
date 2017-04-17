@@ -11,25 +11,38 @@ var dbconfig = require('../models/groups');
 //   resp.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
 //   next()
 // });
+
 connection.query('USE ' + dbconfig.database);
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'yala_netlob_development',
+  multipleStatements: true
+});
+
+connection.connect();
 
 router.get("/",isLoggedIn,function(req,res){
 
   var user_id=req.user.user_id;
   console.log("*********");
-  connection.query("SELECT * FROM groups,notifications where group_admin=?",user_id, function(err, rows) {
+  connection.query("SELECT * FROM groups where group_admin= ?;SELECT * FROM notifications;",user_id, function(err, rows) {
 
     if (err)
+    {
       console.log(err)
-    if (rows.length) {
+    }
+    else if (rows) {
       console.log("group name: "+rows[0].group_name);
       res.render('groups.ejs', {
         title: 'Groups',
         username: req.user.user_name,
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
-        groups: rows,
-        row:rows
+        groups: rows[0],
+        row:rows[1]
       });
 
       //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";

@@ -9,7 +9,7 @@ module.exports = {
         'password': ''
     },
   'database': 'yala_netlob_development',
-    'groups_table': 'groups'
+    multipleStatements: true
 };
 //connnecting to mysql
 // connection.connect(function(err){

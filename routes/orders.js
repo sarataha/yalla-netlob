@@ -7,7 +7,8 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'yala_netlob_development'
+  database : 'yala_netlob_development',
+  multipleStatements: true
 });
 
 connection.connect();
@@ -16,7 +17,7 @@ connection.connect();
 router.get('/',isLoggedIn,function(req, res, next) {
   var user_id=req.user.user_id;
 
-  var query="select orders.order_id,meal_type,order_status,resturant, notifications.* from orders,notifications where owner_id='"+user_id+"'";
+  var query="select orders.order_id,meal_type,order_status,resturant from orders where owner_id='"+user_id+"';SELECT * FROM notifications;";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("****************************************************roooooooow");
@@ -31,8 +32,8 @@ router.get('/',isLoggedIn,function(req, res, next) {
         username: req.user.user_name,
         userID:req.user.user_id,
         avatar: req.user.avatar_url,
-        orders:row,
-        row:row
+        orders:row[0],
+        row:row[1]
       });
     }else{
       connection.query("SELECT * FROM notifications", function(err, rows) {

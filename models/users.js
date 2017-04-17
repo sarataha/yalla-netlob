@@ -7,5 +7,6 @@ module.exports = {
         'password': ''
     },
   'database': 'yala_netlob_development',
-    'users_table': 'users'
+    'users_table': 'users',
+    multipleStatements: true
 };

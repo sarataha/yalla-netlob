@@ -62,8 +62,8 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         			console.log("done to mylist ");
         			connection.query("insert into  user_friends( user_id ,friend_id) values(?,?)",[rows[0].user_id,req.user.user_id],function(insert_error2,insert_row2){
         				if (!insert_error2){
-        					respo.send("done you friend is added");
-        					//respo.redirect("http://localhost:8090/friends");
+        					//respo.send("done you friend is added");
+        					respo.redirect("/friends");
         				}
         				else{
         					respo.send("the friend is already existed");
@@ -108,11 +108,14 @@ router.get("/remove",function(req,resp) {
        		if (err2) {
        			resp.send("error");
        		}else{
-       			resp.send("delete");
+       			//resp.send("delete");
+       			resp.redirect("/friends");
+
        		}
    });
 
     }
   });
+	
 })
 module.exports = router;

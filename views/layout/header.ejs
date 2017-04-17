@@ -1,54 +1,5 @@
 <% include ./config.ejs %>
-<script>
-    $(document).ready(function(){
-        var not_no = $("#my-notifications li").length
-        $("#notifications-no").html(not_no);
-    });
-</script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-    <script>
-        var iosocket = io.connect();
-        var room = "";
-        var owner_id = 0;
-        $(document).ready(function(){
 
-          $("#joinorder").click(function(){
-            console.log("ROOM ",room);
-            
-            console.log(room);
-            iosocket.emit('join order', {msg:'hellohellohello',owner_id:owner_id,room:room,user_id:user_id});
-          });
-          console.log("******"+userID.innerHTML);
-
-            var user_id=userID.innerHTML;
-            //var iosocket = io.connect();
-            iosocket.emit('join', {user_id:user_id});
-
-            iosocket.on('notification',function(data){
-             // alert(data);
-            room = data.room;
-            owner_id = data.owner_id;
-              demo.showNotification('top','right',data.msg);
-              var not_no = $("#my-notifications li").length
-              $("#notifications-no").html(not_no);
-              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
-            });
-
-            iosocket.on('friend joined', function(data) {
-                console.log('Incoming message:', data.room);
-                demo.showNotification('top','right',"Hi");
-            });
-
-            iosocket.on('connectToOrder',function(data){
-                alert(data);
-            });
-
-            // function () {
-            //     console.log("connected");
-            // });
-        });
-    </script>
 <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -97,3 +48,56 @@
                 </div>
             </div>
         </nav>
+<script>
+    $(document).ready(function(){
+        var not_no = $("#my-notifications li").length
+        $("#notifications-no").html(not_no);
+    });
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+    <script>
+        var iosocket = io.connect();
+        var room = "";
+        var owner_id = 0;
+        var userName = $("#user-name").text();
+        console.log(userName);
+        $(document).ready(function(){
+
+          $("#joinorder").click(function(){
+            console.log("ROOM ",room);
+            
+            console.log(room);
+            iosocket.emit('join order', {msg:'hellohellohello',owner_id:owner_id,room:room,user_id:user_id,user_name:userName});
+          });
+          console.log("******"+userID.innerHTML);
+
+            var user_id=userID.innerHTML;
+            //var iosocket = io.connect();
+            iosocket.emit('join', {user_id:user_id});
+
+            iosocket.on('notification',function(data){
+             // alert(data);
+            room = data.room;
+            owner_id = data.owner_id;
+              demo.showNotification('top','right',data.msg);
+              var not_no = $("#my-notifications li").length
+              $("#notifications-no").html(not_no);
+              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
+            });
+
+            iosocket.on('friend joined', function(data) {
+                console.log('Incoming message:', data.room);
+                var msg = data.user_name + " has joined your order";
+                demo.showNotification('top','right',msg);
+            });
+
+            iosocket.on('connectToOrder',function(data){
+                alert(data);
+            });
+
+            // function () {
+            //     console.log("connected");
+            // });
+        });
+    </script>

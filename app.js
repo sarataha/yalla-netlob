@@ -83,7 +83,7 @@ var flag = false;
 
 io.on('connection', function(socket){
   console.log(socket.id);
-  currentConnections.push({socket: socket.id});
+  currentConnections.push({socket: [socket.id]});
   sockets.push(socket);
   console.log(currentConnections);
   socket.on('join',function(data){
@@ -98,6 +98,8 @@ io.on('connection', function(socket){
           // console.log("HIIIII")
           // console.log("FLAG BEFORE CHANGE ",flag);
           // currentConnections[i].socket = socket.id;
+          console.log("test ", currentConnections[i].socket.length);
+          currentConnections[i].socket[currentConnections[i].socket.length] = socket.id;
           flag = true;
           // console.log("FLAG AFTER CHANGE ",flag);
           break;
@@ -159,7 +161,7 @@ io.on('connection', function(socket){
     for (var i = currentConnections.length - 1; i >= 0; i--) {
       if(currentConnections[i].user_id == data.user_id) {
         console.log(currentConnections[i]);
-        socket.broadcast.to(currentConnections[i].socket).emit('notification',{owner_id:data.owner_id,msg:data.msg,room:data.room});
+        socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('notification',{owner_id:data.owner_id,msg:data.msg,room:data.room});
       }
     }
 
@@ -185,8 +187,9 @@ io.on('connection', function(socket){
     //   }
       for (var i = currentConnections.length - 1; i >= 0; i--) {
       if(currentConnections[i].user_id == data.owner_id) {
+        console.log("OWNER ID ", data.owner_id);
         console.log(currentConnections[i]);
-        socket.broadcast.to(currentConnections[i].socket).emit('friend joined',{owner_id:data.owner_id,msg:data.msg,room:data.room});
+        socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('friend joined',{user_name:data.user_name,user_id:data.user_id,owner_id:data.owner_id,msg:data.msg,room:data.room});
       }
     }
     

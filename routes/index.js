@@ -8,19 +8,43 @@ var dbconfig = require('../models/groups');
 //var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
-
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'yala_netlob_development'
+});
 module.exports = function(app, passport) {
 
 	/* GET Home page with login form. */
 	app.get('/', function(req, res) {
 		// Redirect user to the dashboard if he trys to open the login page while already logged in
 		if (req.isAuthenticated()) {
+			var user_id=req.user.user_id;
+			connection.query("SELECT * from notifications",function (err,row) {
+				if(err)
+					console.log(err);
+				else {
+					if(row) {
 			res.render('index.ejs', {
 				title: 'Home',
 				username: req.user.user_name,
 				userID:req.user.user_id,
-				avatar: req.user.avatar_url
+				avatar: req.user.avatar_url,
+				row:row
 			});
+		}
+		else {
+			res.render('index.ejs', {
+				title: 'Home',
+				username: req.user.user_name,
+				userID:req.user.user_id,
+				avatar: req.user.avatar_url,
+				row:[]
+			});
+		}
+		}
+		});
 		}
 		else {
 		res.render('login.ejs', {
@@ -96,14 +120,30 @@ module.exports = function(app, passport) {
 	/* GET home page if user logged in. */
 	app.get('/home', isLoggedIn, function(req, res) {
 		console.log(req.user.avatar_url);
-		res.render('index.ejs', {
-			title: 'Home',
-			username: req.user.user_name,
-			userID:req.user.user_id,
-			avatar: req.user.avatar_url
+		var user_id = req.user.user_id;
+		var query="select users.user_name,orders.*,notifications.* from users,orders,notifications where user_id=owner_id limit 5";
+		connection.query(query,[user_id],function(err,row,fields){
+			if(!err){
+					console.log(row);
+					res.render('index.ejs', {
+					title: 'Home',
+					username: req.user.user_name,
+					userID:req.user.user_id,
+					avatar: req.user.avatar_url,
+					row:row
+					// notifications: [{row.notifier_id: row.order_id}]
+				});
+			}else {
+				console.log(err);
+			}
 		});
+
 	});
-	
+
+	// app.post('/home', isLoggedIn, function(req, res) {
+	//
+	// });
+
 	/* GET home friends if user logged in. */
 	// requires a middleware to verify that the user is successfully logged in
 	app.get('/friends', isLoggedIn, function(req, res) {
@@ -111,7 +151,8 @@ module.exports = function(app, passport) {
   		host     : 'localhost',
   		user     : 'root',
   		password : '',
-  		database : 'yala_netlob_development'
+  		database : 'yala_netlob_development',
+  		multipleStatements: true
 	});
   connection.connect(function(err){
  		 if(err){
@@ -122,32 +163,50 @@ module.exports = function(app, passport) {
   		}
 	});
 
-	connection.query("select * from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+")",function(err,rows,fields){
+	connection.query("select users.* from users where user_id in(select friend_id from user_friends where user_id="+req.user.user_id+");SELECT * FROM notifications;",function(err,rows,fields){
 		// body...
 		if (!err) {
+			console.log("HI FROM ",rows)
 			if (rows.length>0) {
 				console.log(rows);
 				res.render('friends.ejs', {
-			title: 'Friends',
-			username: req.user.user_name,
-			userID:req.user.user_id,
-			friends:rows,
-			avatar: req.user.avatar_url
-		});
+				title: 'Friends',
+				username: req.user.user_name,
+				userID:req.user.user_id,
+				friends:rows[0],
+				avatar: req.user.avatar_url,
+				row:rows[1]
+				});
 
 			}
 			else{
-				res.render('friends.ejs', {
-			title: 'Friends',
-			username: req.user.user_name,
-			friends: [],
-			userID:req.user.user_id,
-			avatar: req.user.avatar_url
-
-			// userID:req.user.user_id,
-			// avatar: req.user.avatar_url,
-			// friends: []
-		});
+				connection.query("SELECT * FROM notifications",function (err,row) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						if(row) {
+						res.render('friends.ejs', {
+							title: 'Friends',
+							username: req.user.user_name,
+							friends: [],
+							userID:req.user.user_id,
+							avatar: req.user.avatar_url,
+							row:row
+						});
+					}
+					else{
+						res.render('friends.ejs', {
+							title: 'Friends',
+							username: req.user.user_name,
+							friends: [],
+							userID:req.user.user_id,
+							avatar: req.user.avatar_url,
+							row:[]
+						});
+					}
+					}
+				});
 
 			}
 
@@ -159,27 +218,16 @@ module.exports = function(app, passport) {
 
 	});
 
-	/* GET home orders if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-	/*app.get('/orders', isLoggedIn, function(req, res) {
-		res.render('orders.ejs', {
-			title: 'Orders',
-			username: req.user.user_name,
-			userID:req.user.user_id
-		});
-	});
-*/
 	/* GET new order page if user logged in. */
-	// requires a middleware to verify that the user is successfully logged in
-	app.get('/new_order', isLoggedIn, function(req, res, next) {
-	  res.render('new_order', {
-	  	title: 'New Order',
-		username: req.user.user_name,
-		userID:req.user.user_id,
-		avatar: req.user.avatar_url
-	  });
-	});
-	
+	// app.get('/new_order', isLoggedIn, function(req, res, next) {
+	//   res.render('new_order', {
+	//   	title: 'New Order',
+	// 	username: req.user.user_name,
+	// 	userID:req.user.user_id,
+	// 	avatar: req.user.avatar_url
+	//   });
+	// });
+
 	/***
 	 * FACEBOOK Authentication
 	 */

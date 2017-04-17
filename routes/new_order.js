@@ -20,13 +20,30 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-router.get('/',middlewareBodyParser,function(req, res) {
-  return res.render("new_order",{
-        title: 'new_order',
-        username: req.user.user_name,
-        userID: req.user.user_id,
-        avatar: req.user.avatar_url,
-      });
+router.get('/',isLoggedIn,function(req, res) {
+    var user_id = req.user.user_id;
+    var query="select * from notifications";
+    connection.query(query,function(err,row,fields){
+      if(!err){
+          console.log(row);
+          return res.render('new_order', {
+          title: 'New Order',
+          username: req.user.user_name,
+          userID:req.user.user_id,
+          avatar: req.user.avatar_url,
+          row:row
+          // notifications: [{row.notifier_id: row.order_id}]
+        });
+      }else {
+        console.log(err);
+      }
+    });
+  // return res.render("new_order",{
+  //       title: 'new_order',
+  //       username: req.user.user_name,
+  //       userID: req.user.user_id,
+  //       avatar: req.user.avatar_url,
+  //     });
 });
 
 router.post('/',middlewareBodyParser,function(req, res) {
@@ -111,7 +128,10 @@ router.put('/',middlewareBodyParser,function(req, res) {
   var meal_type=req.body.meal_type;
   var resturant=req.body.from;
   var menu_img=req.body.image;
+  var owner_name = req.body.owner_name;
+  var invited_id = req.body.invited_id;
     var d= new Date();
+    console.log(owner_name);
 var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
 //  var order_time=new Date("yyyy-mm-dd").toLocaleString();
   console.log(order_time);
@@ -135,7 +155,21 @@ var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHo
 
               }
               else{
-                  res.send("notify");
+                  connection.query("select order_id from orders where owner_id=? and order_time=?",[owner_id,order_time],function(error,rows){
+                    if(error){
+                      console.log(err);
+                    }else{
+                      console.log(owner_name);
+                      connection.query("INSERT INTO notifications (notifier_id, notified_id, order_id, notifier_name, type) values(?,?,?,?,?)",[owner_id,invited_id,rows[0].order_id,owner_name,0],function (err,rows) {
+                        if (err) {
+                          console.log("EROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRR");
+                        }
+                      else {
+                        res.send("notify");
+                      }
+                    });
+                    }
+                  });
 
               //   socket.on('send to server',function(data){
               //     //  socketId =  getSocketIdFromUserId(user_id);
@@ -156,6 +190,17 @@ var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHo
     }
   });
 });
+
+// route middleware to check:
+function isLoggedIn(req, res, next) {
+
+  // if the user is authenticated in the session, keep going
+  if (req.isAuthenticated())
+    return next();
+
+  // else if they aren't then redirect them to the login/signup home page
+  res.redirect('/');
+}
 
 
 module.exports = router;

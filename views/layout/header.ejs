@@ -1,5 +1,10 @@
 <% include ./config.ejs %>
-
+<script>
+    $(document).ready(function(){
+        var not_no = $("#my-notifications li").length
+        $("#notifications-no").html(not_no);
+    });
+</script>
 <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -17,23 +22,24 @@
                         <li>
                             <a href="/user">
                                 <img width="30" height="30" src="<%= avatar %>" />
-                                <p><%= username %> </p>
+                                <p id="user-name"><%= username %> </p>
                                   <p id="userID"><%= userID %> </p>
                             </a>
                         </li>
                         <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell" aria-hidden="true"></i>
-                                    <p class="notification">5</p>
+                                    <p id="notifications-no" class="notification"></p>
                   <p></p>
                   <b class="caret"></b>
                               </a>
-                              <ul class="dropdown-menu">
-                                <li><a href="#">Wafaa joined your breakfast order</a></li>
-                                <li><a href="#">Mariam invited you to her order</a></li>
-                                <li><a href="#">Dina placed an new entry in your order</a></li>
-                                <li><a href="#">Notification 4</a></li>
-                                <li><a href="#">Another notification</a></li>
+                              <ul id="my-notifications" class="dropdown-menu">
+                                <% for(var i = row.length-1; i >= 0; i--) { %>
+                                    <% if (row[i].notified_id == userID){ %>
+                                        <li>  <a><%= row[i].notifier_name %> has invited you to order <a href="#">Join</a></a></li>
+                                    <% } else{ %>
+                                    <% } %>
+                                    <% } %>
                               </ul>
                         </li>
             <li>

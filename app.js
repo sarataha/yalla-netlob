@@ -12,17 +12,15 @@ var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
-var app      = express();
-// var http=require('http').createServer(app);
-//var server=http;
-// var io = require('socket.io')(http);
-// http.listen(8090,"127.0.0.1");
 
 var app = express();
-var server = app.listen(8080);
+var server = app.listen(8090,function () {
+  // body...
+  console.log("App is running on port 8090");
+});
 var io = require('socket.io').listen(server);
 
-var port     = process.env.PORT || 8090;
+// var port     = process.env.PORT || 8090;
 
 var passport = require('passport');
 var config = require('./config/auth.js');
@@ -78,23 +76,52 @@ app.use('/orders', orders);
 app.use('/new_order', new_order);
 app.use('/order_details', order_details);
 
+var currentConnections = [];
 
 io.on('connection', function(socket){
+  console.log(socket.id);
+  currentConnections.push({socket: socket.id});
+  console.log(currentConnections);
   socket.on('join',function(data){
       console.log("join***"+data.user_id);
-      users[data.user_id]=socket;
-      console.log(users.length);
-
+      currentConnections[currentConnections.length-1].user_id = data.user_id; 
+      console.log(currentConnections);
+      // console.log(currentConnections[socket.id]);
+      // users[data.user_id]=socket;
+      // console.log("USERS LENGTH => ", users.length);
+      // console.log(users[data.user_id]);
   });
+
+  var room = "";
+
   socket.on('send notification',function(data){
     console.log("in notification send");
-    console.log(data.user_id);
-    users[data.user_id].emit('notification',data.msg);
-    //users[data.user_id].emit('notification',data.msg);
+    room = data.room;
+    socket.join('room-'+room);
+    console.log("ROOOM NAAAAAAAAAME", room);
+    // console.log(data.user_id);
+    for (var i = currentConnections.length - 1; i >= 0; i--) {
+      if(currentConnections[i].user_id == data.user_id) {
+        console.log(currentConnections[i]);
+        socket.broadcast.to(currentConnections[i].socket).emit('notification',data.msg);
+      }
+    }
+
+    // socket.join(room);
+
+    // socket.on('join order', function (data) {
+    //   io.sockets.in("room-"+2).emit('connectToRoom', "You are in room no. "+2);
+    // });    
   });
+
   console.log('connection')
-//   socket.on('connection', function(msg){console.log("message recieved"+msg);});
-//   socket.on('disconnect',function(){});
+  socket.on('groups', function (data) {
+    console.log("GROUPS")
+  });
+
+  socket.on('disconnect', function() {
+    delete currentConnections[socket.id];
+  });
 });
 
 
@@ -119,6 +146,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-app.listen(port,function () {
-  console.log("App is running on port " + port);
-});
+// app.listen(port,function () {
+//   console.log("App is running on port " + port);
+// });

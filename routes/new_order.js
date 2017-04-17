@@ -149,7 +149,7 @@ console.log(order_time);
         if(error){
 
         }else{
-          console.log(rows[0].order_id);
+          console.log(rows);
           for(var i=0;i<req.body.invited_id.length;i++){
             console.log(req.body.invited_id[i]);
             connection.query("insert into orders_users (order_id,user_id) values (?,?)",[rows[0].order_id,req.body.invited_id[i]],function(error,rows){

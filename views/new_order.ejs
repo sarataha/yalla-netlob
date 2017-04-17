@@ -98,7 +98,7 @@
 										var member_email=$("#friend_txt").val();
 										$("#friend_txt").val("");
 										$.ajax({
-											url:"http://localhost:8080/new_order",
+											url:"http://localhost:8090/new_order",
 											method:"post",
 											data:{
 												member_type:member_type,
@@ -128,7 +128,7 @@
 										var member_name=$("#group_txt").val();
 										$("#group_txt").val("");
 										$.ajax({
-											url:"http://localhost:8080/new_order",
+											url:"http://localhost:8090/new_order",
 											method:"post",
 											data:{
 												member_type:member_type,
@@ -180,7 +180,7 @@
 									console.log(invited_id);
 									console.log(invited_name);
 									$.ajax({
-										url:"http://localhost:8080/new_order",
+										url:"http://localhost:8090/new_order",
 										method:"put",
 										data:{
 											meal_type:meal_type,

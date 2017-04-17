@@ -7,7 +7,8 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'yala_netlob_development'
+  database : 'yala_netlob_development',
+  multipleStatements: true
 });
 
 connection.connect(function(err){

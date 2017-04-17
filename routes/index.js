@@ -12,7 +12,8 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'yala_netlob_development'
+  database : 'yala_netlob_development',
+  multipleStatements: true
 });
 module.exports = function(app, passport) {
 
@@ -121,7 +122,7 @@ module.exports = function(app, passport) {
 	app.get('/home', isLoggedIn, function(req, res) {
 		console.log(req.user.avatar_url);
 		var user_id = req.user.user_id;
-		var query="select users.user_name,orders.*,notifications.* from users,orders,notifications where user_id=owner_id limit 5";
+		var query="select users.user_name,orders.* from users,orders where user_id=owner_id limit 5;SELECT * FROM notifications;";
 		connection.query(query,[user_id],function(err,row,fields){
 			if(!err){
 					console.log(row);
@@ -130,7 +131,8 @@ module.exports = function(app, passport) {
 					username: req.user.user_name,
 					userID:req.user.user_id,
 					avatar: req.user.avatar_url,
-					row:row
+					data:row[0],
+					row:row[1]
 					// notifications: [{row.notifier_id: row.order_id}]
 				});
 			}else {

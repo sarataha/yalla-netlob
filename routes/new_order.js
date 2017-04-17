@@ -130,13 +130,10 @@ router.put('/',middlewareBodyParser,function(req, res) {
   var menu_img=req.body.image;
   var owner_name = req.body.owner_name;
   var invited_id = req.body.invited_id;
-  var order_time= new Date();
-
+    var d= new Date();
     console.log(owner_name);
-//var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
+var order_time ="'"+d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+"'";
 //  var order_time=new Date("yyyy-mm-dd").toLocaleString();
-console.log("dateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-console.log(order_time);
   console.log(order_time);
   connection.query("insert into orders (meal_type,order_status,owner_id,resturant,menu_img,order_time) values (?,?,?,?,?,?)",[meal_type,"waiting",owner_id,resturant,menu_img,order_time],function(error,row){
     if(error)
@@ -149,7 +146,7 @@ console.log(order_time);
         if(error){
 
         }else{
-          console.log(rows);
+          console.log(rows[0].order_id);
           for(var i=0;i<req.body.invited_id.length;i++){
             console.log(req.body.invited_id[i]);
             connection.query("insert into orders_users (order_id,user_id) values (?,?)",[rows[0].order_id,req.body.invited_id[i]],function(error,rows){
@@ -165,7 +162,7 @@ console.log(order_time);
                       console.log(owner_name);
                       connection.query("INSERT INTO notifications (notifier_id, notified_id, order_id, notifier_name, type) values(?,?,?,?,?)",[owner_id,invited_id,rows[0].order_id,owner_name,0],function (err,rows) {
                         if (err) {
-                          console.log("EROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRR");
+                          console.log(err);
                         }
                       else {
                         res.send("notify");

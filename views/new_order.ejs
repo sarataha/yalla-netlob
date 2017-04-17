@@ -58,6 +58,7 @@
                         <div class="card ">
                             <div class="header">
                                 <h4 class="title">Invited Friends</h4>
+                                <p class="category">More of bla bla bla</p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart" id="friend_list" style="height:550px">
@@ -71,13 +72,12 @@
 						<script src="/socket.io/socket.io.js"></script>
 						<script>
 					var	user_id=userID.innerHTML;
-					var friend_id;
 					var user_name = $("#user-name").text();
 					console.log(user_name);
-					  var iosocket = io.connect();
-					  iosocket.on('notification',function(data){
-              			alert(data);
-            			});
+					  //var iosocket = io.connect();
+					  //iosocket.on('notification',function(data){
+              			//alert(data);
+            			//});
 							$(function(){
 							console.log($("#user-name").text());
 								var invited_id=[];
@@ -96,6 +96,7 @@
 									var member_type = $("input[name='addM']:checked").val();
 									if(member_type=="friend"){
 										var member_email=$("#friend_txt").val();
+										console.log("emaillll ",member_email);
 										$("#friend_txt").val("");
 										$.ajax({
 											url:"http://localhost:8090/new_order",
@@ -110,14 +111,10 @@
 												if(response.message=="not_friend")
 													alert("not in your friends");
 												else if(response.message=="is_friend"){
-
-													if(!invited_id.includes(response.friend_id)){
-														friend_id=response.friend_id;
-														invited_id.push(response.friend_id);
-														invited_name.push(response.friend_name);
-														$("#friend_list").append("<p id='rm"+response.friend_id+"'>"+response.friend_name+"</p><a class='rmm' value='"+response.friend_id+"' id='remove"+response.friend_id+"'>remove</a>");
-													}
-											}
+													invited_id.push(response.friend_id);
+													invited_name.push(response.friend_name);
+													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+												}
 											},
 											error:function(error){
 												console.log("error checking");
@@ -139,12 +136,10 @@
 												console.log(resault);
 												if(response.message=="is_group"){
 													for(i=0;i<response.group_members.length;i++){
-														if(!invited_id.includes(response.friend_id)){
-															invited_name.push(response.group_members[i].user_name);
-															invited_id.push(response.group_members[i].user_id);
-															$("#friend_list").append("<p id='rm"+response.friend_id+"'>"+response.friend_name+"</p><a class='rmm' value='"+response.friend_id+"' id='remove"+response.friend_id+"'>remove</a>");
+														invited_name.push(response.group_members[i].user_name);
+														invited_id.push(response.group_members[i].user_id);
+														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
 													}
-												}
 												}
 											},
 											error:function(error){
@@ -156,18 +151,6 @@
 										console.log(member_type);
 									}
 								});
-
-								$('#friend_list').delegate('a','click',function() {
-									//event.preventDefault();
-									console.log("Heeeeeeeeeeeeere");
-									value=invited_id.indexOf(friend_id);
-									console.log(value);
-									invited_id.splice(value,1);
-									console.log(invited_id);
-									$("#rm"+friend_id).remove();
-									$("#remove"+friend_id).remove();
-								});
-
 								$("#publish").click(function(event){
 									event.preventDefault();
 									var meal_type=$("#meal").find(":selected").val();
@@ -197,9 +180,10 @@
 												var username = $("#user-name").text().trim();
 												var notification_msg = username + " has invited you to joined their order";
 												var room = username + from + meal_type;
+												console.log("ORDER ROOOOOOM ",room);
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg,room:room});
+													iosocket.emit('send notification',{owner_id:user_id,user_id:invited_id[i],msg:notification_msg,room:room});
 										}}
 												console.log("success");
 												window.location.href = "/orders"
@@ -210,8 +194,6 @@
 										}
 									})
 								});
-
-
 							});
 						</script>
 	<%include layout/footer %>

@@ -1,41 +1,6 @@
 <% include layout/sidebar %>
 <% include layout/header %>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-    <script>
 
-        $(document).ready(function(){
-
-          console.log("******"+userID.innerHTML);
-
-            var user_id=userID.innerHTML;
-            var iosocket = io.connect();
-            iosocket.emit('join', {user_id:user_id});
-
-            iosocket.on('notification',function(data){
-             // alert(data);
-              demo.showNotification('top','right',data);
-              var not_no = $("#my-notifications li").length
-              $("#notifications-no").html(not_no);
-              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
-             /* var answer = confirm (data)
-            if (answer) {
-                io.emit('join order');
-                alert("hi");
-            }
-           else
-                alert ("Darn. Well, keep trying then.")*/
-            });
-
-            socket.on('connectToOrder',function(data){
-                alert(data);
-            });
-
-            // function () {
-            //     console.log("connected");
-            // });
-        });
-    </script>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -43,12 +8,13 @@
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Latest Orders</h4>
+                                <p class="category">Bla bla bla blaaaa</p>
                             </div>
                             <div class="content">
                                 <div class="ct-chart ct-perfect-fourth">
-                                  <% for(var i=0; i < row.length; i++) { %>
-                                    <% if (row[i].order_status == "waiting"){ %>
-                                      <p><a class="latest" id="<%= row[i].order_id %>" href="/order_details?order_id=<%=row[i].order_id%>"><%= row[i].meal_type %> on <%= row[i].order_time %> </a></p>
+                                  <% for(var i=0; i < data.length; i++) { %>
+                                    <% if (data[i].order_status == "waiting"){ %>
+                                      <p><a class="latest" id="<%= data[i].order_id %>" href="/order_details?order_id=<%=data[i].order_id%>"><%= data[i].meal_type %> on <%= data[i].order_time %> </a></p>
                                     <% } %>
                                     <% } %>
                                 </div>
@@ -73,11 +39,11 @@
                             </div>
                             <div class="content">
                                 <div class="ct-chart">
-                                  <% for(var i=0; i < row.length; i++) { %>
-                                    <% if (row[i].user_name == username){ %>
-                                    <p><a id='<%= row[i].owner_id %>' href="/user"><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                  <% for(var i=0; i < data.length; i++) { %>
+                                    <% if (data[i].user_name == username){ %>
+                                    <p><a id='<%= data[i].owner_id %>' href="/user"><%= data[i].user_name %></a> has created an order for <%= data[i].meal_type %> from <%= data[i].resturant %></p>
                                     <% } else{ %>
-                                      <p><a id='<%= row[i].owner_id %>' href="/users?user_id=<%=row[i].owner_id%>"><%= row[i].user_name %></a> has created an order for <%= row[i].meal_type %> from <%= row[i].resturant %></p>
+                                      <p><a id='<%= data[i].owner_id %>' href="/users?user_id=<%=data[i].owner_id%>"><%= data[i].user_name %></a> has created an order for <%= data[i].meal_type %> from <%= data[i].resturant %></p>
                                     <% } %>
                                     <% } %>
                                 </div>

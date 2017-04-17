@@ -9,7 +9,8 @@ module.exports = {
         'password': ''
     },
   'database': 'yala_netlob_development',
-    'orders_table': 'orders'
+    'orders_table': 'orders',
+    multipleStatements: true
 };
 
 // connection.connect();

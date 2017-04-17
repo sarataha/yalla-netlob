@@ -1,5 +1,10 @@
 <% include ./config.ejs %>
-
+<script>
+    $(document).ready(function(){
+        var not_no = $("#my-notifications li").length
+        $("#notifications-no").html(not_no);
+    });
+</script>
 <div class="main-panel">
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -24,12 +29,17 @@
                         <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell" aria-hidden="true"></i>
-                                    <p id="notifications-no" class="notification">5</p>
+                                    <p id="notifications-no" class="notification"></p>
                   <p></p>
                   <b class="caret"></b>
                               </a>
                               <ul id="my-notifications" class="dropdown-menu">
-                                
+                                <% for(var i = row.length-1; i >= 0; i--) { %>
+                                    <% if (row[i].notified_id == userID){ %>
+                                        <li>  <a><%= row[i].notifier_name %> has invited you to order <a href="#">Join</a></a></li>
+                                    <% } else{ %>
+                                    <% } %>
+                                    <% } %>
                               </ul>
                         </li>
             <li>

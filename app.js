@@ -14,10 +14,13 @@ var crypto = require('crypto');
 var path = require('path');
 
 var app = express();
-var server = app.listen(8080);
+var server = app.listen(8090,function () {
+  // body...
+  console.log("App is running on port 8090");
+});
 var io = require('socket.io').listen(server);
 
-var port     = process.env.PORT || 8090;
+// var port     = process.env.PORT || 8090;
 
 var passport = require('passport');
 var config = require('./config/auth.js');
@@ -143,6 +146,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-app.listen(port,function () {
-  console.log("App is running on port " + port);
-});
+// app.listen(port,function () {
+//   console.log("App is running on port " + port);
+// });

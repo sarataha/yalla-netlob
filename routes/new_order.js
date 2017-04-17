@@ -20,13 +20,30 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-router.get('/',middlewareBodyParser,function(req, res) {
-  return res.render("new_order",{
-        title: 'new_order',
-        username: req.user.user_name,
-        userID: req.user.user_id,
-        avatar: req.user.avatar_url,
-      });
+router.get('/',isLoggedIn,function(req, res) {
+    var user_id = req.user.user_id;
+    var query="select * from notifications";
+    connection.query(query,function(err,row,fields){
+      if(!err){
+          console.log(row);
+          return res.render('new_order', {
+          title: 'New Order',
+          username: req.user.user_name,
+          userID:req.user.user_id,
+          avatar: req.user.avatar_url,
+          row:row
+          // notifications: [{row.notifier_id: row.order_id}]
+        });
+      }else {
+        console.log(err);
+      }
+    });
+  // return res.render("new_order",{
+  //       title: 'new_order',
+  //       username: req.user.user_name,
+  //       userID: req.user.user_id,
+  //       avatar: req.user.avatar_url,
+  //     });
 });
 
 router.post('/',middlewareBodyParser,function(req, res) {
@@ -176,6 +193,17 @@ console.log(order_time);
     }
   });
 });
+
+// route middleware to check:
+function isLoggedIn(req, res, next) {
+
+  // if the user is authenticated in the session, keep going
+  if (req.isAuthenticated())
+    return next();
+
+  // else if they aren't then redirect them to the login/signup home page
+  res.redirect('/');
+}
 
 
 module.exports = router;

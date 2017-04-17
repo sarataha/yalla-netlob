@@ -15,7 +15,7 @@ router.get("/",isLoggedIn,function(req,res){
   var user_id=req.user.user_id;
   console.log(user_id);
 console.log("Rendering users ***********");
-  connection.query("SELECT * FROM users where user_id= ?",user_id, function(err, rows) {
+  connection.query("SELECT * FROM users,notifications where user_id= ?",user_id, function(err, rows) {
     console.log(rows.length);
     if (err)
     return done(err);
@@ -27,7 +27,8 @@ console.log("Rendering users ***********");
         userID:rows[0].user_id,
         avatar: req.user.avatar_url,
         user_img:rows[0].avatar_url,
-        user_email:rows[0].email
+        user_email:rows[0].email,
+        row:rows
       });
   //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 

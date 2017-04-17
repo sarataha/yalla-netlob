@@ -1,41 +1,6 @@
 <%include layout/sidebar.ejs %>
 <%include layout/header.ejs %>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-    <script>
 
-        $(document).ready(function(){
-                
-          console.log("******"+userID.innerHTML);
-
-            var user_id=userID.innerHTML;
-            var iosocket = io.connect();
-            iosocket.emit('join', {user_id:user_id});
-
-            iosocket.on('notification',function(data){
-             // alert(data);
-              demo.showNotification('top','right',data);
-              var not_no = $("#my-notifications li").length
-              $("#notifications-no").html(not_no);
-              $("#my-notifications").append('<li><a href="#">'+data+'</a></li>')
-             /* var answer = confirm (data)
-            if (answer) {
-                io.emit('join order');
-                alert("hi");
-            }
-           else
-                alert ("Darn. Well, keep trying then.")*/
-            });
-
-            socket.on('connectToOrder',function(data){
-                alert(data);
-            });
-
-            // function () {
-            //     console.log("connected");
-            // });
-        });
-    </script>
 <script>
 $(document).ready(function(){
 

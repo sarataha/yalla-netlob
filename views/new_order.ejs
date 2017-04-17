@@ -74,10 +74,10 @@
 					var	user_id=userID.innerHTML;
 					var user_name = $("#user-name").text();
 					console.log(user_name);
-					  var iosocket = io.connect();
-					  iosocket.on('notification',function(data){
-              			alert(data);
-            			});
+					  //var iosocket = io.connect();
+					  //iosocket.on('notification',function(data){
+              			//alert(data);
+            			//});
 							$(function(){
 							console.log($("#user-name").text());
 								var invited_id=[];
@@ -96,9 +96,10 @@
 									var member_type = $("input[name='addM']:checked").val();
 									if(member_type=="friend"){
 										var member_email=$("#friend_txt").val();
+										console.log("emaillll ",member_email);
 										$("#friend_txt").val("");
 										$.ajax({
-											url:"http://localhost:8080/new_order",
+											url:"http://localhost:8090/new_order",
 											method:"post",
 											data:{
 												member_type:member_type,
@@ -124,7 +125,7 @@
 										var member_name=$("#group_txt").val();
 										$("#group_txt").val("");
 										$.ajax({
-											url:"http://localhost:8080/new_order",
+											url:"http://localhost:8090/new_order",
 											method:"post",
 											data:{
 												member_type:member_type,
@@ -162,7 +163,7 @@
 									console.log(invited_id);
 									console.log(invited_name);
 									$.ajax({
-										url:"http://localhost:8080/new_order",
+										url:"http://localhost:8090/new_order",
 										method:"put",
 										data:{
 											meal_type:meal_type,
@@ -179,9 +180,10 @@
 												var username = $("#user-name").text().trim();
 												var notification_msg = username + " has invited you to joined their order";
 												var room = username + from + meal_type;
+												console.log("ORDER ROOOOOOM ",room);
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg,room:room});
+													iosocket.emit('send notification',{owner_id:user_id,user_id:invited_id[i],msg:notification_msg,room:room});
 										}}
 												console.log("success");
 												window.location.href = "/orders"

@@ -12,11 +12,6 @@ var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');
 var path = require('path');
-var app      = express();
-// var http=require('http').createServer(app);
-//var server=http;
-// var io = require('socket.io')(http);
-// http.listen(8090,"127.0.0.1");
 
 var app = express();
 var server = app.listen(8080);
@@ -78,9 +73,6 @@ app.use('/orders', orders);
 app.use('/new_order', new_order);
 app.use('/order_details', order_details);
 
-// users = []
-// console.log(users.length);
-
 var currentConnections = [];
 
 io.on('connection', function(socket){
@@ -96,23 +88,31 @@ io.on('connection', function(socket){
       // console.log("USERS LENGTH => ", users.length);
       // console.log(users[data.user_id]);
   });
+
+  var room = "";
+
   socket.on('send notification',function(data){
     console.log("in notification send");
-    console.log(data.user_id);
+    room = data.room;
+    socket.join('room-'+room);
+    console.log("ROOOM NAAAAAAAAAME", room);
+    // console.log(data.user_id);
     for (var i = currentConnections.length - 1; i >= 0; i--) {
       if(currentConnections[i].user_id == data.user_id) {
         console.log(currentConnections[i]);
         socket.broadcast.to(currentConnections[i].socket).emit('notification',data.msg);
       }
     }
-    
-    //users[data.user_id].emit('notification',data.msg);
+
+    // socket.join(room);
+
+    // socket.on('join order', function (data) {
+    //   io.sockets.in("room-"+2).emit('connectToRoom', "You are in room no. "+2);
+    // });    
   });
+
   console.log('connection')
-//   socket.on('connection', function(msg){console.log("message recieved"+msg);});
-//   socket.on('disconnect',function(){});
   socket.on('groups', function (data) {
-    // body...
     console.log("GROUPS")
   });
 

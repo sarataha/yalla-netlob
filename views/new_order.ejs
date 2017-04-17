@@ -173,13 +173,15 @@
 										success:function(response){
 											var result=$.trim(response)
 											if(result=="notify"){
-												var username = $("#user-name").text();
+												var username = $("#user-name").text().trim();
 												var notification_msg = username + " has invited you to joined their order";
+												var room = username + from + meal_type;
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg});
+													iosocket.emit('send notification',{user_id:invited_id[i],msg:notification_msg,room:room});
 										}}
 												console.log("success");
+												window.location.href = "/orders"
 										},
 										error:function(error){
 											console.log("error publish");

@@ -13,8 +13,20 @@
             iosocket.emit('join', {user_id:user_id});
 
             iosocket.on('notification',function(data){
-              alert(data);
-            })
+              //alert(data);
+              var answer = confirm (data)
+            if (answer) {
+                io.emit('join order');
+                alert("hi");
+            }
+           else
+                alert ("Darn. Well, keep trying then.")
+            });
+
+            socket.on('connectToOrder',function(data){
+                alert(data);
+            });
+
             // function () {
             //     console.log("connected");
             // });

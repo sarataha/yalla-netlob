@@ -59,8 +59,18 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         	connection.query("insert into  user_friends( user_id ,friend_id) values(?,?)",[req.user.user_id,rows[0].user_id],function(insert_error,insert_row){
         		// body...
         		if (!insert_error) {
-        			console.log("done");
-        			respo.send("done you friend is added");
+        			console.log("done to mylist ");
+        			connection.query("insert into  user_friends( user_id ,friend_id) values(?,?)",[rows[0].user_id,req.user.user_id],function(insert_error2,insert_row2){
+        				if (!insert_error2){
+        					respo.send("done you friend is added");
+        					respo.redirect("http://localhost:8090/friends");
+        				}
+        				else{
+        					respo.send("the friend is already existed");
+        				}
+        			});
+
+        			
         		}
         		else{
         			console.log("the friend is already existed");

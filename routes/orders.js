@@ -17,12 +17,12 @@ connection.connect();
 router.get('/',isLoggedIn,function(req, res, next) {
   var user_id=req.user.user_id;
 
-  var query="select o.order_id,meal_type,order_status,resturant,invited_count from orders as o where o.owner_id="+user_id+" or o.order_id in(select order_id from orders_users where user_id="+user_id+") group by order_id;SELECT * FROM notifications;select count(order_id) as join_count from orders_users group by order_id;";
+  var query="select o.order_id,meal_type,order_status,resturant,invited_count,owner_id from orders as o where o.owner_id="+user_id+" or o.order_id in(select order_id from orders_users where user_id="+user_id+") group by order_id;SELECT * FROM notifications;select count(order_id) as join_count from orders_users group by order_id;";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("****************************************************roooooooow");
       console.log(row);
-      console.log(row[2][0].join_count);
+      //console.log(row[2][0].join_count);
       var joined=[];
       // console.log(req.user.user_id);
       // console.log(row[0]);

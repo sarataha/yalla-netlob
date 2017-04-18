@@ -17,9 +17,10 @@ var multer  = require('multer')
 var upload = multer({ dest: 'public/assets/img/avatar/' })
 
 var app = express();
-var server = app.listen(8090,function () {
+
+var server = app.listen(process.env.PORT || 8090,function () {
   // body...
-  console.log("App is running on port 8090");
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 var io = require('socket.io').listen(server);
 

@@ -49,7 +49,8 @@ console.log("Rendering users ***********");
         user_name:rows[0][0].user_name,
         user_id:rows[0][0].user_id,
         user_img:rows[0][0].avatar_url,
-        user_email:rows[0][0].email
+        user_email:rows[0][0].email,
+        cls: ["inactive","inactive","inactive","inactive"]
       });
   //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 

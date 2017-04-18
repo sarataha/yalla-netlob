@@ -50,7 +50,8 @@ router.get('/',isLoggedIn,function(req, res) {
               invited_count:row[0][0].invited_count,
               join_count:row[2][0].join_count,
               invited_name:row[3],
-              join_users:row[4]
+              join_users:row[4],
+              cls: ["inactive","inactive","inactive","active"]
             });
         }else{
           //order_data=[{order_id:order_id}]
@@ -74,8 +75,8 @@ router.get('/',isLoggedIn,function(req, res) {
                   invited_count:row[0][0].invited_count,
                   join_count:row[3][0].join_count,
                   invited_name:row[2],
-                  join_users:row[4]
-
+                  join_users:row[4],
+                  cls: ["inactive","inactive","inactive","active"]
                 });
             }
           });

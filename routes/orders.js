@@ -52,7 +52,8 @@ router.get('/',isLoggedIn,function(req, res, next) {
           avatar: req.user.avatar_url,
           orders:row[0],
           row:row[1],
-          joined:joined
+          joined:joined,
+          cls: ["inactive","inactive","inactive","active"]
         });
       }else{
         res.render('orders.ejs', {
@@ -62,7 +63,8 @@ router.get('/',isLoggedIn,function(req, res, next) {
           avatar: req.user.avatar_url,
           orders:row[0],
           row:row[1],
-          joined:[{join_count:0}]
+          joined:[{join_count:0}],
+          cls: ["inactive","inactive","inactive","active"]
         });
       }
     }else{
@@ -79,7 +81,8 @@ router.get('/',isLoggedIn,function(req, res, next) {
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
         groups: "",
-        row:rows
+        row:rows,
+        cls: ["inactive","inactive","inactive","active"]
       });
       }
       else {
@@ -89,7 +92,8 @@ router.get('/',isLoggedIn,function(req, res, next) {
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
         groups: "",
-        row:[]
+        row:[],
+        cls: ["inactive","inactive","inactive","active"]
       });
       }
     }

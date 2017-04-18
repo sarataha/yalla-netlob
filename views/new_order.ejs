@@ -1,0 +1,207 @@
+<% include layout/sidebar %>
+<% include layout/header %>
+	<div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Add Order</h4>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart ct-perfect-fourth" style="height: 500px">
+																	<form action="" method="post">
+																	<div class="form-group">
+																		<label for="meal">Order For</label>
+																		<select name="meal" class="form-control" id="meal">
+																			<option value="breakfast">Breakfast</option>
+																			<option value="lunch">Lunch</option>
+																			<option value="dinner">Dinner</option>
+																		</select>
+																		</div>
+																		<div class="form-group">
+																		<label for="restaurant">From</label>
+																		<input class="form-control" name="restaurant" type="text" id="from">
+																		</div>
+																		<div class="form-group">
+																		<label for="friends">Members</label><br>
+																		<input type="radio" value="friend" name="addM" id="addF" class="addM" >Friend
+																		<input class="form-control" type="email" class="form-control" name="email" placeholder="Email" id="friend_txt" disabled="true" required>
+																		</div>
+																		<div class="form-group">
+																			<input type="radio" value="group" name="addM" id="addG" class="addM">Group
+																		<input name="member" class="form-control" placeholder="Name" id="group_txt" type="text" disabled="true"><br>
+																		<input type="button" id="add_member" value="Add" class="btn btn-warning">
+																		</div>
+																		<div class="form-group">
+																		<label for="menu-image">Menu Image</label>
+																		<input name="menu-image" type="file" id="image">
+																		</div>
+																		<input type="submit" value="Publish" id="publish" class="btn btn-danger btn-wd">
+																	</form>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Invited Friends</h4>
+                                <p class="category">More of bla bla bla</p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart" id="friend_list" style="height:550px">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+						<script src="/socket.io/socket.io.js"></script>
+						<script>
+					var	user_id=userID.innerHTML;
+					var user_name = $("#user-name").text();
+					console.log(user_name);
+					  //var iosocket = io.connect();
+					  //iosocket.on('notification',function(data){
+              			//alert(data);
+            			//});
+							$(function(){
+							console.log($("#user-name").text());
+								var invited_id=[];
+								var invited_name=[];
+								$('#addF').click(function()
+								{
+								  $('#friend_txt').removeAttr("disabled");
+									$('#group_txt').attr("disabled",true);
+								});
+								$('#addG').click(function()
+								{
+								  $('#group_txt').removeAttr("disabled");
+									$('#friend_txt').attr("disabled",true);
+								});
+								$("#add_member").click(function(event){
+									var member_type = $("input[name='addM']:checked").val();
+									if(member_type=="friend"){
+										var member_email=$("#friend_txt").val();
+										console.log("emaillll ",member_email);
+										$("#friend_txt").val("");
+										$.ajax({
+											url:"http://localhost:8090/new_order",
+											method:"post",
+											data:{
+												member_type:member_type,
+												member_email:member_email
+											},
+											success:function(response){
+												var resault=$.trim(response.message);
+												console.log(resault);
+												if(response.message=="not_friend")
+													alert("not in your friends");
+												else if(response.message=="is_friend"){
+													if(!invited_id.includes(response.friend_id)){
+													invited_id.push(response.friend_id);
+													invited_name.push(response.friend_name);
+													$("#friend_list").append("<p>"+response.friend_name+"</p><br><a>remove</a>");
+												}
+												}
+											},
+											error:function(error){
+												console.log("error checking");
+												console.log(error);
+											}
+										});//end of ajax
+									}else if(member_type=="group"){
+										var member_name=$("#group_txt").val();
+										$("#group_txt").val("");
+										$.ajax({
+											url:"http://localhost:8090/new_order",
+											method:"post",
+											data:{
+												member_type:member_type,
+												member_name:member_name
+											},
+											success:function(response){
+												var resault=$.trim(response.message);
+												console.log(resault);
+												if(response.message=="is_group"){
+													for(i=0;i<response.group_members.length;i++){
+														if(!invited_id.includes(response.group_members[i].user_id)){
+														invited_name.push(response.group_members[i].user_name);
+														invited_id.push(response.group_members[i].user_id);
+														$("#friend_list").append("<p>"+response.group_members[i].user_name+"</p><br><a>remove</a>");
+													}
+													}
+												}
+											},
+											error:function(error){
+												console.log("error checking group");
+												console.log(error);
+											}
+										});//end of ajax
+										console.log(member_name);
+										console.log(member_type);
+									}
+								});
+								$("#publish").click(function(event){
+									event.preventDefault();
+									var meal_type=$("#meal").find(":selected").val();
+									console.log("mealType");
+									console.log(meal_type);
+									var from=$("#from").val();
+									console.log(from);
+									var img=$('input[type=file]').val();
+									console.log(img);
+									console.log(invited_id);
+									console.log(invited_name);
+									var username = $("#user-name").text().trim();
+									var order_name = username + from + meal_type;
+									console.log(order_name);
+									$.ajax({
+										url:"http://localhost:8090/new_order",
+										method:"put",
+										data:{
+											meal_type:meal_type,
+											owner_id:user_id,
+											owner_name: user_name,
+											from:from,
+											invited_id:invited_id,
+											invited_name:invited_name,
+											image:img,
+											order_name: order_name
+										},
+										success:function(response){
+											var result=$.trim(response)
+											if(result=="notify"){
+												var username = $("#user-name").text().trim();
+												var notification_msg = username + " has invited you to joined their order";
+												var room = username + from + meal_type;
+												console.log("ORDER ROOOOOOM ",room);
+												for(var i=0;i<invited_id.length;i++)
+											{console.log("sending notification to user : "+invited_id[i] );
+													iosocket.emit('send notification',{owner_id:user_id,user_id:invited_id[i],msg:notification_msg,room:room});
+										}}
+												console.log("success");
+												window.location.href = "/orders"
+										},
+										error:function(error){
+											console.log("error publish");
+											console.log(error);
+										}
+									})
+								});
+							});
+						</script>
+	<%include layout/footer %>

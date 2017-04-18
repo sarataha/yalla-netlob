@@ -1,0 +1,321 @@
+<% include layout/sidebar %>
+<% include layout/header %>
+<script>
+var groupname;
+var user_id;
+var grpname;
+$(document).ready(function(){
+  $( "#addGroup" ).click(function( event ) {
+    //event.preventDefault();
+    groupname=$("#groupName").val();
+    console.log(groupname.length);
+    //user_id=userID[0].innerHTML;
+    console.log(user_id);
+    console.log(groupname);
+      if(groupname.length>1){
+    $.ajax({
+      url:"http://localhost:8090/groups/add",
+      method:"POST",
+      data:{name:groupname},
+      success:function(response){
+        var result=$.trim(response)
+        if(result=="Exists")
+        {alert("That group already exist");}
+        else{
+          console.log(response);
+          getGroups();
+        }
+      },
+      error:function(error){
+        console.log(error);
+      }
+    });
+}
+  else{console.log("group name is empty");}
+  });
+
+
+  $('#groupsNames').on('click', '.removegp',function( event ) {
+    //event.preventDefault();
+    console.log("remove group is pressed");
+    groupname=$(this).attr("name");
+    //user_id=userID[0].innerHTML;
+    console.log(groupname);
+
+    $.ajax({
+      url:"http://localhost:8090/groups/removegp",
+      method:"POST",
+      data:{name:groupname},
+      success:function(response){
+          console.log(response);
+          getGroups();
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+
+  });
+
+  function getGroups(){
+    console.log("****function get groups");
+    //user_id=userID[0].innerHTML;
+    $.ajax({
+      url:"http://localhost:8090/groups/getGroups",
+      method:"POST",
+      success:function(response){
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-groups")
+        { $("#groupName").val("");
+          $("#groupsNames").html(" ");
+
+        }
+        else if(result="groups"){
+          $("#groupName").val("");
+          $("#groupsNames").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].group_name);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#groupsNames").append("<li class='list-group-item justify-content-between'><a  href= ' http://localhost:8090/groups#group_div' class='grp'>"+ response.rows[i].group_name +"</a><span class='badge badge-default badge-pill'><i class='fa fa-times removegp' aria-hidden='true' name='"+ response.rows[i].group_name+"' </i> </span></li>");
+        }
+        }
+        console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
+
+
+
+
+
+
+  function getFriends(){
+    console.log("****function get friends");
+    //user_id=userID[0].innerHTML;
+    groupname=$("#single-group").text();
+    $.ajax({
+      url:"http://localhost:8090/groups/getFriends",
+      method:"POST",
+      data:{groupname:groupname},
+      success:function(response){
+        var result=$.trim(response.message)
+        console.log(result);
+        if(result=="no-friends")
+        { $("#friendName").val("");
+          $("#group_friends").html(" ");
+          $("#single-group").html(groupname);
+        }
+        else if(result="friends"){
+          $("#friendName").val("");
+          $("#group_friends").html(" ");
+          console.log(groupname);
+          console.log(response.rows[0].user_name);
+          $("#single-group").html(groupname);
+          for (var i=0;i<response.rows.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.rows[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.rows[i].user_name+"'></i> </span></li>");
+        }
+        }
+        console.log(response);
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
+
+  $( "#add_friend" ).click(function( event ) {
+    //user_id=userID[0].innerHTML;
+    friendName=$("#friendName").val();
+    groupname=$("#single-group").text();
+    console.log(groupname);
+    console.log(friendName);
+    console.log(user_id);
+    if(friendName.length>=1){
+    $.ajax({
+      url:"http://localhost:8090/groups/addfriend",
+      method:"POST",
+      data:{name:friendName,groupname:groupname},
+      success:function(response){
+        var result=$.trim(response.message)
+        if(result=="not-friend")
+        {alert("You dont have this person as a friend");}
+        else{
+          console.log(response);
+          getFriends();
+        }
+      },
+      error:function(error){
+        console.log(error);
+      }
+    })
+  }
+  else{
+    console.log("you didnt write name of friend");
+  }
+  });
+
+
+    $('#groupsNames').on('click', ".grp",function( event ) {
+    grpname = $(this).text();
+    //user_id=userID[0].innerHTML;
+    console.log(grpname);
+    $.ajax({
+      url:"http://localhost:8090/groups/group",
+      method:"GET",
+      data:{group:grpname},
+      success:function(response){
+        var result=$.trim(response.message)
+        if(result=="friends")
+        {
+          $("#group_friends").html(" ");
+          console.log(response.group_name);
+          console.log(response.row[0].user_name);
+          $("#single-group").html(response.group_name);
+          for (var i=0;i<response.row.length;i++)
+          { $("#group_friends").append(" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+" <span class='badge badge-default badge-pill'><i class='fa fa-times removefriend'id='removefriend' aria-hidden='true' name='"+ response.row[i].user_name+"'></i> </span></li>");
+        }
+      }
+      else{
+        console.log(response.group_name);
+        $("#single-group").html(response.group_name);
+        $("#group_friends").html(" ");
+
+      }
+      //innerHTML+=" <li class='list-group-item justify-content-between'>"+ response.row[i].user_name+"</li>"
+    },
+    error:function(error){
+      console.log(error);
+    }
+  })
+});
+
+
+
+$('#group_friends').on('click', '#removefriend',function( event ) {
+  console.log("remove friend is pressed");
+  groupfriend=$(this).attr("name");
+  //user_id=userID[0].innerHTML;
+  groupname=$("#single-group").text();
+  console.log(groupfriend);
+
+  $.ajax({
+    url:"http://localhost:8090/groups/removefriend",
+    method:"POST",
+    data:{name:groupfriend,groupname:groupname},
+    success:function(response){
+        console.log(response);
+        getFriends();
+    },
+    error:function(error){
+      console.log(error);
+    }
+  })
+
+});
+
+});
+
+</script>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form-group">
+          <label>Group</label>
+          <input type="text" value="" placeholder="Input"  name="groupName" id="groupName" class="form-control" />
+        </div>
+        <div class="form-group col-md-offset-8">
+          <button type="submit" class="btn btn-info btn-fill btn-wd"  id="addGroup" >Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="header">
+            <h4 class="title">Groups</h4>
+            <p class="category">-</p>
+            <p class="category" >
+              <ul id="groupsNames" class="list-group">
+                <% for(var i=0; i < groups.length; i++) { %>
+
+                <li class="list-group-item justify-content-between">
+                  <a  href= " http://localhost:8090/groups#group_div" class="grp"><%= groups[i].group_name %></a>
+
+                    <span class="badge badge-default badge-pill"><i class="fa fa-times removegp" aria-hidden="true" name="<%= groups[i].group_name %>"></i> </span>
+
+                </li>
+
+                <% } %>
+
+              </ul>
+            </p>
+          </div>
+          <div class="content">
+            <div class="ct-chart ct-perfect-fourth">
+            </div>
+
+            <div class="footer">
+              <div class="chart-legend">
+                <i class="fa fa-circle text-info"></i>
+                <i class="fa fa-circle text-danger"></i>
+                <i class="fa fa-circle text-warning"></i>
+              </div>
+              <hr>
+              <div class="stats">
+                <i class="ti-timer"></i> Updated 3 minutes ago
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8" id="group_div">
+        <div class="card ">
+          <div class="header">
+
+            <h4 class="title" id="single-group"></h4>
+
+
+          </div>
+          <div class="content">
+            <div class="col-md-6 col-md-offset-3">
+              <div class="form-group">
+                <label>Your Friend Name</label>
+                <input type="text" value="" placeholder="Input" class="form-control"id="friendName" />
+              </div>
+
+            </div>
+            <div class="ct-chart" >
+              <div class="form-group col-md-offset-8">
+                <button class="btn btn-primary btn-fill" id="add_friend">Add</button>
+              </div>
+              <br>
+              <h4 class="title" style="float:left;">Friends List:</h4><br><br>
+              <ul id="group_friends" >
+
+              </ul>
+            </div>
+
+            <div class="footer">
+              <div class="chart-legend">
+                <i class="fa fa-circle text-info"></i>
+                <i class="fa fa-circle text-danger"></i>
+                <i class="fa fa-circle text-warning"></i>
+              </div>
+              <hr>
+              <div class="stats">
+                <i class="ti-timer"></i> Updated 3 minutes ago
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% include layout/footer %>

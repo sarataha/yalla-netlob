@@ -42,7 +42,8 @@ router.get("/",isLoggedIn,function(req,res){
         userID: req.user.user_id,
         avatar: req.user.avatar_url,
         groups: rows[0],
-        row:rows[1]
+        row:rows[1],
+        cls:["inactive","inactive","active","inactive"]
       });
 
       //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";

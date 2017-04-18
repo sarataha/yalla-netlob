@@ -11,30 +11,30 @@
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="yalla-netlob.herokuapp.com" class="simple-text">
-                    Yalla Netlob
+                    Yalla Netlob <%= cls[0] %>
                 </a>
             </div>
 
             <ul class="nav">
-                <li class="active">
+                <li class="<%=cls[0]%>">
                     <a href="/home">
                         <i class="fa fa-home" aria-hidden="true"></i>
                         <p>Home</p>
                     </a>
                 </li>
-                <li>
+                <li class="<%=cls[1]%>">
                     <a href="/friends">
                         <i class="fa fa-user" aria-hidden="true"></i>
                         <p>Friends</p>
                     </a>
                 </li>
-                <li>
+                <li class="<%=cls[2]%>">
                     <a href="/groups">
                         <i class="fa fa-users" aria-hidden="true"></i>
                         <p>Groups</p>
                     </a>
                 </li>
-                <li>
+                <li class="<%=cls[3]%>">
                     <a href="/orders">
                         <i class="fa fa-cutlery" aria-hidden="true"></i>
                         <p>Orders</p>

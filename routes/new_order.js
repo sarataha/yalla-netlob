@@ -32,7 +32,8 @@ router.get('/',isLoggedIn,function(req, res) {
           username: req.user.user_name,
           userID:req.user.user_id,
           avatar: req.user.avatar_url,
-          row:row
+          row:row,
+          cls: ["inactive","inactive","inactive","active"]
           // notifications: [{row.notifier_id: row.order_id}]
         });
       }else {

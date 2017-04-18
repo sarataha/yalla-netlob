@@ -28,7 +28,8 @@ console.log("Rendering users ***********");
         avatar: req.user.avatar_url,
         user_img:rows[0].avatar_url,
         user_email:rows[0].email,
-        row:rows
+        row:rows,
+        cls: ["inactive","inactive","inactive","inactive"]
       });
   //  $("#groupsNames").innerHTML+="<li>'"+rows[i].group_name+"'</li>";
 

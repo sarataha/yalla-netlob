@@ -41,7 +41,8 @@ router.get('/',isLoggedIn,function(req, res) {
               userID: req.user.user_id,
               avatar: req.user.avatar_url,
               order_data:row[0],
-              row:row[1]
+              row:row[1],
+              cls: ["inactive","inactive","inactive","active"]
             });
         }else{
           //order_data=[{order_id:order_id}]
@@ -57,7 +58,8 @@ router.get('/',isLoggedIn,function(req, res) {
                   userID: req.user.user_id,
                   avatar: req.user.avatar_url,
                   order_data:[{order_id:order_id}],
-                  row:row
+                  row:row,
+                  cls: ["inactive","inactive","inactive","active"]
                 });
             }
           });

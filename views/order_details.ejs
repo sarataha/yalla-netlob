@@ -40,8 +40,8 @@
 	</div>
 	<div class="notification-container">
 		<div id="friends-details" class="friends-details">
-			<a href="#" id="invited-friends">10 friends invited, click to view</a> <br> <br>
-			<a href="#" id="joined-friends">5 friends joined, click to view</a>
+			<a  class="invited-friends" id="invited-friends"><%= invited_count %> friends invited, click to view</a> <br> <br>
+			<a  class="joined-friends" id="joined-friends"><%= join_count %> friends joined, click to view</a>
 		</div>
 		<div id="invited-modal" class="modal">
 
@@ -50,9 +50,10 @@
 		      <span class="close">&times;</span>
 		    </div>
 		    <div class="modal-body">
-		      <ul>
-		      	<li>Ahmed Ali</li>
-		      	<li>Ahmed Ali</li>
+		      <ul id="invited_li">
+		      <% for(var i=0; i < invited_name.length; i++) { %>
+		      	<li><%= invited_name[i].user_name %></li>
+		      	<% } %>
 		      </ul>
 		    </div>
 		  </div>
@@ -66,8 +67,9 @@
 		    </div>
 		    <div class="modal-body">
 		      <ul>
-		      	<li>Ahmed Ali</li>
-		      	<li>Ahmed Ali</li>
+		      	<% for(var i=0; i < join_users.length; i++) { %>
+		      	<li><%= join_users[i].user_name %></li>
+		      	<% } %>
 		      </ul>
 		    </div>
 		  </div>
@@ -143,6 +145,8 @@
 																										"</td><td>"+response.items.amount+
 																										"</td><td>"+response.items.price+
 																										"</td><td>"+response.items.comment+"</td></tr>");
+
+																										
 						}
 						console.log("success");
 					},
@@ -151,6 +155,24 @@
 					}
 				});
 			});//end of add click
+
+			/*$(".invited-friends").click(function(event){
+				order_id=$(".add").attr('name');
+				$.ajax({
+					url:"http://localhost:8090/order_details/invited",
+					method:"POST",
+					data:{
+						order_id:parseInt(order_id)
+							},
+					success:function(response){
+						console.log(response);
+					},
+					error:function(error){
+						console.log(error)
+					}
+			});
+			});*/
+
 		});//end of function
 	</script>
 <%include layout/footer %>

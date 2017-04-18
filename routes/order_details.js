@@ -25,39 +25,57 @@ router.get('/',isLoggedIn,function(req, res) {
   console.log(req.query.order_id);
   var order_id=req.query.order_id;
 
-  var query=" select users.user_name ,orders_items.* from orders_items,users where users.user_id=orders_items.user_id and orders_items.order_id="+order_id+";SELECT * FROM notifications;";
+  var query="select users.user_name, orders.invited_count,orders_items.* from orders_items,users,orders where users.user_id=orders_items.user_id and orders_items.order_id="+order_id+" and orders.order_id="+order_id+";SELECT * FROM notifications;select count(order_id) as join_count from orders_users where order_id="+order_id+";select user_name from users,notifications where user_id=notified_id and order_id="+order_id+";select user_name from users where user_id in(select user_id from orders_users where order_id="+order_id+");";
   connection.query(query,function(err,row,fields){
     if(!err){
       console.log("**************************************************** Order Detailss");
-      //console.log(row[0]);
+      //console.log(row[3][0]);
+      //console.log(row[3]);
+      console.log(row);
+      /*console.log(row[2][0].join_count);
+      console.log(row[0][0].invited_count);
       console.log(req.user.user_id);
       console.log(order_id);
       console.log("bal8888888888888888888")
-      console.log(row.length);
+      console.log(row.length);*/
       if(row[0].length>0){
+
         return res.render("order_details",{
               title: 'order_details',
               username: req.user.user_name,
               userID: req.user.user_id,
               avatar: req.user.avatar_url,
               order_data:row[0],
-              row:row[1]
+              row:row[1],
+              invited_count:row[0][0].invited_count,
+              join_count:row[2][0].join_count,
+              invited_name:row[3],
+              join_users:row[4]
             });
         }else{
           //order_data=[{order_id:order_id}]
-          connection.query("SELECT * FROM notifications",function (err,row) {
+          connection.query("select invited_count from orders where orders.order_id="+order_id+";SELECT * FROM notifications;select user_name from users,notifications where user_id=notified_id and order_id="+order_id+";select count(order_id) as join_count from orders_users where order_id="+order_id+";select user_name from users where user_id in(select user_id from orders_users where order_id="+order_id+");",function (err,row) {
             if (err) {
               console.log(err);
             }
             else {
-              console.log(order_id);
+            	console.log("elseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+              console.log(row[4]);
+              console.log(row[0][0].invited_count);
+              console.log(row[2]);
+              console.log(row[3][0].join_count);
               return res.render("order_details",{
                   title: 'order_details',
                   username: req.user.user_name,
                   userID: req.user.user_id,
                   avatar: req.user.avatar_url,
                   order_data:[{order_id:order_id}],
-                  row:row
+                  row:row[1],
+                  invited_count:row[0][0].invited_count,
+                  join_count:row[3][0].join_count,
+                  invited_name:row[2],
+                  join_users:row[4]
+
                 });
             }
           });
@@ -103,6 +121,22 @@ router.get('/',isLoggedIn,function(req, res) {
     });
     });
 
+/* router.post('/invited',middlewareBodyParser,function(req, res) {
+ 	console.log("inviiiiiiiiiiiiiiiited");
+ 	var query="select user_name from users where user_id in(select user_id from orders_users where order_id="+order_id+") ;";
+  	connection.query(query,function(err,row){
+  		if(!err){
+  			console.log("inviiiiiiiiiiiiiited")
+  			console.log(row);
+  			res.send({ivited:row});
+  		}else{
+  			console.log(err);
+  			res.send("error")
+  			
+  		}
+
+  	});
+ });*/
 // route middleware to check:
 function isLoggedIn(req, res, next) {
 

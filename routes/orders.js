@@ -136,6 +136,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
 
  router.delete("/",middlewareBodyParser,function(req, res) {
    order_id=req.body.order_id;
+   console.log(req.user.user_name);
    var query = "SELECT * FROM orders_users WHERE order_id = ?";
    connection.query(query,[order_id],function (err,rows) {
      // body...
@@ -143,13 +144,17 @@ router.put('/',middlewareBodyParser,function(req, res) {
       console.log(err);
      }
      else {
-      order_users = rows.user_id;
+      order_users = [];
+      for (var i = rows.length - 1; i >= 0; i--) {
+        order_users.push(rows[i].user_id);
+      }
+      // order_users = rows.user_id;
       var query="delete from orders where order_id="+order_id;
       connection.query(query,function(err,row,fields){
       if(!err){
-       console.log("****************************************************delete successed");
+       console.log("****************************************************delete successed",req.user.user_name);
        console.log(req.user.user_id);
-       res.send({message:"cancel",order_id:order_id,owner_id:req.user.user_id,order_users:order_users});
+       res.send({message:"cancel",owner_name:req.user.user_name,order_id:order_id,owner_id:req.user.user_id,order_users:order_users});
          }
      else {
        console.log("error");

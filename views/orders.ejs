@@ -92,15 +92,18 @@
             $(".cancel").click(function(event){
               console.log("HEYYYYYY");
               order_id=$(this).attr('value');
+              owner_id = $("#userID").text().trim();
+              console.log("OWner ID ",owner_id);
               console.log(order_id);
               $.ajax({
                 url:"http://localhost:8090/orders",
                 method:"delete",
-                data:{order_id:parseInt(order_id)},
+                data:{order_id:parseInt(order_id),owner_id:parseInt(owner_id)},
                 success:function(response){
                   if(response.message=="cancel"){
+                    console.log(response);
                     $('table#order_tb tr#cancelion'+response.order_id).remove();
-                    iosocket.emit('cancel',{owner_id:response.owner_id,order_id:response.order_id});
+                    /*iosocket.emit('cancel',{owner_name:response.owner_name,owner_id:response.owner_id,order_id:response.order_id,order_users:response.order_users});*/
 
                   }
                 },

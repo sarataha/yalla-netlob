@@ -191,7 +191,7 @@
 												console.log("ORDER ROOOOOOM ",room);
 												for(var i=0;i<invited_id.length;i++)
 											{console.log("sending notification to user : "+invited_id[i] );
-													iosocket.emit('send notification',{owner_id:user_id,user_id:invited_id[i],msg:notification_msg,room:room});
+													iosocket.emit('send notification',{owner_id:user_id,owner_name:username,user_id:invited_id[i],msg:notification_msg,room:room});
 										}}
 												console.log("success");
 												window.location.href = "/orders"

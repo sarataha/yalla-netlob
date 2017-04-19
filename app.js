@@ -192,7 +192,7 @@ io.on('connection', function(socket){
     for (var i = currentConnections.length - 1; i >= 0; i--) {
       if(currentConnections[i].user_id == data.user_id) {
         console.log(currentConnections[i]);
-        socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('notification',{owner_id:data.owner_id,msg:data.msg,room:data.room});
+        socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('notification',{owner_id:data.owner_id,owner_name:data.owner_name,msg:data.msg,room:data.room});
       }
     }
 
@@ -222,22 +222,28 @@ io.on('connection', function(socket){
     var user_id = data.user_id;
     var owner_name = data.owner_name;
     var user_name = data.user_name;
-    console.log("ORDER NAME ",order_name)
-    connection.query("select notifications.order_id AS order_id, notifications.order_name AS order_name from orders,notifications where notifier_name=? AND notified_id=? AND type=?",[owner_name,user_id,0],function(error,rows){
-        if(error){
-          console.log(error);
-        }else{
-          console.log(rows);
+    var order_id = data.order_id;
+    // var order_name = data.order_name;
+    console.log("\n\nNOTIFIED ",user_id);
+    console.log("NOTIFIER ",owner_name);
+    console.log("\n\n\n\n\nMy order id is ",order_id);
+    console.log("ORDER NAME ",order_name);
+
+    // connection.query("select notifications.order_id AS order_id from notifications where notifier_name=? AND notified_id=? AND type=? AND order_name = ?",[owner_name,user_id,0,order_name],function(error,rows){
+        // if(error){
+          // console.log(error);
+        // }else{
+          // console.log(rows);
           // console.log(rows[0].order_name);
           // for(var i=0;i<req.body.user_id.length;i++){
             // console.log(req.body.user_id[i]);
-    connection.query("insert into orders_users (order_id,user_id) values (?,?)",[rows[0].order_id,user_id],function(error,rows){
+    connection.query("insert into orders_users (order_id,user_id) values (?,?)",[order_id,user_id],function(error,rows){
               if(error){
-                console.log("error in 2 query");
+                console.log(error);
 
               }
               else{
-                  connection.query("select owner_id, order_id, order_name from orders where owner_id=(select notifier_id from notifications where notifier_name = ? and notified_id = ? and type = ? order by order_id desc limit 1)",[owner_name,user_id,0],function(error,rows){
+                  connection.query("select owner_id, order_id, order_name from orders where order_id=?",[order_id],function(error,rows){
                     if(error){
                       console.log(error);
                     }else{
@@ -263,7 +269,7 @@ io.on('connection', function(socket){
                     }
                   });
                 }});
-    }});
+    // }});
     
     
     // socket.join(data.room);
@@ -279,31 +285,54 @@ io.on('connection', function(socket){
     // body...
     var owner_id = data.owner_id;
     var order_id = data.order_id;
-    console.log(owner_id);
+    var order_users = data.order_users;
+    var owner_name = data.owner_name;
+    console.log("\n\n\n\n\n\n\n\n\n\n\n\n",owner_id);
     console.log(order_id);
+    console.log(order_users);
+    console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
-    var query = "SELECT user_name FROM users WHERE user_id = ?;SELECT * FROM orders_users WHERE order_id = ?";
-    connection.query(query,[owner_id,order_id],function (err,rows) {
+    var notify = [];
+
+    for (var i = 0; i < order_users.length; i++) {
+      notify[i].push([owner_id,order_users[i],order_id,owner_name,3]);
+    }
+
+    console.log(notify);
+
+    var query = "INSERT INTO notifications (notifier_id,notified_id,order_id,notifier_name,type) VALUES (?,?,?,?,?)"
+    connection.query(query,[notify],function (err,row) {
       // body...
-      if(err) {
+      if (err) {
         console.log(err);
       }
       else {
-        if (rows[1]) {
-          console.log(rows[1]);
-          for (var i = rows[1].length - 1; i >= 0; i--) {
-            for (var j = currentConnections.length - 1; j >= 0; j--) {
-              if (rows[1][i].user_id == currentConnections[j].user_id) {
-                socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('cancel',{owner_name:rows[0].user_name,order_id:rows[1].order_id});                
-              }
-            }
-          }
-        }
-        else {
-          console.log("empty")
-        }
+        console.log("done");
       }
     });
+
+    // var query = "SELECT user_name FROM users WHERE user_id = ?;SELECT * FROM orders_users WHERE order_id = ?";
+    // connection.query(query,[owner_id,order_id],function (err,rows) {
+    //   // body...
+    //   if(err) {
+    //     console.log(err);
+    //   }
+    //   else {
+    //     if (rows[1]) {
+    //       console.log(rows[1]);
+    //       for (var i = rows[1].length - 1; i >= 0; i--) {
+    //         for (var j = currentConnections.length - 1; j >= 0; j--) {
+    //           if (rows[1][i].user_id == currentConnections[j].user_id) {
+    //             socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('cancel',{owner_name:rows[0].user_name,order_id:rows[1].order_id});                
+    //           }
+    //         }
+    //       }
+    //     }
+    //     else {
+    //       console.log("empty")
+    //     }
+    //   }
+    // });
   });
 
   console.log('connection')

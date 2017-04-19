@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
 		// Redirect user to the dashboard if he trys to open the login page while already logged in
 		if (req.isAuthenticated()) {
 			var user_id=req.user.user_id;
-			connection.query("SELECT * from notifications",function (err,row) {
+			connection.query("select users.user_name,orders.* from users,orders where user_id=owner_id limit 5;SELECT * from notifications",function (err,row) {
 				if(err)
 					console.log(err);
 				else {
@@ -32,7 +32,8 @@ module.exports = function(app, passport) {
 				username: req.user.user_name,
 				userID:req.user.user_id,
 				avatar: req.user.avatar_url,
-				row:row,
+				data:row[0],
+				row:row[1],
 				cls: ["active","inactive","inactive","inactive"]
 			});
 		}

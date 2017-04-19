@@ -70,22 +70,28 @@ router.post("/add",middlewareBodyParser,function(req,respo){
         				}
         			});
 
-        			
+
         		}
         		else{
         			console.log("the friend is already existed");
         			respo.send("the friend is already existed <a href='/friends'> return to last page</a>");
+        			respo.send("the friend is already existed <a href='/friends'> return to last page </a>");
         		}
 
         	})
 
         }
-      else
+      else{
         console.log('invalid user data');
+				respo.send("Invalid Data <a href='/friends'> return to last page </a>");
+			}
 	}
-    else
+    else{
       console.log("invalid data");
       respo.send("invalid data <a href='/friends'> return to last page</a>")
+			respo.send("Invalid Data <a href='/friends'> return to last page </a>");}
+
+
   });
 	//console.log("result "+res);
 
@@ -117,6 +123,6 @@ router.get("/remove",function(req,resp) {
 
     }
   });
-	
+
 })
 module.exports = router;

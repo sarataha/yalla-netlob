@@ -1,0 +1,87 @@
+<% include layout/sidebar %>
+<% include layout/header %>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Latest Orders</h4>
+                                <p class="category">Bla bla bla blaaaa</p>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart ct-perfect-fourth">
+                                  <% for(var i=0; i < data.length; i++) { %>
+                                    <% if (data[i].order_status == "waiting"){ %>
+                                      <p><a class="latest" id="<%= data[i].order_id %>" href="/order_details?order_id=<%=data[i].order_id%>"><%= data[i].meal_type %> on <%= data[i].order_time %> </a></p>
+                                    <% } %>
+                                    <% } %>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card ">
+                            <div class="header">
+                                <h4 class="title">Friends Activities</h4>
+                            </div>
+                            <div class="content">
+                                <div class="ct-chart">
+                                  <% for(var i=0; i < data.length; i++) { %>
+                                    <% if (data[i].user_name == username){ %>
+                                    <p><a id='<%= data[i].owner_id %>' href="/user"><%= data[i].user_name %></a> has created an order for <%= data[i].meal_type %> from <%= data[i].resturant %></p>
+                                    <% } else{ %>
+                                      <p><a id='<%= data[i].owner_id %>' href="/users?user_id=<%=data[i].owner_id%>"><%= data[i].user_name %></a> has created an order for <%= data[i].meal_type %> from <%= data[i].resturant %></p>
+                                    <% } %>
+                                    <% } %>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="chart-legend">
+                                        <i class="fa fa-circle text-info"></i>
+                                        <i class="fa fa-circle text-danger"></i>
+                                        <i class="fa fa-circle text-warning"></i>
+                                    </div>
+                                    <hr>
+                                    <div class="stats">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <script>
+          $(function(){
+            $(".latest").click(function(event){
+              order_id=$(this).attr('id');
+              console.log(order_id);
+              $.ajax({
+                url:"http://localhost:8080/order_details",
+                method:"get",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                  console.log(response);
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });
+            });
+          });
+        </script> -->
+<% include layout/footer %>

@@ -1,0 +1,143 @@
+<% include ./config.ejs %>
+
+<div class="main-panel">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar bar1"></span>
+                        <span class="icon-bar bar2"></span>
+                        <span class="icon-bar bar3"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><%= title %></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/user">
+                                <img id="header-avatar" width="30" height="30" src="<%= avatar %>" />
+                                <p id="user-name"><%= username %> </p>
+                                  <p id="userID"><%= userID %> </p>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bell" aria-hidden="true"></i>
+                                    <p id="notifications-no" class="notification"></p>
+                  <p></p>
+                  <b class="caret"></b>
+                              </a>
+                              <ul id="my-notifications" class="dropdown-menu">
+                                <% for(var i = row.length-1; i >= 0; i--) { %>
+                                    <% if (row[i].notified_id == userID){ %>
+                                    <% if (row[i].type == 0){ %>
+                                        <li id="<%=row[i].order_id%>">  <a><span id="notifier-name"><%= row[i].notifier_name %></span> has invited you to his order number <span id="order-id"><%= row[i].order_id %></span><a id="joinorder">Join</a></a></li>
+                                    <% } else{ %>
+                                        <li id="owned-order"><a><%= row[i].notifier_name %> has joined your <span id="order-id"><%= row[i].order_id %></span> order</a><a id="vieworder">View</a></li>
+                                    <% } %>   
+                                    <% } else{ %>
+                                    <% } %>
+                                    <% } %>
+                              </ul>
+                        </li>
+            <li>
+                            <a href="/logout">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                <p>Logout</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+<script>
+    $(document).ready(function(){
+        var not_no = $("#my-notifications li").length
+        $("#notifications-no").html(not_no);
+    });
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+    <script>
+        var iosocket = io.connect();
+        var room = "";
+        var owner_id = 0;
+        var userName = $("#user-name").text().trim();
+        var orderID = $("#order-id").text().trim();
+        var ownedOrderID = $("#owned-order").text().trim();
+        var owner_name = $("#notifier-name").text().trim();
+        console.log("OWNER NAME ",owner_name);
+        console.log(userName);
+        $(document).ready(function(){
+
+          $("#joinorder").click(function(){
+            console.log("ROOM ",room);
+            console.log(owner_name);
+            console.log(room);
+            var order_id = $(this).attr('id');
+
+            iosocket.emit('join order', {msg:'hellohellohello',owner_name:owner_name,owner_id:owner_id,room:room,user_id:user_id,user_name:userName,order_id:parseInt(orderID)});
+
+            window.location.replace("http://localhost:8090/order_details?order_id="+parseInt(orderID));
+
+            /*$.ajax({
+                url:"http://localhost:8090/order_details?order_id="+parseInt(ownedOrderID),
+                method:"get",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                  
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });*/
+          });
+
+          $("#vieworder").click(function() {
+            var order_id = $(this).attr('id');
+            window.location.replace("http://localhost:8090/order_details?order_id="+parseInt(orderID));
+          });
+          console.log("******"+userID.innerHTML);
+
+            var user_id=userID.innerHTML;
+            //var iosocket = io.connect();
+            iosocket.emit('join', {user_id:user_id});
+
+            iosocket.on('notification',function(data){
+             // alert(data);
+            room = data.room;
+            owner_id = data.owner_id;
+              demo.showNotification('top','right',data.msg);
+              var not_no = $("#my-notifications li").length
+              $("#notifications-no").html(not_no);
+              $("#my-notifications").prepend('<li><a><span id="notifier-name">'+data.owner_name+'</span>  invited you to <span id="'+data.room+'">'+data.room+'<span> <a id="joinorder">Join</a></a></li>')
+            });
+
+            iosocket.on('cancel', function(data) {
+                console.log("ORDER CANCELLED");
+                var msg = data.owner_name + " has cancelled the order";
+                demo.showNotification('top','right',msg);
+            });
+
+            iosocket.on('invalid join',function(data) {
+                alert("Invalid Join");
+            });
+
+            iosocket.on('friend joined', function(data) {
+                console.log('Incoming message:', data.room);
+                var msg = data.user_name + " has joined your order";
+                demo.showNotification('top','right',msg);
+            });
+
+            iosocket.on('connectToOrder',function(data){
+                alert(data);
+            });
+
+            // function () {
+            //     console.log("connected");
+            // });
+        });
+    </script>

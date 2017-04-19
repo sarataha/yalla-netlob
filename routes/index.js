@@ -5,8 +5,6 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var dbconfig = require('../models/groups');
 
- var fileupload = require('fileupload').createFileUpload('/uploadDir').middleware
-
 //var nodemailer = require('nodemailer');
 var async = require('async');
 var crypto = require('crypto');

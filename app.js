@@ -240,7 +240,14 @@ io.on('connection', function(socket){
     connection.query("insert into orders_users (order_id,user_id) values (?,?)",[order_id,user_id],function(error,rows){
               if(error){
                 console.log(error);
-
+                for (var i = currentConnections.length - 1; i >= 0; i--) {
+                        console.log("INSIDE for",rows[0].owner_id);
+                        if(currentConnections[i].user_id == rows[0].user_id) {
+                          console.log("OWNER ID ", data.owner_id);
+                          console.log(currentConnections[i]);
+                          socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('invalid join',{user_name:data.user_name,user_id:data.user_id,owner_id:data.owner_id,msg:data.msg,room:data.room});
+                        }
+                      }
               }
               else{
                   connection.query("select owner_id, order_id, order_name from orders where order_id=?",[order_id],function(error,rows){

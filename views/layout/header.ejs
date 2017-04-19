@@ -34,7 +34,7 @@
                                     <% if (row[i].type == 0){ %>
                                         <li id="<%=row[i].order_id%>">  <a><span id="notifier-name"><%= row[i].notifier_name %></span> has invited you to his order number <span id="order-id"><%= row[i].order_id %></span><a id="joinorder">Join</a></a></li>
                                     <% } else{ %>
-                                        <li><a><%= row[i].notifier_name %> has joined your order</a></li>
+                                        <li id="owned-order"><a><%= row[i].notifier_name %> has joined your <span id="order-id"><%= row[i].order_id %></span> order</a><a id="vieworder">View</a></li>
                                     <% } %>   
                                     <% } else{ %>
                                     <% } %>
@@ -66,6 +66,7 @@
         var owner_id = 0;
         var userName = $("#user-name").text().trim();
         var orderID = $("#order-id").text().trim();
+        var ownedOrderID = $("#owned-order").text().trim();
         var owner_name = $("#notifier-name").text().trim();
         console.log("OWNER NAME ",owner_name);
         console.log(userName);
@@ -78,6 +79,26 @@
             var order_id = $(this).attr('id');
 
             iosocket.emit('join order', {msg:'hellohellohello',owner_name:owner_name,owner_id:owner_id,room:room,user_id:user_id,user_name:userName,order_id:parseInt(orderID)});
+
+            window.location.replace("http://localhost:8090/order_details?order_id="+parseInt(orderID));
+
+            /*$.ajax({
+                url:"http://localhost:8090/order_details?order_id="+parseInt(ownedOrderID),
+                method:"get",
+                data:{order_id:parseInt(order_id)},
+                success:function(response){
+                  console.log("success");
+                  
+                },
+                error:function(error){
+                  console.log(error);
+                }
+              });*/
+          });
+
+          $("#vieworder").click(function() {
+            var order_id = $(this).attr('id');
+            window.location.replace("http://localhost:8090/order_details?order_id="+parseInt(orderID));
           });
           console.log("******"+userID.innerHTML);
 
@@ -92,13 +113,17 @@
               demo.showNotification('top','right',data.msg);
               var not_no = $("#my-notifications li").length
               $("#notifications-no").html(not_no);
-              $("#my-notifications").prepend('<li><a><span id="notifier-name">'+data.owner_name+'</span> has invited you to <span id="'+data.room+'">'+data.room+'<span> <a id="joinorder">Join</a></a></li>')
+              $("#my-notifications").prepend('<li><a><span id="notifier-name">'+data.owner_name+'</span>  invited you to <span id="'+data.room+'">'+data.room+'<span> <a id="joinorder">Join</a></a></li>')
             });
 
             iosocket.on('cancel', function(data) {
                 console.log("ORDER CANCELLED");
                 var msg = data.owner_name + " has cancelled the order";
                 demo.showNotification('top','right',msg);
+            });
+
+            iosocket.on('invalid join',function(data) {
+                alert("Invalid Join");
             });
 
             iosocket.on('friend joined', function(data) {

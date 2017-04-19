@@ -88,8 +88,7 @@ module.exports = function(passport) {
                     var newUserMysql = {
                         email: email,
                         username: req.body.username,
-                        password: bcrypt.hashSync(password, null, null),  // Sekurity :D
-                        picture: req.body.avatar.value
+                        password: bcrypt.hashSync(password, null, null)  // Sekurity :D
                     };
 
                     var insertQuery = "INSERT INTO users ( user_name, email, password, avatar_url ) values (?,?,?,?)";

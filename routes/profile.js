@@ -21,8 +21,8 @@ router.get("/",isLoggedIn,function(req,res){
   console.log(user_id);
 console.log("Rendering users ***********");
   connection.query("SELECT * FROM users,notifications where user_id= ?",user_id, function(err, rows) {
-    console.log(rows.length);
-    console.log("avatar ",rows[0].avatar_url);
+    // console.log(rows.length);
+    // console.log("avatar ",rows[0].avatar_url);
     if (err)
     return done(err);
     if (rows.length) {

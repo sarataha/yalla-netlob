@@ -27,15 +27,12 @@
                                   <div class="col-lg-3 col-sm-6">
                         <div class="card">
                             <div class="content">
-                                <div class="row">
-                                    <div class="col-xs-5">
-                                        <div class="icon-big icon-warning text-center">
-                                            <i class="ti-server"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-7">
+                                <div class="row center">
+                                    
+                                    <div class="col-md-9">
                                         <div class="numbers">
-                                            <p><a href="/user?user_id=<%=friends[i].user_id%>"><%= friends[i].user_name%></a></p>
+                                            <p style="text-align:left;"><a href="/users?user_id=<%=friends[i].user_id%>"><%= friends[i].user_name%></a></p>
+                                            <img src="<%= friends[i].avatar_url %>" />
                                         </div>
                                     </div>
                                 </div>

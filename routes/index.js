@@ -184,6 +184,7 @@ module.exports = function(app, passport) {
 				friends:rows[0],
 				avatar: req.user.avatar_url,
 				row:rows[1],
+				usersdata:rows[0],
 				cls: ["inactive","active","inactive","inactive"]
 				});
 

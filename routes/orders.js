@@ -135,7 +135,7 @@ router.put('/',middlewareBodyParser,function(req, res) {
 
 
  router.delete("/",middlewareBodyParser,function(req, res) {
-   order_id=req.body.order_id;
+   order_id=parseInt(req.body.order_id);
    console.log(req.user.user_name);
    var query = "SELECT * FROM orders_users WHERE order_id = ?";
    connection.query(query,[order_id],function (err,rows) {

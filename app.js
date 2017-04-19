@@ -283,6 +283,7 @@ io.on('connection', function(socket){
 
   socket.on('cancel', function (data) {
     // body...
+    console.log('inside cancel')
     var owner_id = data.owner_id;
     var order_id = data.order_id;
     var order_users = data.order_users;
@@ -295,21 +296,31 @@ io.on('connection', function(socket){
     var notify = [];
 
     for (var i = 0; i < order_users.length; i++) {
-      notify[i].push([owner_id,order_users[i],order_id,owner_name,3]);
+      notify.push([owner_id,order_users[i],order_id,owner_name,3]);
+    }
+
+    // console.log(rows[1]);
+    for (var i = 0; i < order_users.length; i++) {
+      for (var j = 0; j < currentConnections.length; j++) {
+        if (order_users[i] == currentConnections[j].user_id) {
+          console.log("FOUND ",currentConnections[j].user_id);
+          socket.broadcast.to(currentConnections[i].socket[currentConnections[i].socket.length - 1]).emit('cancel',{owner_name:owner_name,order_id:order_id});                
+        }
+      }
     }
 
     console.log(notify);
 
-    var query = "INSERT INTO notifications (notifier_id,notified_id,order_id,notifier_name,type) VALUES (?,?,?,?,?)"
-    connection.query(query,[notify],function (err,row) {
-      // body...
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log("done");
-      }
-    });
+    // var query = "INSERT INTO notifications (notifier_id,notified_id,order_id,notifier_name,type) VALUES (?,?,?,?,?)"
+    // connection.query(query,[notify],function (err,row) {
+    //   // body...
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    //   else {
+    //     console.log("done");
+    //   }
+    // });
 
     // var query = "SELECT user_name FROM users WHERE user_id = ?;SELECT * FROM orders_users WHERE order_id = ?";
     // connection.query(query,[owner_id,order_id],function (err,rows) {

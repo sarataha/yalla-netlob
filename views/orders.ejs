@@ -103,7 +103,7 @@
                   if(response.message=="cancel"){
                     console.log(response);
                     $('table#order_tb tr#cancelion'+response.order_id).remove();
-                    /*iosocket.emit('cancel',{owner_name:response.owner_name,owner_id:response.owner_id,order_id:response.order_id,order_users:response.order_users});*/
+                    iosocket.emit('cancel',{owner_name:response.owner_name,owner_id:response.owner_id,order_id:response.order_id,order_users:response.order_users});
 
                   }
                 },

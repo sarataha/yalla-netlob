@@ -47,9 +47,21 @@ var GoogleStrategy = require('passport-google-oauth').Strategy;
 
 var flash    = require('connect-flash');
 
+var path = require('path');
+var formidable = require('formidable');
+var fs = require('fs');
+
 // configuration
 
 require('./config/passport')(passport);
+
+var path = require('path'),
+    fs = require('fs'),
+    formidable = require('formidable'),
+    readChunk = require('read-chunk'),
+    fileType = require('file-type');
+
+    app.use('/uploads', express.static('uploads'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,6 +73,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(express.bodyParser({uploadDir:'./uploads'}));
 
 // required for passport
 app.use(session({

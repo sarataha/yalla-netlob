@@ -8,6 +8,11 @@ var bodyParser=require('body-parser');
 var middlewareBodyParser=bodyParser.urlencoded({extended:false})
 var bcrypt = require('bcrypt-nodejs');
 
+var qs = require("querystring");
+var bodyParser = require('body-parser');
+var multer = require("multer");
+var uploadedFile = multer({dest: __dirname + "/../public/assets/img/profile"})
+
 connection.query('USE ' + dbconfig.database);
 
 // /* GET users listing. */
@@ -17,6 +22,7 @@ router.get("/",isLoggedIn,function(req,res){
 console.log("Rendering users ***********");
   connection.query("SELECT * FROM users,notifications where user_id= ?",user_id, function(err, rows) {
     console.log(rows.length);
+    console.log("avatar ",rows[0].avatar_url);
     if (err)
     return done(err);
     if (rows.length) {
@@ -53,7 +59,6 @@ console.log("Rendering users ***********");
     });
   });
 
-
     router.post("/updateUserName",middlewareBodyParser,function(req,respo){
       console.log("updateUserName"+req.body.name);
       var username=req.body.name;
@@ -62,21 +67,24 @@ console.log("Rendering users ***********");
         if (err)
         {respo.send("error")}
          else {console.log("query is being processed *****");
-           respo.send("Updated");
+           respo.send({statues:"Updated",user_name:username});
         }
       });
     });
 
 
-      router.post("/updateUserImg",middlewareBodyParser,function(req,respo){
-        console.log("updateUserImg"+req.body.user_img);
-        var user_id=req.body.user_id;
-        var user_img=req.body.user_img;
-        connection.query("update users set   avatar_url=? where user_id=?",[user_img,user_id], function(err, rows) {
+      router.post("/updateUserImg",uploadedFile.single("profile_picture"),bodyParser.urlencoded({extended: false}),middlewareBodyParser,function(req,respo){
+        // console.log("updateUserImg"+req.body.user_img);
+        var user_id=req.user.user_id;
+        var user_img="/assets/img/profile/"+req.file.filename;
+        console.log("USER ID ",user_id);
+        console.log("USER IMAGE ", user_img);
+        connection.query("update users set avatar_url=? where user_id=?",[user_img,user_id], function(err, rows) {
           if (err)
           {respo.send("error")}
            else {
-             respo.send("Updated");
+             console.log("Avatar Updated");
+            respo.redirect('/user');             
           }
         });
       });
